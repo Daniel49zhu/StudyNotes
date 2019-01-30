@@ -66,8 +66,21 @@
    > reg.exec(str)
    < ["sales3", index: 22, input: "sales1.xls sales2.xls sales3.xls sa1.xls", groups: undefined]
    > reg.exec(str)
+   ```
+   - 匹配特殊字符
+   
+   如果就是希望匹配`.`，则必须加一个`\`(反斜杠)进行转义
+   ```
+   > var str = "sa.xls na.xls pap.xls"
+      var reg = /.a\./g
+      reg.exec(str)
+   < ["sa.", index: 0, input: "sa.xls na.xls pap.xls", groups: undefined]
+   > reg.exec(str)
+   < ["na.", index: 7, input: "sa.xls na.xls pap.xls", groups: undefined]
+   > reg.exec(str)
    < null
    ```
+   `\`是一个元字符（metacharacter），表示这个字符有特殊的含义，而不是字符本身的含义。
     
     
    
