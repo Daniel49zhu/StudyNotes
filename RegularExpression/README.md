@@ -4,7 +4,7 @@
 
     正则表达式（Regular Expression）已经出现了很多年，它可以用来完成各种复杂的文本处理
     工作，更重要的是，几乎所有程序设计语言和平台都支持。我们将会从简单的文本匹配开始，循序渐进的设计
-    一些复杂的专题，包括回溯引用(backreference)、条件性求职(conditional evaluaion)和前后查找(lookingaround)等
+    一些复杂的专题，包括回溯引用(backreference)、条件性求值(conditional evaluaion)和前后查找(lookingaround)等
     
 - 第一章 入门
 
@@ -48,6 +48,25 @@
    
    > re.exec(str)
    <["ABC", index: 8, input: "123#abc#ABC", groups: undefined]
+   ```
+   
+   - 匹配任意字符
+   
+   在正则表达式里，特殊字符（或字符集合）用来给出要搜索的对象。`.`字符有可以匹配任何一个单个
+   的字符，这类似与DOS中的`?`和SQL中的`_`字符。
+   因此`c.t`可以同时匹配`cat`和`cot`。
+   
+   ```
+   > var str = "sales1.xls sales2.xls sales3.xls sa1.xls"
+   var reg = /sales./g
+   reg.exec(str)
+   < ["sales1", index: 0, input: "sales1.xls sales2.xls sales3.xls sa1.xls", groups: undefined]
+   > reg.exec(str)
+   < ["sales2", index: 11, input: "sales1.xls sales2.xls sales3.xls sa1.xls", groups: undefined]
+   > reg.exec(str)
+   < ["sales3", index: 22, input: "sales1.xls sales2.xls sales3.xls sa1.xls", groups: undefined]
+   > reg.exec(str)
+   < null
    ```
     
     
