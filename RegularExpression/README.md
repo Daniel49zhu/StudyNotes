@@ -111,7 +111,28 @@
     不会出现在匹配结果里。
     
     为了简化这种字符区间，正则表达式提供了一个特殊的元字符`-`（连字符）来定义字符区间，刚刚的正则可以改写成
-    `[ns]a[0-9]\.xls`
+    `[ns]a[0-9]\.xls`,`[0-9]`与`[0123456789]`的功能是完全等价的
+    ```
+    > var str = "na1.xls sa1.xls sa2.xls ca1.xls sam.xls";
+    var reg = /[ns]a[0-9]\.xls/g;
+    reg.exec(str);
+    < ["na1.xls", index: 0, input: "na1.xls sa1.xls sa2.xls ca1.xls sam.xls", groups: undefined]
+    > reg.exec(str);
+    < ["sa1.xls", index: 8, input: "na1.xls sa1.xls sa2.xls ca1.xls sam.xls", groups: undefined]
+    > reg.exec(str);
+    < ["sa2.xls", index: 16, input: "na1.xls sa1.xls sa2.xls ca1.xls sam.xls", groups: undefined]
+    > reg.exec(str);
+    < null
+    ```
+    字符区间并不仅限于数字，以下都是合法的字符区间
+    + A-Z，从A到Z的所有大写字母
+    + a-z，从a到z的所有小写字母
+    + A-F，从A到F的所有大写字母
+    + A-z，从ASCII字符A到z的所有字母（其中会包含`[`和`^`，因此不常用）
+    
+    在定义字符区间时应该避免让尾字符大于首字符，如`[3-1]`，这样会让整个模式失效。
+    `-`(连字符)是一个特殊的元字符，只会在[]之间起作用，在区间之外它只是一个普通字符，用来匹配自身。
+    
     
     
    
