@@ -208,11 +208,54 @@
     才能正确的进行重复匹配。
     ```
     > var str = 'abc@net.com';
-    var reg = /\w+@\w+\.\w+/;
+    var reg = /[\w.]+@[\w.]+\.\w+/;
     reg.exec(str);
     < ["abc@net.com", index: 0, input: "abc@net.com", groups: undefined]
     ```
+    
+    - 匹配零个或多个 
    
+    `+`最少需要匹配一个字符，如果是要匹配零个或多个则需要元字符`*`，其用法与`+`完全一致。
+    ```
+    > var str = 'abc@net.com';
+    var reg = /\w+[\w.]*@[\w.]+\.\w+/;
+    reg.exec(str);
+    < ["abc@net.com", index: 0, input: "abc@net.com", groups: undefined]
+    ```
+    这个正则对上一个例子进行了完善，它要求邮箱首字母必须是一个字母数字字符
+    
+    - 匹配零个或一个字符
+    
+    另一个常用字符是`?`，用来匹配零次或一次出现的字符。
+    ```
+    > var str = 'http://www.aaa.com https://www.bbb.com httpss://www.ccc.com';
+    var reg = /https?:\/\/[\w.]+/g
+    reg.exec(str);
+    < ["http://www.aaa.com", index: 0, input: "http://www.aaa.com https://www.bbb.com httpss://www.ccc.com", groups: undefined]
+    > reg.exec(str);
+    < ["https://www.bbb.com", index: 19, input: "http://www.aaa.com https://www.bbb.com httpss://www.ccc.com", groups: undefined]
+    > reg.exec(str);
+    < null
+    ```
+    
+    - 匹配指定的重复次数
+    
+    `+ * ?`解决了很多问题，但还需要可以设定重复次数的语法，我们可以使用`{}`，把数值放在他们之间，
+    参照第三章匹配RGB值的例子，我们进行改写
+    ```
+    > var str = '#FFFFFF #FF00ff #GG00GG';
+    var reg = /#[0-9A-Fa-f]{6}/g;
+    reg.exec(str);
+    < ["#FFFFFF", index: 0, input: "#FFFFFF #FF00ff #GG00GG", groups: undefined]
+    > reg.exec(str);
+    < ["#FF00ff", index: 8, input: "#FFFFFF #FF00ff #GG00GG", groups: undefined]
+    > reg.exec(str);
+    < null
+    ```
+    
+    - 为重复次数设定一个区间
+    
+    我们可以通过`{2,4}`这种形式来指定重复次数，最少两次，最多四次，`{3,}`表示至少重复3次
    
     
     
