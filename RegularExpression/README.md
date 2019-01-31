@@ -133,6 +133,22 @@
     在定义字符区间时应该避免让尾字符大于首字符，如`[3-1]`，这样会让整个模式失效。
     `-`(连字符)是一个特殊的元字符，只会在[]之间起作用，在区间之外它只是一个普通字符，用来匹配自身。
     
+    在同一个字符集合里可以给出多个字符区间`[A-Za-z0-9]`，用来匹配任意的大小写字母或数字。
+    
+    现在以匹配RGB值为例子，该值是一个十六进制的数字，黑色（#000000），白色（#FFFFFF），红色（#FF0000），
+    RGB值忽略大小写，#FF00ff（品红）也是合法的RGB值，
+    给出的正则匹配模式`[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]`
+    ```
+    > var str = '#FFFFFF #FF00ff #GG00GG';
+    var reg = /[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g;
+    reg.exec(str);
+    < ["FFFFFF", index: 1, input: "#FFFFFF #FF00ff #GG00GG", groups: undefined]
+    > reg.exec(str);
+    < ["FF00ff", index: 9, input: "#FFFFFF #FF00ff #GG00GG", groups: undefined]
+    > reg.exec(str);
+    < null
+    ```
+    
     
     
    
