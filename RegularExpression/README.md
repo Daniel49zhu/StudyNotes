@@ -137,17 +137,33 @@
     
     现在以匹配RGB值为例子，该值是一个十六进制的数字，黑色（#000000），白色（#FFFFFF），红色（#FF0000），
     RGB值忽略大小写，#FF00ff（品红）也是合法的RGB值，
-    给出的正则匹配模式`[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]`
+    给出的正则匹配模式`#[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]`
     ```
     > var str = '#FFFFFF #FF00ff #GG00GG';
-    var reg = /[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g;
+    var reg = /#[0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]/g;
     reg.exec(str);
-    < ["FFFFFF", index: 1, input: "#FFFFFF #FF00ff #GG00GG", groups: undefined]
+    < ["#FFFFFF", index: 0, input: "#FFFFFF #FF00ff #GG00GG", groups: undefined]
     > reg.exec(str);
-    < ["FF00ff", index: 9, input: "#FFFFFF #FF00ff #GG00GG", groups: undefined]
+    < ["#FF00ff", index: 8, input: "#FFFFFF #FF00ff #GG00GG", groups: undefined]
     > reg.exec(str);
     < null
     ```
+    
+    - 取非匹配
+    
+    取非以为着出了字符集合里的元素，其他元素都可以匹配，用元字符`^`表明对一个字符进行取非匹配。
+    ```
+    > var str = "na1.xls sa1.xls sa2.xls ca1.xls sam.xls";
+    var reg = /[ns]a[^0-9]\.xls/g;
+    reg.exec(str);
+    < ["sam.xls", index: 32, input: "na1.xls sa1.xls sa2.xls ca1.xls sam.xls", groups: undefined]
+    > reg.exec(str);
+    < null
+    ```
+    
+    - 小结
+    
+    元字符`[`和`]`定义字符集合，元字符`-`给出一个字符区间，元字符`^`对字符集合求非
     
     
     
