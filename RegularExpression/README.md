@@ -256,6 +256,40 @@
     - 为重复次数设定一个区间
     
     我们可以通过`{2,4}`这种形式来指定重复次数，最少两次，最多四次，`{3,}`表示至少重复3次
+    
+    - 防止过度匹配
+    
+    `?`只能匹配领零个或一个字符，`{n}`和`{n,m}`也有一个重复次数的上限；但`*`和`+`都是贪婪型的元字符，
+    他们在进行匹配的时候是多多益善而不是适可而止。在不需要这种“贪婪行为”时该怎么办，答案是使用懒惰型的版本，
+    只要给贪婪型的元字符加上一个`?`后缀即可。
+    ```
+    贪婪型元字符              懒惰型元字符
+        *                       *?
+        +                       +?
+        {n,}                    {n,}?
+    ```
+    ```
+    > var str = 'This offer is not availble to customers living in <B>AK</B> and <B>HI</B>';
+    var reg = /<[Bb]>.*<\/[Bb]>/g
+    reg.exec(str);
+    < ["<B>AK</B> and <B>HI</B>", index: 50, input: "This offer is not availble to customers living in <B>AK</B> and <B>HI</B>", groups: undefined]
+    > reg.exec(str);
+    < null
+    
+    > var str = 'This offer is not availble to customers living in <B>AK</B> and <B>HI</B>';
+    var reg = /<[Bb]>.*?<\/[Bb]>/g
+    reg.exec(str);
+    < ["<B>AK</B>", index: 50, input: "This offer is not availble to customers living in <B>AK</B> and <B>HI</B>", groups: undefined]
+    > reg.exec(str);
+    < ["<B>HI</B>", index: 64, input: "This offer is not availble to customers living in <B>AK</B> and <B>HI</B>", groups: undefined]
+    > reg.exec(str);
+    < null
+    ```
+    因为第一个正则中`*`是贪婪的匹配多个，所以它一直匹配到了最后一个`</B>`，而第二个则是匹配到了首个`</B>`。
+    
+    - 小结
+    
+    `+`匹配一个或多个字符集合 `*`匹配零个或多个 `?`匹配零个或一个 `{}`匹配指定次数,贪婪型后缀`?`将使其变为懒惰型。 
    
     
     
