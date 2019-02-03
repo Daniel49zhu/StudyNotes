@@ -382,6 +382,94 @@
      - 小结
      
      子表达式的作用是把同一个表达式的各个相关部分组合在一起；`|`OR操作符对或条件做出准确的定义
+     
+ - 第8章 回溯引用：前后一致匹配
+ 
+    - 回溯引用有什么用
+    
+        HTML语言中最常用的标题标签`<H1>`到`<H6>`以及匹配的结束标签来定义和排版Web页面的标题文字。现在
+        我们想要把其中所有的标题文字查找出来而不关心它的级别。
+        
+        ```
+        > var str = '<BODY>' + 
+        '<H1>Welcome to my HomePage</H1>' +
+        '<H2>ColdFusion</H2>' +
+        'Information about Something' +
+        '<H2>Wireless</H2>' +
+        '</BODY>';
+        var reg = /<[Hh]1>.*<\/[Hh]1>/g;
+        reg.exec(str);
+        < ["<H1>Welcome to my HomePage</H1>", index: 6, input: "<BODY><H1>Welcome to my HomePage</H1><H2>ColdFusio…formation about Something<H2>Wireless</H2></BODY>", groups: undefined]
+        var nreg = /<[Hh][1-6]>.*?<\/[Hh][1-6]>/g
+        nreg.exec(str);
+        ```
+        目前还只能匹配`<H1>`中的文字，如果想要匹配六个级别的标题标签，最容易想到的使用字符集合`[1-6]`来替代1，第二个正则
+        已经可以正常匹配到所有标题标签了。
+        但是如果原始的标题标签不合法，类似`<H2>Wireless</H3>`也能匹配出来，出现这个问题的原因是因为匹配结束标签
+        的第二部分对于模式的第1部分毫无所知，想要解决这个问题需要借助回溯引用。
+        
+        - 回溯引用匹配
+        
+        先看一个例子
+        ```
+        var str = 'This is a block of of text,serval words are are repeated,' +
+                ' and and they should not be';
+                var reg = /[ ]+(\w+)[ ]\1/g;
+                reg.exec(str);
+        < [" of of", "of", index: 15, input: "This is a block of of text,serval words are are repeated, and and they should not be", groups: undefined]
+        reg.exec(str);
+        < [" are are", "are", index: 39, input: "This is a block of of text,serval words are are repeated, and and they should not be", groups: undefined]
+        reg.exec(str);
+        < [" and and", "and", index: 57, input: "This is a block of of text,serval words are are repeated, and and they should not be", groups: undefined]
+        reg.exec(str);
+        null
+        ```
+        这个正则把文本中所有相邻出现的重复的单词都查出来了，但它是如果做到的呢。
+        `[ ]+`匹配一个或多个空格，`(\w+)`匹配一个或多个字母数字字符,`[ ]+`匹配随后的空格，这个正则
+        最后的部分是`\1`就是一个回溯引用，它引用的就是前面划分出来的子表达式，当`(\w+)`匹配and时`\1`
+        也会匹配单词and
+        
+        回溯引用指的是模式的后半部分引用前半部分中定义的子表达式，`\1`代表第一个子表达式，依次可以类推
+        `\2`和`\3`的含义，`\0`代表整个正则，你可以把回溯引用想象成一个变量。
+        
+        对于之前本章开头的HTML匹配问题就可以进行改写了。
+      ```
+      > var str = '<BODY>' + 
+      '<H1>Welcome to my HomePage</H1>' +
+      '<H2>ColdFusion</H2>' +
+      'Information about Something' +
+      '<H2>Wireless</H3>' +
+      '</BODY>';
+      var reg = /<([Hh][1-6])>.*?<\/\1>/g;
+      reg.exec(str);
+      < ["<H1>Welcome to my HomePage</H1>", "H1", index: 6, input: "<BODY><H1>Welcome to my HomePage</H1><H2>ColdFusio…formation about Something<H2>Wireless</H3></BODY>", groups: undefined]
+      reg.exec(str);
+      < ["<H2>ColdFusion</H2>", "H2", index: 37, input: "<BODY><H1>Welcome to my HomePage</H1><H2>ColdFusio…formation about Something<H2>Wireless</H3></BODY>", groups: undefined]
+      reg.exec(str);
+      null
+      ```
+      
+      - 正则表达式替换
+      ```
+       > var str = 'Hello ben@forta.com is my email address';
+       var reg1 = /(\w+[\w\.]*@[\w\.]+\.\w+)/;
+       var reg2 = '<A HREF="mailto:$1">$1</A>';
+       str.replace(reg1,reg2);
+       < "Hello <A HREF="mailto:ben@forta.com">ben@forta.com</A> is my email address";
+      ```
+      替换需要给出两个正则表达式，一个用来给出搜索模式，另一个用来替换模式。回溯引用可以跨域使用
+      ```
+      var str = '313-555-1234 248-555-9999 810-555-9000';
+            var reg1 =/([\d]{3})-([\d]{3})-([\d]{4})/g;
+            var reg2 = '($1) $2-$3';
+            str.replace(reg1,reg2);
+      "(313) 555-1234 (248) 555-9999 (810) 555-9000"
+      ```
+      
+    - 小结
+    
+    子表达式用来定义字符或表达式的集合。子表达式还能在模式内部被引用，称为回溯引用，其在文本匹配和替换中也非常有用 
+          
       
     
     
