@@ -468,7 +468,43 @@
       
     - 小结
     
-    子表达式用来定义字符或表达式的集合。子表达式还能在模式内部被引用，称为回溯引用，其在文本匹配和替换中也非常有用 
+    子表达式用来定义字符或表达式的集合。子表达式还能在模式内部被引用，称为回溯引用，其在文本匹配和替换中也非常有用
+    
+- 第9章 前后查找
+
+    到目前为止正则还都只是用来匹配文本的，但有时我们还需要用正则表达式标记要匹配的文本的位置（而不仅仅是文本本身）。
+    这就引出了前后查找（lookaround，对某一位置的前后内容进行查找）的概念。
+    
+    - 前后查找
+    
+    先看一个例子，如果要把Web页面的页面标题提取出来，页面标题是嵌在`<TITLE>`和`</TITLE>`标签之间的文字，
+    而这对标签又必须嵌在HEAD部分中
+    ```
+    var str = '<HEAD>' +
+              '<TITLE>Ben Forta\'s Homepage</TITLE>' +
+              '</HEAD>';
+    var reg = /<[tT][iI][Tt][lL][Ee]>.*<\/[tT][iI][Tt][lL][Ee]>/;
+    reg.exec(str);
+    < ["<TITLE>Ben Forta's Homepage</TITLE>", index: 6, input: "<HEAD><TITLE>Ben Forta's Homepage</TITLE></HEAD>", groups: undefined]
+    ```
+    这个正则的确能匹配到Title中的文本，但不够理想，因为只有标题是我们需要的
+    
+    - 向前查找
+    
+    向前吵着制定了一个必须匹配但不在结果中返回的模式。向前查找实际就是一个子表达式，一个向前查找模式其实就是一个以`?=`开头的子表达式，
+    需要普配的文本跟在`=`的后面，举例现在有一些URL地址，我们需要匹配出前面的协议名。
+    ```
+    var str = 'http://www.forta.com/';
+    var reg = /.+?(?=:)/g;
+    reg.exec(str);
+    < ["http", index: 0, input: "http://www.forta.com/", groups: undefined]
+    var reg2 = /.+?(:)/g;
+    reg2.exec(str);
+    < ["http:", ":", index: 0, input: "http://www.forta.com/", groups: undefined]
+    ```
+    第一个是向前匹配的模式，它没有消费`:`，而第二种的普通匹配最后消费了分号`:`
+    
+    - 向后查找
           
       
     
