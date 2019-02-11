@@ -505,6 +505,34 @@
     第一个是向前匹配的模式，它没有消费`:`，而第二种的普通匹配最后消费了分号`:`
     
     - 向后查找
+    
+    与向前查找类似，向后查找的操作符是`?<=`，后面跟匹配的文本
+    ```
+    var str = 'http://www.baidu.com';
+    var reg = /(?<=:\/\/).+/g
+    reg.exec(str);
+    < ["www.baidu.com", index: 7, input: "http://www.baidu.com", groups: undefined]
+    ```
+    
+    - 将向前查找和向后查找结合
+    本章开头的例子，可以利用两种查找方式结合来解决
+    ```
+    var str = '<HEAD>' +
+                  '<TITLE>Ben Forta\'s Homepage</TITLE>' +
+                  '</HEAD>';
+    var reg = /(?<=<[tT][iI][Tt][lL][Ee]>).*(?=<\/[tT][iI][Tt][lL][Ee]>)/;
+    reg.exec(str);
+    < ["Ben Forta's Homepage", index: 13, input: "<HEAD><TITLE>Ben Forta's Homepage</TITLE></HEAD>", groups: undefined]
+    ```
+    
+    - 对前后查找取非
+    
+    之前的用法被称为*正向前查找*(positive lookahead)和*正向后查找*(positive lookbehind)，还有一种不太常见的用法叫做
+    *负前后查找*(negative lookaround)，不同于第3章的取非`^`，而是要用`!`取代`=`
+    
+    - 小结
+    
+    前后查找操作使我们可以利用子表达式来指定文本匹配操作的发生未知，并收到致匹配不消费的效果。
           
       
     
