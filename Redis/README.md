@@ -86,3 +86,25 @@
     BITOP operation destkey key [key …]
     ```
     Redis提供了四个命令直接操作键值的二进制的值
+    
+    - 散列类型
+    
+    散列（hash）类型的键值也是一种字典结构，其存储了字段（field）和字段值的映射，但字段值只能是字符串，不支持其他类型。
+    
+    - 命令
+    1. 赋值与取值：
+        ```
+        HSET key field value
+        HGET key field
+        HMSET key field value field value ...
+        HMGET key field field
+        HGETALL key
+        ```
+        HSET命令在字段不存在时执行插入，存在则执行更新，键不存在则自动建立
+    
+    2. 判断字段是否存在：HEXISTS key field
+    3. 当字段不存在时赋值：HSETNX key field value，与HSET的区别时如果字段已存在不会进行更新
+    4. 增加数字：HINCRBY key field increment
+    5. 删除字段：HDEL key field1 field2...
+    6. 只获取字段名或字段值：HKEYS key ，HVALS key
+    7. 获取字段数量：HLEN key
