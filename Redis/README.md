@@ -59,3 +59,30 @@
     
     最基本的数据类型，能存储任何形式的字符串，包括二进制数据。你可以用来存储JSON对象甚至是图片，一个字符串
     类型的键允许存储的数据的最大容量是512Mb（3.0版本以前）
+    
+    - 命令
+    1. 赋值：SET key value
+    2. 取值：GET key，若键不存在会返回空值
+    3. 递增数字：INCR key，键值为整型会自增，键值为空会变为1，键值不是整型则会报错，在关系型数据库中我们可以通过设置字段属性为AUTO_INCREMENT来实现每增加一条记录自动生成一个唯一
+    的递增ID的目的，而在Redis中，对于每一类对象使用名为对象类型：count的键（如users:count）来存储当前对象的数量，
+    每增加一个新对象都是用INCR命令递增该键的值，返回的数字即是当前对象的总数，也是新增加对象的id。
+    
+    4. 增加指定的整数：INCRBY key increment
+    5. 减少指定的整数：DECR key decrement
+    6. 增加指定浮点数：INCRBYFLOAT key increment
+    7. 向尾部追加值：APPEND key value，向键值的末尾添加value，返回值是追加后的字符串的总长度
+    8. 获取字符串长度：STRLEN key
+    9. 同时获得和设置多个键值对：
+          ```
+          MGET key1 key2
+          MSET key1 v1 key2 v2
+          ```
+          
+    10. 位操作：
+    ```
+    GETBIT key offset
+    SETBIT key offset value
+    BITCOUNT key [start] [end]
+    BITOP operation destkey key [key …]
+    ```
+    Redis提供了四个命令直接操作键值的二进制的值
