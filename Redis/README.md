@@ -163,5 +163,30 @@
     7. 随机获得集合中的元素：SRANDMEMBER key [count]
     8. 从集合中弹出一个元素：SPOP key
     
+    - 有序集合类型
+    
+    有序集合类型（sorted set）与上一个集合类型唯一的区别就是有序。在集合类型的基础上为每一个集合中的元素都
+    关联了一个分数，我们可以按照需要获得分数最高（或最低）的前N个元素。
+    有序集合是使用散列表和跳跃表（Skip list）实现的，所以即使读取位于中间的数据速度也很快（时间复杂度是O(log(N))）。
+    
+    - 命令
+    1. 增加元素：ZADD key score1 member1 score2 member2
+    2. 获得元素的分数：ZSCORE key member
+    3. 获得排名在某个范围的元素列表：
+    ```
+    ZRANGE key start stop [WITHSCORES]
+    ZREVRANGE key start stop [WITHSCORES]
+    ```
+    4. 获得指定分数范围的元素：ZRANGEBYSCORE key min max
+    5. 增加某个元素的分数：ZINCRBY key increment member
+    6. 获得集合中元素的数量：ZCARD key
+    7. 获得指定分数范围内的元素个数：ZCOUNT key min max
+    8. 删除一个或多个元素：ZREM key member1 member2
+    9. 按照排名范围删除元素：ZREMRANGEBYRANK key start stop
+    10. 按照分数范围删除元素： ZREMRANGEBYSCORE key min max
+    11. 获得元素的排名：ZRANK key member，ZREVRANK key member
+    
+    
+    
     
     
