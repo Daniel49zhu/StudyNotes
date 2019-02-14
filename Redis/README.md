@@ -108,3 +108,42 @@
     5. 删除字段：HDEL key field1 field2...
     6. 只获取字段名或字段值：HKEYS key ，HVALS key
     7. 获取字段数量：HLEN key
+    
+    - 列表类型
+    
+    列表类型可以存储一个有序的字符串列表，常用的操作时向列表两端添加元素，或者获得列表的一个片段。列表类型内部是使用双向链表（double linked list）
+    实现的，所以向列表两端添加元素的时间复杂度都为O(1)，获取越接近两端的元素也会越快。这意味这从有几千万元素的列表中取头10条记录的速度也是
+    极快的。
+    - 命令
+    1. 向列表两端增加元素：
+    ```
+    LPUSH key value1 value2
+    RPUSH key value1 value2
+    ``` 
+    2. 从列表两端弹出元素
+    ```
+    LPOP key
+    RPOP key
+    ```
+    3. 获取列表中元素的个数：LLEN key
+    4. 获得列表的片段：LRANGE key start end
+    4. 删除列表中的指定值:LREM key count value，删除列表中前count个值为value的元素
+    5. 获得/设置指定索引的元素值：LINDEX key index，LSET key index value
+    6. 只保留列表指定片段：LTRIM key start end
+    7. 向列表中插入元素：LINSERT key BEFORE|AFTER pivot value
+    8. 将元素从一个列表中转义到另一个列表：RPOPLPUSH source destination
+    
+    - 集合类型
+    
+    集合的概念在高中就徐熙过，集合中的元素各不相同，且没有顺序。集合常用的操作是向集合中加入或删除元素，判断元素是否存在等，由于
+    集合在Redis内部是使用散列表（HashTable）实现的，所以这些操作的时间复杂度都是O(1)。多个集合类型的键之间
+    可以进行并集、交集和差集运算。
+    
+    - 命令
+    1. 增加/删除元素：
+    ```
+    SADD key member1 member2
+    SREM key member1 member2
+    ```
+    
+    
