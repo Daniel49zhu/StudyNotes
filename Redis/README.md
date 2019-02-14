@@ -145,5 +145,23 @@
     SADD key member1 member2
     SREM key member1 member2
     ```
+    2. 获得集合中的所有元素：SMEMBERS key
+    3. 判断元素是否在集合中：SISMEMBER key member
+    4. 集合间运算：
+    ```
+    SDIFF key key ... //对多个集合进行差集元素 A-B
+    SINTER key key ...//对多个集合进行交集运算 A∩B
+    SUNION key key ...//对多个集合执行并集运算 A∪B
+    ```
+    5. 获得集合中元素个数：SCARD key
+    6. 进行集合运算并将结果存储
+    ```
+    SDIFFSTORE destionation key key 
+    SINTERSTORE destionation key key 
+    SUNIONSTORE destionation key key  
+    ```
+    7. 随机获得集合中的元素：SRANDMEMBER key [count]
+    8. 从集合中弹出一个元素：SPOP key
+    
     
     
