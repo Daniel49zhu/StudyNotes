@@ -1,25 +1,33 @@
 const electron = require('electron');
 
 const {
-    app, //控制应用生命周期的模块
-    BrowserWindow, //创建原声浏览器窗口的模块
+    app, // 控制应用生命周期的模块。
+    BrowserWindow, // 创建原生浏览器窗口的模块。
     ipcMain,
 } = electron;
 
+
 let mainWindow;
 
-function createWindow() {
-    //创建浏览器窗口
-    mainWindow = new BrowserWindow({width:800,height:600});
 
-    //加载应用的index.html页面
-    //这里使用的是file协议，加载当前目录下的index.html文件
-    //也可以使用http协议
+function createWindow() {
+    // 创建浏览器窗口。
+    mainWindow = new BrowserWindow({ width: 800, heigth: 600 });
+
+    // 加载应用的 index.html。
+    // 这里使用的是 file 协议，加载当前目录下的 index.html 文件。
+    // 也可以使用 http 协议，如 mainWindow.loadURL('http://nodejh.com')。
     mainWindow.loadURL(`file://${__dirname}/index.html`);
 
+    // 启用开发者工具。
+    // mainWindow.webContents.openDevTools();
+
     // 当 window 被关闭，这个事件会被触发。
-    mainWindow.on('closed',()=>{
-       mainWindow = null;
+    mainWindow.on('closed', () => {
+        // 取消引用 window 对象，如果你的应用支持多窗口的话，
+        // 通常会把多个 window 对象存放在一个数组里面，
+        // 与此同时，你应该删除相应的元素。
+        mainWindow = null;
     });
 }
 
@@ -52,6 +60,3 @@ ipcMain.on('asynchronous-message', (event, arg) => {
     // 发送消息到主进程
     event.sender.send('asynchronous-reply', reply);
 });
-
-
-
