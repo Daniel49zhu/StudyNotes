@@ -6,7 +6,7 @@
 
   一个基本的Electron-demo的目录结构如下
   ```
-    electron-demo/
+    electron-quick-start-demo/
     ├── package.json
     ├── main.js
     └── index.html
@@ -29,4 +29,14 @@
   首先全局安装electron-packager：`npm install electron-packager -g`
   然后在项目中安装 electron：` npm install electron --save-dev`
   然后打包：`electron-packager . electron-demo`
+  
+  - 调试
+  
+  BrowserWindow.webContents.openDevTools能用来调试窗口中的JavaScript，即Web页面，
+  为了调试主进程，提供了--inpect和--inspect-brk开关。详细教程在https://www.jianshu.com/p/98237341a08e
+  
+- demo-camera
+  
+  一个简单的调用摄像头的应用[index.html](demo-camera/index.html)
+
   
