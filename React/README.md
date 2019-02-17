@@ -102,4 +102,10 @@
   
   - 轮流落子
   
+  在Board中添加xIsNext变量
+  
+  - 判断输赢
+  
+  添加`calculateWinner`来判断赢家
+  
   
