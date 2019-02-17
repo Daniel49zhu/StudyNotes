@@ -12,4 +12,6 @@
 
 - React
 
-  [官网教程](React/README.md)
+  [官网教程](React/my-app/README.md)
+  
+- TypeScript  

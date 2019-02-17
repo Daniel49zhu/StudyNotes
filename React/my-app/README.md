@@ -27,7 +27,7 @@
   部分被称为JSX表达式。使用自定义的React组件也很简单，通过`<ShoppingList />`标签就可以在React中
   调用ShoppingList组件。每个组件都是独立包装好的，这样可以像搭积木一样组合各种组件。
   
-  在[index.js](my-app/src/index.js)中我们定义了三个组件
+  在[index.js](src/index.js)中我们定义了三个组件
   - Square，代表一个单独的`<Button>`
   - Board，包含了9个square组件，也就是棋盘的九个单元格
   - Game，为我们即将编写的代码预留了位置，这些组件暂不具备交互能力
