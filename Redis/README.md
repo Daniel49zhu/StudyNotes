@@ -360,5 +360,29 @@
    每一条都不依赖其他命令的返回结果时，就可以把这组命令一起通过管道发出。管道通过减少客户端与Redis的通信次数来减少
    往返时延。
    
+   - 节省空间
    
+   Redis是一个基于内存的数据库，所有数据都存储在内存中，减少内存空间占用对成本控制来说是一个非常重要的话题。
+   1. 精简键名和键值。需要把握好易理解和精简之间的尺度
+   2. 内部编码优化
+   ![内部编码方式](images/encoding.jpg "内部编码方式")
+   
+- 第5章 实践
+
+    本章将会通过实例介绍Redis的Node.js客户端的使用方法。
+    ```
+    var redis = require('redis')
+    var client = redis.createClient('6379', '127.0.0.1');
+    client.set('foo', 'bar', function () {
+    //此时SET命令执行完并返回结果，
+    //因为这里并不关心SET命令的结果，所以我们省略了回调函数的形参。
+    	client.get('foo', function (error, fooValue) {
+    	//error 参数存储了命令执行时返回的错误信息，如果没有错误则返回null。
+    	//回调函数的第二个参数存储的是命令执行的结果
+    	console.log(fooValue); // 'bar'
+    	});
+    });
+    ```
+    
+  
   
