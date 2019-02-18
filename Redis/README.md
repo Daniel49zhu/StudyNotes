@@ -251,7 +251,78 @@
     来删除不需要的键，Redis支持的删除策略包括
    ![删除策略](images/strategy.jpg "删除策略")
     
+   - 排序
+   
+   SORT命令可以对列表类型、集合类型、有序集合类型键排序，并且可以完成与关系数据库中的
+   连接查询相似的任务。
+   ```
+    redis＞LPUSH mylist 4 2 6 1 3 7
+    (integer)6
+    redis＞SORT mylist
+    1) "1"
+    2) "2"
+    3) "3"
+    4) "4"
+    5) "6"
+    6) "7"
     
+    redis＞ZADD myzset 50 2 40 3 20 1 60 5
+    (integer) 4
+    redis＞SORT myzset
+    1) "1"
+    2) "2"
+    3) "3"
+    4) "5"
     
+    redis＞LPUSH mylistalpha a c e d B C A
+    (integer) 7
+    redis＞SORT mylistalpha
+    (error) ERR One or more scores can't be converted into double
+    redis＞SORT mylistalpha ALPHA
+    1) "A"
+    2) "B"
+    3) "C"
+    4) "a"
+    5) "c"
+    6) "d"
+    7) "e"
+    //如果没有加ALPHA参数的话，SORT命令会尝试将所有元素转换
+    //成双精度浮点数来比较，如果无法转换则会提示错误
+   ```
+   
+   - BY参数
+   
+   很多情况下列表（或集合、有序集合）中存储的元素值代表的是对象的ID，单纯对ID自身排序的意义不大。更多的时候
+   我们希望根据ID对应的对象的某个属性进行排序。这时就需要SORT命令的一个参数`BY`
+   ```
+    redis＞LPUSH sortbylist 2 1 3
+    (integer) 3
+    redis＞SET itemscore:1 50
+    OK
+    redis＞SET itemscore:2 100
+    OK
+    redis＞SET itemscore:3 -10
+    OK
+    redis＞SORT sortbylist BY itemscore:＊ DESC
+    1) "2"
+    2) "1"
+    3) "3"
+   ```
+   
+   - STROE参数
+   
+   默认情况下SORT会直接返回排序的结果，如果希望将排序结果保存，在要配合SROTE参数
+   `SORT tag:ruby:posts BY post:＊-＞time DESC GET post:＊-＞title GET post:＊-
+    ＞time
+    GET # STORE sort.result`
     
+    - 性能优化
     
+    SORT如果使用不好很容易成为性能瓶颈。SORT命令的时间复杂度是O(n+mlogm)，其中n是要排序的列表中元素的个数，
+    m是要返回的元素的个数。当n越大性能越低。
+    
+    所以在使用SORT时需要注意：
+    1. 尽可能减少待排序的元素的数量
+    2. 使用LIMIT参数直获取少量需要的数据
+    3. 如果排序的数据量较大，尽可能使用STORE参数来将结果缓存
+   
