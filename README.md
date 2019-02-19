@@ -14,4 +14,4 @@
 
   [官网教程](React/my-app/README.md)
   
-- TypeScript  
+  [React视频教程](React/React视频教程/README.md)
