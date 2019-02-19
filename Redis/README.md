@@ -384,6 +384,8 @@
     });
     ```
     
+    
+    
 - 第6章 脚本
 
 Redis2.6推出了脚本功能，允许开发者使用Lua语言编写脚本传到Redis中执行。在Lua脚本中可以执行大部分的
@@ -426,6 +428,183 @@ Redis命令。使用脚本的好处有
     11
     10
     ```
+    
+    - 注释 
+    
+    Lua的注释有单行和多行两种，单行注释以`--`开始，多行注释以`--[[`开始，到`]]`结束
+    
+    - 赋值
+    
+    Lua支持多重赋值
+    ```
+    local a, b=1, 2 --a的值是1，b的值是2
+    local c, d=1, 2, 3 --c的值是1，d的值是2，3被舍弃了
+    local e, f=1 --e的值是1，f的值是nil
+    ```
+    
+    - 操作符
+    
+    Lua有以下5类操作符
+    (1) 数学操作符 （2）比较操作符 （3）逻辑操作符 （4）连接操作符`..` （5）取长度操作符`#`
+    
+    - if语句
+    ```
+    if 条件表达式 then
+        语句块
+    elseif 条件表达式 then
+        语句块
+    else
+        语句块
+    end
+    ``` 
+    注意Lua中只有nil和false是假，其余都是真值，所以当用EXISTS来判断键是否存在，即使返回0也代表真值
+    
+    - 循环语句
+    
+    Lua支持while，repeat和for循环语句。
+    ```
+    while 条件表达式 do
+        语句块
+    end
+    
+    repeat 
+        语句块
+    until 条件表达式
+    
+    for 变量=初值, 终值, 步长 do
+        语句块
+    end
+    
+    for变量1,变量2,...,变量N in迭代器do
+    语句块
+    end
+    ```
+    
+    - 表类型
+    
+    表是Lua中唯一的数据结构，可以理解为关联数组，任何类型的值（除了空类型）都可以作为表的索引。
+    ```
+    a={} --将变量a赋值为一个空表
+    a['field']='value' --将field字段赋值value
+    print(a.field) --打印内容为'value'，a.field是a['field']的语法糖。
+    
+    people={ --也可以这样定义
+    name='Bob',
+    age=29
+    }
+    print(people.name) --打印的内容为'Bob'
+    ```
+    
+    - 函数
+    
+    函数的定义为
+    ```
+    function(参数列表)
+        函数体
+    end
+    ```
+    可以将函数赋值给一个局部变量
+    ```
+    local function square (num)
+        return num ＊ num
+    end
+    //这段代码等价于
+    local square
+    square=function(num)
+        return num ＊ num
+    end
+    ```
+    
+    - 标准库
+    
+    Lua的标准库提供了很多实用的函数
+    ![Redis支持的Lua标准库](images/std.jpg "Redis支持的Lua标准库")
+    1. String库
+        ```
+        string.len(string)
+        string.lower(string)
+        string.upper(string)
+        string.sub(string,start[,end])
+        ```
+    2. Table库
+        ```
+        table.concat(table[,sep[,i[,j]]]) --将一个数组转换成字符串
+        table.insert(table, [pos,] value) --向数组中插入元素
+        table.remove(table [, pos])       --从数组中弹出一个元素
+        ```
+    3. Math库
+    ![数学函数库](images/math.jpg "数学函数库")
+    
+    - 在脚本中调用Redis命令
+    ```
+    redis.call('set', 'foo', 'bar')
+    local value=redis.call('get', 'foo') --value的值为bar
+    ```
+    - 在Redis中调用脚本
+    Redis提供了EVAL命令来像调用内置命令一样调用脚本，格式是:
+    `EVAL script numkeys key [key ...] arg [arg ...]` 
+    
+- 第7章 管理
+
+    - 持久化 
+    
+    将Redis中的数据从内存中同步到硬盘上的过程就是持久化，主要有两种形式
+    1. RDB方式
+    
+        通过快照（snapshotting）完成，当符合一定条件时Redis会自动将内存中的
+        数据进行快照并存储到硬盘上。进行快照的条件由用户在配置文件中自定义，由
+        两个参数构成：时间和改动的键的个数。当在指定时间内更改的键的个数大于指定
+        的数值时就会进行快照。
+        
+        在配置中已经预置了3个条件：
+        ```
+        save 900 1
+        save 300 10
+        save 60 10000
+        ```
+        Redis默认将快照文件本存在当前目录的dump.rdb文件中，可以通过dir和dbfilename
+        来指定。
+        
+        Redis快照的过程如下：
+        （1）Redis使用fork函数复制一份当前进程（父进程）的副本（子进程）；
+        （2）父进程继续接收并处理客户端发来的命令，而子进程开始将内存中的数据写入硬盘中
+        的临时文件；
+        （3）当子进程写入完所有数据后会用该临时文件替换旧的RDB文件，至此一次快照操作完
+        成。
+        
+        除了自动快照，可以通过SAVE或BGSAVE来让Redis执行快照。
+    
+    2. AOF方式
+    
+        默认情况下Redis没有开启AOF（append only file）方式的持久化，可以通过
+        appendonly参数开启，开启之后，买执行一条命令就会将该命令写入硬盘中的
+        AOF文件。AOF文件的保存位置和RDB一致
+        
+    - 复制
+    
+    Redis提供了复制的功能，可以自动将更新的数据同步到其他的服务器上。同步后的数据库分为两类，
+    主数据库（master），一类时从数据库（salve），主数据库有读写权限，发生写操作时会
+    将数据同步给从数据库。而从数据库一般是只读的，并能接收主数据库同步过来的数据。主数据库
+    有一个，从数据库可以有多个。
+    
+    在Redis中使用复制功能非常容易，只需要在从数据库的配置文件中加入“slaveof 主数据库IP 主数据库端口”即可，主数据库无需进行任何配置。
+    
+    原理：
+    当一个从数据库启动后，会向主数据库发送SYNC命令，主数据库接收到SYNC命令后会
+    开始在后台保存快照（即RDB持久化的过程），并将保存期间接收到的命令缓存起来。当快照
+    完成后，Redis会将快照文件和所有缓存的命令发送给从数据库。从数据库收到后，会载入快
+    照文件并执行收到的缓存的命令。当主从数据库断开重连后会重新执行上述操作，不支持断
+    点续传。
+
+    通过复制功能可以实现读写分离，以提高服务器的负载能力，主数据库负责写数据，而读数据从从数据库。
+    
+    - 安全
+    
+    可以通过配置文件中的requirepass参数为Redis设置一个密码。例如：
+    requirepass TAFK(@~!ji^XALQ(sYh5xIwTn5D s7JF
+   
+    
+   
     
     
   
