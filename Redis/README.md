@@ -602,7 +602,17 @@ Redis命令。使用脚本的好处有
     
     可以通过配置文件中的requirepass参数为Redis设置一个密码。例如：
     requirepass TAFK(@~!ji^XALQ(sYh5xIwTn5D s7JF
+    
+    - 管理工具
+    
+    下面介绍几个管理Redis时常用的命令：
+    1. 耗时命令日志：当一条命令执行时间超过限制时，Redis会将该命令的执行时间等信息加入耗时命令日志（slow log）
+    以供开发者查看。可以通过slowlog-log-slower-than参数设置这一限制，注意单位是微秒，默认是10000。
+    
+    2. 命令监控：Redis提供了MONITOR命令来监控Redis执行的所有命令，redis-cli同样支持该命令，这时Redis执行的
+    所有命令都会在redis-cli中打印出来。
    
+   MONITOR命令非常影响Redis的性能，降低接近一半的负载能力。所以该命令只适合用来调试和纠错。
     
    
     
