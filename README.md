@@ -1,4 +1,4 @@
-### 后端技术学习笔记
+### 学习笔记
 
 - 正则表达式
   
@@ -8,7 +8,13 @@
 
   [《Redis入门指南》](Redis/README.md)
   
-- [Electron](Electron/README.md)
+- MongoDB
+
+  [《MongoDB实战》](MongoDB/mongodb-in-action/README.md)
+  
+- Electron
+
+    [Electron](Electron/README.md)
 
 - React
 
