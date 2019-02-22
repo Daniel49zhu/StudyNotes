@@ -62,4 +62,30 @@
     - mongooplog --展示MongoDb操作日志的信息
     - Bsondump --把BSON文件转为JSON
     
+- 第2章 通过JavaScript shell操作MongoDB
+
+    MongoDB把集合分别存储在不同的数据库中。与传统的SQL数据库不同，MongoDB只区分集合的命名空间。要查询MongoDB
+    数据库，需要知道存储文档数据的数据库和集合的名字。如果没有指定数据库，shell会默认选择test数据库。为了统一，我们
+    切换到tutorial数据库：`use tutorila`,插入文档`db.users.insert({username:"simth"})`，在此刻，磁盘上还没有
+    tutorial数据库，也没有users这个集合。因为要为二者创建初始化文件。
+    
+    此刻可以使用查询来查看数据`db.users.find() -->{ "_id" : ObjectId("5c6ff328524054df3f9ad84c"), "username" : "smith" }`
+    ,注意到_id字段已经默认添加到文档中，我们可以把它当成主键。继续插入第二个用户当users集合中`db.users.insert({username:"jones"})`
+    ,查询`db.users.find({username:"jones"})`，这个查询条件会返回索引名字jones的文档数据，多个条件的AND和OR操作
+    ```
+    db.users.find({username:"smith",_id:ObjectId("5c6ff328524054df3f9ad84c")});
+    db.users.find({$and:[{_id:ObjectId("5c6ff328524054df3f9ad84c")},{username:"smith"} ]});
+    db.users.find({$or:[{_id:ObjectId("5c6ff328524054df3f9ad84c")},{username:"smith"} ]});
+    ```
+    
+    更新文档： 所有的更新至少需要两个参数，第一个指定要更新的文档，第二个指定要修改的属性
+    ```
+    db.users.update({username:"smith"},{$set:{country:"America"}})
+    db.users.update({username:"smith"},{country:""America})
+    ```
+    第一种是修改文档，在原文档上添加或者修改属性，第二种是替换更新，会直接替换原文档的值，
+    除了$set，还可以使用`$push`和`$addToSet`。这两个命令都是往数组中添加数据，但是第二个会阻止
+    向数组中添加重复的数据。
+    
+    删除数据：`db.users.remove()`在不传入参数时，默认会清空users集合里的所有文档，`db.users.drop()`会删除集合及其索引数据。
     
