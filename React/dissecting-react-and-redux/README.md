@@ -58,5 +58,24 @@
         
         而JSX中的onClick则不存在上述问题，onClick挂载的每个函数都控制在组件范围内，不会污染全局空间，它是通过
         事件委托（event delegation）的方式处理点击事件，所有的点击事件都被同意挂载到DOM上一个顶级节点，然后根据
-        点击的target分发给对应的元素
+        点击的target分发给对应的元素。
+        
+        除了定义交互行为，也可以定义样式
+        ```
+            render() {
+                const counterStyle = {
+                    margin: '16px'
+                }
+                return (
+                    <div style={counterStyle}>
+                        <button onClick={this.onClickButton}>Click Me</button>
+                        <div>
+                            Click Count: <span id="clickCount">{this.state.count}</span>
+                        </div>
+                    </div>
+                );
+            }
+        ```
+        
+        
        
