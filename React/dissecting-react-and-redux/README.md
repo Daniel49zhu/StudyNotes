@@ -9,7 +9,7 @@
         
     - 新增一个react组件
         
-        react的首要思想是用组件来开发应用，观察[index.js](first_react_app/src/index.js)文件，中间代码如下
+        react的首要思想是用组件来开发应用，观察[index.js](chapter-01/first_react_app/src/index.js)文件，中间代码如下
         ```
         import React from 'react';
         import ReactDOM from 'react-dom';
@@ -19,10 +19,10 @@
         
         ReactDOM.render(<App />, document.getElementById('root'));
         ```
-        这段代码所做的事情就是渲染一个名叫App的组件，该组件被定义在了[App.js](first_react_app/src/App.js)中，该组件
+        这段代码所做的事情就是渲染一个名叫App的组件，该组件被定义在了[App.js](chapter-01/first_react_app/src/App.js)中，该组件
         渲染出的效果就是上图中的界面。
         
-        现在我们来自定义一个能够计算点击数的新组件，修改[index.js](first_react_app/src/index.js)
+        现在我们来自定义一个能够计算点击数的新组件，修改[index.js](chapter-01/first_react_app/src/index.js)
         ```
         import React from 'react';
         import ReactDOM from 'react-dom';
@@ -34,7 +34,7 @@
           document.getElementById('root')
         );
         ```
-        新增一个[ClickCounter.js](first_react_app/src/ClickCounter.js),此时的页面会进行热更新为
+        新增一个[ClickCounter.js](chapter-01/first_react_app/src/ClickCounter.js),此时的页面会进行热更新为
         ![计数](images/ClickCounter.jpg "计数")
         一个带有交互功能的组件已经构建完成，现在来解析ClickCounter中的代码,先是在index.js中
         `import ClickCounter from './ClickCounter';`引入了该组件，在ClickCounter.js中的第一行
@@ -80,7 +80,7 @@
         
    - 分解React应用
    
-   观察[package.json](first_react_app/package.json),
+   观察[package.json](chapter-01/first_react_app/package.json),
    ```
       "scripts": {
         "start": "react-scripts start",
@@ -110,3 +110,7 @@
    而React则无需一步一步来手动实现这个过程，只需要告诉React我想要什么样的显示效果即可。它的理念，总结起来就是
    `UI=rendern(data)`,用户看到的界面UI一个应该是函数render的执行结果，对于开发者而言，应该区分哪些是render，哪些是data。
    这就是响应式编程(Reactive Programming)的思想。
+   
+   - Virtual DOM
+   
+   
