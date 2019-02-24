@@ -78,4 +78,35 @@
         ```
         
         
-       
+   - 分解React应用
+   
+   观察[package.json](first_react_app/package.json),
+   ```
+      "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject"
+      },
+   ```
+   可以看到，`npm start`其实调用了`react-scripts`这个命令，我们可以在node_module/react-scripts目录下看到，
+   还有一个eject命令，通过`npm run eject`启动，运行之后会把一系列技术栈的配置弹射到应用的顶层。
+   
+   - React的工作方式
+   
+   如果用jQuery来实现上面的点击效果我们可能会写这么一段代码
+   ```
+    $(function() {
+        $('#clickMe').click(function(){
+            var clickCounter = $('#clickCount);
+            var count = parsrInt(clickCounter.text(),10);
+            clickCounter.text(count+1);
+        });
+    });
+   ```
+   jQuery的解决方案是通过CSS的规则找到对应id的按钮。添加上匿名的处理函数，来修改对应DOM元素的文本，这样的代码直观且
+   易于理解，但是项目规模增大之后会造成代码结构复杂难以维护。
+   
+   而React则无需一步一步来手动实现这个过程，只需要告诉React我想要什么样的显示效果即可。它的理念，总结起来就是
+   `UI=rendern(data)`,用户看到的界面UI一个应该是函数render的执行结果，对于开发者而言，应该区分哪些是render，哪些是data。
+   这就是响应式编程(Reactive Programming)的思想。
