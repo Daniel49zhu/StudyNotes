@@ -76,41 +76,83 @@
                 );
             }
         ```
-        
-        
-   - 分解React应用
-   
-   观察[package.json](chapter-01/first_react_app/package.json),
-   ```
-      "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject"
-      },
-   ```
-   可以看到，`npm start`其实调用了`react-scripts`这个命令，我们可以在node_module/react-scripts目录下看到，
-   还有一个eject命令，通过`npm run eject`启动，运行之后会把一系列技术栈的配置弹射到应用的顶层。
-   
-   - React的工作方式
-   
-   如果用jQuery来实现上面的点击效果我们可能会写这么一段代码
-   ```
-    $(function() {
-        $('#clickMe').click(function(){
-            var clickCounter = $('#clickCount);
-            var count = parsrInt(clickCounter.text(),10);
-            clickCounter.text(count+1);
+    - 分解React应用
+       
+       观察[package.json](chapter-01/first_react_app/package.json),
+       ```
+          "scripts": {
+            "start": "react-scripts start",
+            "build": "react-scripts build",
+            "test": "react-scripts test",
+            "eject": "react-scripts eject"
+          },
+       ```
+       可以看到，`npm start`其实调用了`react-scripts`这个命令，我们可以在node_module/react-scripts目录下看到，
+       还有一个eject命令，通过`npm run eject`启动，运行之后会把一系列技术栈的配置弹射到应用的顶层。
+       
+    - React的工作方式
+       
+       如果用jQuery来实现上面的点击效果我们可能会写这么一段代码
+       ```
+        $(function() {
+            $('#clickMe').click(function(){
+                var clickCounter = $('#clickCount);
+                var count = parsrInt(clickCounter.text(),10);
+                clickCounter.text(count+1);
+            });
         });
-    });
-   ```
-   jQuery的解决方案是通过CSS的规则找到对应id的按钮。添加上匿名的处理函数，来修改对应DOM元素的文本，这样的代码直观且
-   易于理解，但是项目规模增大之后会造成代码结构复杂难以维护。
-   
-   而React则无需一步一步来手动实现这个过程，只需要告诉React我想要什么样的显示效果即可。它的理念，总结起来就是
-   `UI=rendern(data)`,用户看到的界面UI一个应该是函数render的执行结果，对于开发者而言，应该区分哪些是render，哪些是data。
-   这就是响应式编程(Reactive Programming)的思想。
-   
-   - Virtual DOM
-   
-   
+       ```
+       jQuery的解决方案是通过CSS的规则找到对应id的按钮。添加上匿名的处理函数，来修改对应DOM元素的文本，这样的代码直观且
+       易于理解，但是项目规模增大之后会造成代码结构复杂难以维护。
+       
+       而React则无需一步一步来手动实现这个过程，只需要告诉React我想要什么样的显示效果即可。它的理念，总结起来就是
+       `UI=rendern(data)`,用户看到的界面UI一个应该是函数render的执行结果，对于开发者而言，应该区分哪些是render，哪些是data。
+       这就是响应式编程(Reactive Programming)的思想。
+       
+    - Virtual DOM
+           
+       要了解虚拟DOM就要先了解DOM，DOM是结构化文本的抽象表达形式，HTML中的每个元素都对应DOM中的一个节点，形成了一个树形
+       的结构，成为DOM树。浏览器会根据DOM树渲染出用户看到的界面，当需要改变界面时，就回去改变DOM树上的节点。在前端
+       开发时，需要尽量减少DOM操作。即使是一句简单的JS语句，浏览器也需要对网页重新布局，重新绘制。
+       
+       JSX虽然看起来是HTML，但最终会被Babel解析为一条条创建React组件或者HTML元素的语句，React并不是通过这些
+       语句直接构建DOM树，而是先构建一个虚拟DOM。
+       
+       虚拟DOM并不涉及浏览器的部分，只是一个JavaScript空间的树形结构，每次渲染组件时，会对比这次产生的虚拟DOM和
+       上一次渲染的虚拟DOM，发现两棵虚拟DOM树的区别，然后一次性将这些差别修改到真正的DOM树上。
+
+- 第2章 设计高质量的React组件
+
+     - React组件的数据
+     
+     React组件的数据分为两种，prop和state，无论prop或者state的改变，都可能引发组件的重新渲染。prop是组件
+     对外的接口，state是组件的内部状态，对外用prop，对内用state。
+     
+     新建一个ControlPanel的项目来演示属性的使用。
+     
+     在React中，prop是从外部传递给组建的数据，一个React组件通过定义自己能接受的prop就定义了自己的
+     对外的公共接口。每个组件都是独立的模块，组件之外的一切都是外部世界，外部世界需要通过prop来和组件
+     对话。
+     
+     1. 给prop赋值
+     ```
+        <SampleButton 
+            id="sample" borderWidth={2} onClick={onButtonClick}
+            style={{color:"red"}}
+        />
+     ```
+     在上面的代码中，创建了一个名为SampleButton的组件实例，使用了名为id、borderWidth、onClick
+     和style的prop，目前来看，React和HTML元素的属性还很相似。不过React的prop除了可以是字符串，也可以是
+     任意一种JavaScript支持的数据类型。borderWidth是数字，onClick是函数类型，style是一个对象，如果
+     prop的值不是字符串时，就需要用`{}`来包住prop的值。
+     
+     外部世界要传递值给组件，最简单的方式就是通过prop，同样组件要把数据反馈给外部也用通过prop。函数类型的
+     prop等于让父组件交给了子组件一个回调函数，子组件在恰当的实际调用函数类型的prop，带上必要的参数，就反过来
+     把信息传递给了外部世界。
+     
+     对于Counter组件，父组件ControlPanel就是外部世界，看一下ControlPanel是如何用prop传递信息给
+     Counter的
+     ```
+
+     ```
+    
