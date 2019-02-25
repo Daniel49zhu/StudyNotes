@@ -20,6 +20,4 @@
 
   [官网教程](React/my-app/README.md)
   
-  [React视频教程](React/React视频教程/README.md)
-  
   [《深入浅出React和Redux》](React/dissecting-react-and-redux/README.md)
