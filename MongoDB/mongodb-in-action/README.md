@@ -89,3 +89,98 @@
     
     删除数据：`db.users.remove()`在不传入参数时，默认会清空users集合里的所有文档，`db.users.drop()`会删除集合及其索引数据。
     
+    - 使用索引创建和查询
+    
+        创建大集合：索引只有在一个集合中文档特别多时才有意义，先创建一个大集合，
+        ```
+        > for(i = 0 ; i < 20000; i++) {
+            db.numbers.save({num:i});
+        }
+        WriteResult({ "nInserted" : 1 })
+        > db.numbers.count();
+        20000
+        -- 范围查询
+        > db.numbers.find({num:{"$gt":19995,"$lt":1998}});
+        { "_id" : ObjectId("5c73e38571d823c7dd15b49a"), "num" : 19996 }
+        { "_id" : ObjectId("5c73e38571d823c7dd15b49b"), "num" : 19997 }
+        ```
+        $gt 大于，$lt小于，$gte大于等于，$lte小于等于，$ne 不等于
+        
+        索引和explain()：如果熟悉关系型数据库对于SQL的EXPLAIN非常熟悉，它是一个调试和优化查询的好工具。
+        当所有数据库接收到查询后，必须决定如何执行查询，这称为查询计划。EXPLAIN描述了查询路径并允许
+        开发者通过查询使用的索引来诊断慢的查询语句。
+        ``` 
+        > db.numbers.find({name:{"$gt":19995}}).explain("executionStats");
+        {
+                ...
+                "executionStats" : {
+                        "executionSuccess" : true,
+                        "nReturned" : 0,
+                        "executionTimeMillis" : 90,
+                        "totalKeysExamined" : 0,
+                        "totalDocsExamined" : 20000,
+                        "executionStages" : {
+                                "stage" : "COLLSCAN",
+                                "filter" : {
+                                        "name" : {
+                                                "$gt" : 19995
+                                        }
+                                },
+                                ...
+        }
+        ```
+        你会发现`totalDocsExamined`是20000，说明扫描了整个集合，而`totalKeysExamined`是0，说明没有索引。
+        因此我们需要为num建来创建一个索引
+        `db.numbers.createIndex({num:1})`,
+        通过`db.numbers.getIndexes()`来检测该集合的索引
+        ```
+        [
+                {
+                        "v" : 2,
+                        "key" : {
+                                "_id" : 1
+                        },
+                        "name" : "_id_",
+                        "ns" : "numbers.numbers"
+                },
+                {
+                        "v" : 2,
+                        "key" : {
+                                "num" : 1
+                        },
+                        "name" : "num_1",
+                        "ns" : "numbers.numbers"
+                }
+        ]
+        ```
+        说明有两个索引，一个是`_id`的默认索引，叫做`_id_`，一个是`num`索引，叫做`num_1`，再来看一次执行计划
+        ```
+        > db.numbers.find({num:{"$gt":19995}}).explain("executionStats");
+        ...
+        "executionStats" : {
+                        "executionSuccess" : true,
+                        "nReturned" : 4,
+                        "executionTimeMillis" : 81,
+                        "totalKeysExamined" : 4,
+                        "totalDocsExamined" : 4,
+                        "executionStages" : {
+                                "stage" : "FETCH",
+                                "nReturned" : 4,
+                                "executionTimeMillisEstimate" : 11,
+                                "works" : 5,
+                                "advanced" : 4,
+                                ...
+        ```
+        此时就只扫描了4个文档，查询效率大大优化。
+        
+        - 基本管理
+        ```
+        > show dbs          --打印系统中所有的数据库列表信息
+        > show collections  --展示当前数据库中的所有集合
+        > db.stats()        --对数据库和集合的状态分析，也可以在单个集合上执行
+        > db.runCommand()   --可以传入参数来调用其他任意命令
+        > db.help()         -- 获取帮助
+        ```
+        
+        
+    
