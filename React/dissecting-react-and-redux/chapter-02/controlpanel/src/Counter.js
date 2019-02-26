@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 const buttonStyle = {
   margin: '10px'
@@ -67,14 +66,6 @@ class Counter extends Component {
   }
 }
 
-Counter.propTypes = {
-  caption: PropTypes.string.isRequired,
-  initValue: PropTypes.number
-};
-
-Counter.defaultProps = {
-  initValue: 0
-};
 
 export default Counter;
 
