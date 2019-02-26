@@ -135,24 +135,170 @@
      对话。
      
      1. 给prop赋值
-     ```
-        <SampleButton 
-            id="sample" borderWidth={2} onClick={onButtonClick}
-            style={{color:"red"}}
-        />
-     ```
-     在上面的代码中，创建了一个名为SampleButton的组件实例，使用了名为id、borderWidth、onClick
-     和style的prop，目前来看，React和HTML元素的属性还很相似。不过React的prop除了可以是字符串，也可以是
-     任意一种JavaScript支持的数据类型。borderWidth是数字，onClick是函数类型，style是一个对象，如果
-     prop的值不是字符串时，就需要用`{}`来包住prop的值。
+         ```
+            <SampleButton 
+                id="sample" borderWidth={2} onClick={onButtonClick}
+                style={{color:"red"}}
+            />
+         ```
+         在上面的代码中，创建了一个名为SampleButton的组件实例，使用了名为id、borderWidth、onClick
+         和style的prop，目前来看，React和HTML元素的属性还很相似。不过React的prop除了可以是字符串，也可以是
+         任意一种JavaScript支持的数据类型。borderWidth是数字，onClick是函数类型，style是一个对象，如果
+         prop的值不是字符串时，就需要用`{}`来包住prop的值。
+         
+         外部世界要传递值给组件，最简单的方式就是通过prop，同样组件要把数据反馈给外部也用通过prop。函数类型的
+         prop等于让父组件交给了子组件一个回调函数，子组件在恰当的实际调用函数类型的prop，带上必要的参数，就反过来
+         把信息传递给了外部世界。
+         
+         对于Counter组件，父组件ControlPanel就是外部世界，看一下ControlPanel是如何用prop传递信息给
+         Counter的
+         ```
+            class ControlPanel extends Component {
+              render() {
+                return (
+                  <div>
+                    <Counter caption="First" initValue="{0}"/>
+                    <Counter caption="Second" initValue={10} />
+                    <Counter caption="Third" initValue={20} />
+                  </div>
+                );
+              }
+            }
+         ```
+         ControlPanel组件包含了三个Counter组件实例，在ControlPanel的render函数中将这三个子组件用div包起来，
+         因为React要求render只能返回一个元素。在每个Counter都有名为initValue和caption的prop。
      
-     外部世界要传递值给组件，最简单的方式就是通过prop，同样组件要把数据反馈给外部也用通过prop。函数类型的
-     prop等于让父组件交给了子组件一个回调函数，子组件在恰当的实际调用函数类型的prop，带上必要的参数，就反过来
-     把信息传递给了外部世界。
-     
-     对于Counter组件，父组件ControlPanel就是外部世界，看一下ControlPanel是如何用prop传递信息给
-     Counter的
-     ```
-
-     ```
+     2. 读取prop的值：
+         ```
+        class Counter extends Component {
+          constructor(props) {
+            super(props);
+        
+            this.onClickIncrementButton = this.onClickIncrementButton.bind(this);
+            this.onClickDecrementButton = this.onClickDecrementButton.bind(this);
+        
+            this.state = {
+              count: props.initValue
+            }
+          }
+          
+            componentWillReceiveProps(nextProps) {
+              console.log('enter componentWillReceiveProps ' + this.props.caption)
+            }
+         }
+         ```
+         如果一个组件需要定义自己的构造函数，则第一行一定要加上super来调用父类的构造函数。不加的话就无法通过
+         this.props访问到父组件传递过来的props的值。
+         
+         在构造函数中通过props来获取传入的prop值，在其他方法中通过this.props来获取传入的值。
+         
+         React通过propTypes来限定传入的prop的规格
+         ```
+            Counter.propTypes = {
+              caption: PropTypes.string.isRequired,
+              initValue: PropTypes.number
+            };
+         ```
+         这里规定了传入的caption是字符类型且是必须的，initValue则必须是数字类型。
+         这种类型限定在开发阶段是有意义的，但是在生产环境下就可以去除了。
     
+    - React的state
+    
+        state代表组件内部的状态。由于React组件不能修改传入的prop，所以需要记录自身数据变化，
+        就要使用state。在Counter组件中，最初显示初始计数，这个数字来自prop，当用户点击按钮改变
+        这个数字时就要Counter自己通过state来存储。
+        
+        1. 初始化statr
+            ```
+            coonstructor(props) {
+                ...
+                this.state = {
+                    count: props.initValue || 0
+                }
+            }
+            ```
+            组件的state必须是一个javascript对象，因此哪怕只是一个数字类型也需要用对象进行封装。
+        
+        2. 读取和更新state
+        
+            通过给button挂载的onClick事件来处理state
+            ```
+              onClickIncrementButton() {
+                this.setState({count: this.state.count + 1});
+              }
+            
+              onClickDecrementButton() {
+                this.setState({count: this.state.count - 1});
+              }
+            ```
+            this.state可以读取到当前组件的state，但是要改变state的值必须通过this.setState函数，而不能
+            直接修改state对应的属性的值，因为直接修改值不会驱动对组件的重新渲染。
+            
+     - prop和state对比
+     
+        1. prop用于定义外部接口，state用于记录内部状态
+        2. prop的赋值在外部世界使用组件时，state的赋值在组件内部
+        3. 组件不应该改变prop的值，而state存在的目的就是让组件改变
+        
+    - 组件的生命周期
+    
+        React严格规定了组件的生命周期，大致经理下面三个过程，装载过程，更新过程，卸载过程
+        1. 装载过程：
+            当组件第一次被渲染的时候，依次会经历如下的函数调用
+            constructor、getInitialState、getDefaultProps、componentWillMount、render、componentDidMount。
+            - constructor，也是ES6中每个类都会有的构造函数，不是所有组件都需要构造函数，除了以下的目的，一是
+            初始化state，二是绑定成员函数的this环境
+            ```
+             constructor(props) {
+                ...              
+                this.onClickIncrementButton = this.onClickIncrementButton.bind(this);
+                this.onClickDecrementButton = this.onClickDecrementButton.bind(this);
+                ...
+              }
+            ```
+            这样以确保方法被调用时始终指向当前实例。
+            
+            - getInitialState和getDefaultProps，用来初始化state和prop，只有在通过React.createClass方法创建组件时
+            才会被调用，该方法已经被弃用。
+            
+            - render 返回一个JSX元素，交由React渲染
+            
+            - componentWillMount和componentDidMount，在装载过程中，componentWillMount会在调用render函数之前
+            被调用，componentDidMount会在调用render函数之后被调用，这两个函数就像render的前哨和后卫，较为有用
+            的是componentDidMount函数，当组件渲染完成时就会调用该方法，此时我们就可以利用注入jQuery之类的库
+            来操作DOM元素。
+        2. 更新过程
+        
+            当组件被装载到DOM树上之后，用户在网页上可以看到组件的第一印象，但是要提供更好的交互体验，就要让该组件可以
+            随着用户操作改变展现的内容，当props或者state修改的时候，就会引发组件的更新过程。
+            
+            更新过程会依次调用下面的生命周期函数，其中render函数和装载过程一样没有差别，componentWillReceiveProps、
+            shouldComponentUpdate、componentWillUpdate、render、componentDidUpdate。
+            
+            - componentWillReceiveProps(nextProps) ，当父组件调用render函数，无论props是否发生改变，都会
+            出发子组件的这个函数，注意this.setState不会触发这个方法，否则就存在死循环了。其传入的参数nextProps
+            是当前的最新值，this.props是操作前的值，两者不同才有必要通过setState更新组件。
+            
+            - shouldComponentUpdate(nextProps,nextState) 这可能是除了render之外最重要的一个函数，render决定了
+            要渲染成什么样，而shouldComponentUpdate决定了组件是否需要渲染。
+            
+                render和shouldComponentUpdate也是唯二明确要求有返回值的函数。render函数的返回结果用于构造DOM对象，而shouldComponentUpdate函数返回
+            一个布尔值，告诉React库这个组件在这次更新过程中是否要继续执行render。对于不需要渲染的组件阻止它的默认渲染可以提升整体效率。
+            ```
+              shouldComponentUpdate(nextProps, nextState) {
+                return (nextProps.caption !== this.props.caption) ||
+                    (nextState.count !== this.state.count);
+              }
+            ```
+            通过nextProps和this.props以及nextState和this.state的对比来判断是否需要渲染。
+            
+            - componentWillUpdate和componentDidUpdate 如果上一个函数返回true，接下来就会调用这两个方法
+            
+        3. 卸载过程 
+        
+           React的卸载过程只涉及一个函数，componentWillUnmount，当组件将要从DOM树上删除之前，会调用这个方法，
+           该方法适合做一些清理的工作。
+            
+            
+            
+            
