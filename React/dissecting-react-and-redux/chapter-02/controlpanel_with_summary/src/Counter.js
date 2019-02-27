@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component} from 'react';
 import {PropTypes} from 'prop-types';
 
 const buttonStyle = {
@@ -6,15 +6,12 @@ const buttonStyle = {
 };
 
 class Counter extends Component {
-
     constructor(props) {
         super(props);
-
         this.onClickIncrementButton = this.onClickIncrementButton.bind(this);
         this.onClickDecrementButton = this.onClickDecrementButton.bind(this);
-
         this.state = {
-            count: props.initValue
+            count:props.initValue || 0
         }
     }
 
@@ -35,7 +32,7 @@ class Counter extends Component {
     }
 
     render() {
-        const {caption} = this.props;
+        const caption = this.props.caption;
         return (
             <div>
                 <button style={buttonStyle} onClick={this.onClickIncrementButton}>+</button>
@@ -44,18 +41,7 @@ class Counter extends Component {
             </div>
         );
     }
+
 }
 
-Counter.propTypes = {
-    caption: PropTypes.string.isRequired,
-    initValue: PropTypes.number,
-    onUpdate: PropTypes.func
-};
-
-Counter.defaultProps = {
-    initValue: 0,
-    onUpdate: f => f //什么都不做的函数
-};
-
-export default Counter;
-
+export default Counter
