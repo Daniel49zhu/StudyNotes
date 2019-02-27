@@ -303,7 +303,61 @@
     
         通过ControlPanel和Counter已经知道了父组件如何通过prop把数据传递给子组件，而子组件是如何将数据传递到
         父组件呢。解决的方法依然是利用prop。把一个函数通过prop传递给子组件。
-            
+        
+        新建一个control_with_summary项目，Counter组件中的关键代码如下
+        ```
+            onClickDecrementButton() {
+                this.updateCount(false);
+            }
+        
+            updateCount(isIncrement) {
+                const previousValue = this.state.count;
+                const newValue = isIncrement ? previousValue + 1 : previousValue - 1;
+        
+                this.setState({count: newValue})
+                this.props.onUpdate(newValue, previousValue)
+            }
+        ```
+        现在onClickIncrementButton函数和onClickDecrementButton的任务除了调用this.setState改变内部状态，还要调用
+        this.props.onUpdate这个函数，对应的，Counter组建的propTypes和defaultProps就要增加对onUpdate的定义
+        ```
+        Counter.propTypes = {
+          caption: PropTypes.string.isRequired,
+          initValue: PropTypes.number,
+          onUpdate: PropTypes.func
+        };
+        
+        Counter.defaultProps = {
+          initValue: 0,
+          onUpdate: f => f //什么都不做的函数
+        };
+        ```
+        这样Counter的onUpdate就成了作为子组件的Counter向父组件ControlPanel传递数据的渠道。ControlPanel也要做一些
+        修改，现在ControlPanel需要包含自己的state
+        ```
+          constructor(props) {
+            super(props);
+            this.onCounterUpdate = this.onCounterUpdate.bind(this);
+            this.initValues = [ 0, 10, 20];
+            const initSum = this.initValues.reduce((a, b) => a+b, 0);
+            this.state = {
+              sum: initSum
+            };
+          }
+        ```
+        
+    - React组件state和prop的局限
+    
+    我们在Counter中有每个状态的当前计数，在ControlPanel中又有一个计数的总和，因此数据
+    发生了重复。重复数据如何保持一致就是一个问题了。逻辑上应该相同的状态，拆分到
+    不同组件中就会存在这个问题。
+    
+    一种可靠的办法就是将数据提升到全局，让各个组件和全局保持一致即可，这样也容易控制，这就是
+    Flux和Redux中Store的概念。
+    
+    利用prop中转数据也会存在问题，当存在三级组件，中间的组件就不得不成为中转站，而它可能本身
+    并不使用中转的数据，第3章将会解决这个问题。
+                    
             
             
             
