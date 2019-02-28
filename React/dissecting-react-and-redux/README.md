@@ -357,6 +357,67 @@
     
     利用prop中转数据也会存在问题，当存在三级组件，中间的组件就不得不成为中转站，而它可能本身
     并不使用中转的数据，第3章将会解决这个问题。
+    
+- 第3章 从Flux到Redux
+
+    Flux的思想是更严格单向数据流
+    
+    ![flux模型](./images/flux.jpg "flux")
+    - Dispatcher 处理动作分发，维持Store之间的依赖关系
+    - Store 负责存储数据和处理数据相关逻辑
+    - Action 驱动Dispatcher的Javascript对象
+    - View 视图部分
+    
+    我们把之前的案例用flux进行数据管理，首先在项目中引入flux
+    ，在项目下执行`npm install --save flux`
+    
+    1. Dispatcher 首先要创建一个Dispatcher类， 在[AppDispatcher.js](chapter-03/flux/src/AppDispatcher.js)
+    中引入flux库中的，该类的唯一作用就是分发各种action
+    
+    2. action，即动作，这只是一个普通的JavaScript对象，代表一个纯数据。为了管理，action对象
+        必须有一个type字段，代表着action对象的类型。
+    
+        定义action通常需要两个文件，一个定义action的类型，一个定义action的构造函数（也称为action creator）。
+        分成两个文件的主要原因是Store中会根据action类型做不同操作，也就有单独导入action类型的需要。
+        
+        在[ActionTypes.js](chapter-03/flux/src/ActionTypes.js)中定义action的类型
+        ```
+        export const INCREMENT = 'increment';
+        export const DECREMENT = 'decrement';
+        ```
+        此处定义了两个action类型，INCREMENT和DECREMENT。
+        现在再定义action的构造函数，在[Action.js](chapter-03/flux/src/Actions.js)中
+        ```
+        export const increment = (counterCaption) => {
+          AppDispatcher.dispatch({
+            type: ActionTypes.INCREMENT,
+            counterCaption: counterCaption
+          });
+        };
+        export const decrement = (counterCaption) => {
+          AppDispatcher.dispatch({
+            type: ActionTypes.DECREMENT,
+            counterCaption: counterCaption
+          });
+        };
+        ```
+        这个文件中导出了两个action的构造函数，当被调用时将会创造对应的action对象，并
+        立即通过AppDispatcher.dispatch分发出去。派发出去的action接下来将会进入Store
+        
+     3. Store,也是一个对象，用于存储应用状态，同时接受Dispatcher派发的动作，根据动作
+        来决定是否要更新应用状态，现在我们创造两个Store，一个为Counter组件服务的CounterStore，另一个就是为
+        CounterPanel服务的SummaryStore。
+        
+        [CounterStore.js](chapter-03/flux/src/stores/CounterStore.js),当Store的状态发生变化的
+        时候，需要通知应用的其他部分做出响应。最重要的一个步骤是把这个Store注册到AppDispatcher上
+
+        另一个Store，[SummaryStore.js](chapter-03/flux/src/stores/SummaryStore.js)则并没有存储自己的
+        状态，当getSummary被调用时，则是直接获取CounterStore中的数据进行计算。  
+        
+    4. View，理论上视图部分可以用任意的UI库完成。
+    
+   
+        
                     
             
             
