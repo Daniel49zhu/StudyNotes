@@ -417,6 +417,26 @@
     4. View，理论上视图部分可以用任意的UI库完成。
     
    
+   - Flux的优势
+   
+     之前的例子，应用的状态数据只存在于React组件中，每个组件需要维护驱动自己渲染的状态数据，
+     单个组件的状态好维护，但是多个组件如果存在状态的关联就比较麻烦了。React只提供了props来
+     进行组件之间的通信，一旦关系复杂就显得很笨拙。
+     
+     Flux架构下，应用的状态放在了Store中，React只扮演了View的部分，被动根据Store的状态来渲染。
+     从通过this.setState改变组件的状态，到Flux的版本中，用户操作引发一个动作，派发给所有的Store对象
+     ，引起Store状态的改变，组件的状态是Store状态的映射，也就自然发生了改变。
+     
+   - Redux
+   
+        2015年在Flux基础上改进出了Redux，Redux在此基础上强调三个基本原则
+        - 唯一数据源（Single Source of Truth）：应用的状态应该存储在唯一的一个Store上
+        - 保持状态只读（State is read-only）
+        - 数据改变只能通过纯函数完成（Changes are made with pure functions）
+        
+        
+   
+         
         
                     
             
