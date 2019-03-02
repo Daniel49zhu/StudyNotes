@@ -430,9 +430,90 @@
    - Redux
    
         2015年在Flux基础上改进出了Redux，Redux在此基础上强调三个基本原则
-        - 唯一数据源（Single Source of Truth）：应用的状态应该存储在唯一的一个Store上
-        - 保持状态只读（State is read-only）
-        - 数据改变只能通过纯函数完成（Changes are made with pure functions）
+        - 唯一数据源（Single Source of Truth）：应用的状态应该存储在唯一的一个Store上，不同于Flux中允许存在多个Store，避免了
+        造成数据冗余，而且不同数据Store之间产生依赖关系会增加复杂度。这个唯一的Store是一个树形的对象，每个组件往往只是用树形对象
+        上一部分的数据，而如何设计Store上状态的结构，就是Redux的核心问题。
+        - 保持状态只读（State is read-only）：要修改Store的状态，必须要通过派发一个action对象来完成，这个Flux没有区别。
+        - 数据改变只能通过纯函数完成（Changes are made with pure functions）：这里所说的传函数就是Reducer，Redux就是Reducer+Flux。
+        在Redux中，每个reducer的函数签名如下：`reducer(state,action)`，第一个state是当前的状态，第二个参数
+            是接收到的action对象，reducer要做的事情就是根据state和action的值产生一个新的对象返回，注意reducer必须是
+            一个纯函数，也就是说函数的返回结果必须完全由参数state和action决定，而不产生任何副作用，也不能修改state和
+            action对象。
+            
+   和Flux一样，Redux把action类型和action构造函数分成两个文件定义，[ActionType.js](chapter-03/redux_basic/src/ActionTypes.js)和
+   Flux没有区别，但[Actions.js](chapter-03/redux_basic/src/Actions.js)就不大一样了
+   ```
+   Flux:
+   export const increment = (counterCaption) => {
+     AppDispatcher.dispatch({
+       type: ActionTypes.INCREMENT,
+       counterCaption: counterCaption
+     });
+   };
+   Redux:
+   export const increment = (counterCaption) => {
+        return {
+          type: ActionTypes.INCREMENT,
+          counterCaption: counterCaption
+        };
+   };
+   ```
+   Redux中的构造函数会返回一个action对象，而Flux中会调用Dispatcher的dispatch函数分发出去。
+   
+   [Store.js](chapter-03/redux_basic/src/Store.js)，这个文件会输出全局唯一的那个Store，代码如下
+   ```
+   import {createStore} from 'redux';
+   import reducer from './Reducer.js';
+   const initValues = {
+     'First': 0,
+     'Second': 10,
+     'Third': 20
+   };
+   const store = createStore(reducer, initValues);
+   export default store;
+   ```
+   Redux库提供了createStore函数，这个函数第一个参数代表更新状态的reducer，第二个参数是状态的初始值，第三个参数可选，
+   代表Store Enhancer。确定Store的状态是设计好Redux应用的关键。接下来是[Reducer.js](chapter-03/redux_basic/src/Reducer.js)，
+   reducer函数中往往包含以action.type为判断条件的if-else语句。
+   
+   `return {...state, [counterCaption]: state[counterCaption] + 1};`代码中使用三个句点代表扩展操作符（spread operator），
+   表示把state中的所有字段展开，而后面对counterCaption值对应的字段会赋上新值，上面的逻辑等同于
+   ```
+    const newState = Object.assign({},state);
+    newState[counterCaption]++;
+    return newState;
+   ```
+   
+   在Redux框架下一个React组件基本要完成两个功能
+   - 和Redux Store打交道，读取Store的状态用来初始化组件，同时监听Store状态发生的改变来更新组件的状态，
+   如果要更新Store状态，就要派发action对象
+   
+   - 根据当前prop和state，渲染用户界面。
+   
+   当一个组件需要完成两件事时则可以考虑拆分，分别承担一个任务，然后把两个组件嵌套起来，
+   完成一个原本组件完成的所有任务。业界对于这样的拆分，承担第一个负责和redux store打交道
+   的组件叫容器组件（Container Component）；对于承担第二个渲染任务的组件叫做展示组件（Presentational Component）
+   
+   
+   我们通过例子redux_smart_dumb来感受一下这种模式。只有视图部分的代码发生了改变，在[Counter.js](chapter-03/redux_smart_dumb/src/views/Counter.js)中一个是Counter，
+   一个是CounterContainer
+   
+   Counter组件的功能非常简单，只有一个render函数
+   ```
+    class Counter extends Component {
+      render() {
+        const {caption, onIncrement, onDecrement, value} = this.props;
+        return (
+          <div>
+            <button style={buttonStyle} onClick={onIncrement}>+</button>
+            <button style={buttonStyle} onClick={onDecrement}>-</button>
+            <span>{caption} count: {value}</span>
+          </div>
+        );
+      }
+    }
+   ```
+        
         
         
    
