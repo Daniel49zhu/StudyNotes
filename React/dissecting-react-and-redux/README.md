@@ -513,6 +513,22 @@
       }
     }
    ```
+   Counter组件完全没有state，所有状态都来自于props，这种组件叫做无状态组件。而CounterContainer承担了所有
+   和Store的数据交互，它的render函数需要做的就是渲染傻瓜组建Counter，传递必要的props。
+   ```
+    class CounterContainer extends Component {
+          render() {
+            return <Counter caption={this.props.caption}
+              onIncrement={this.onIncrement}
+              onDecrement={this.onDecrement}
+              value={this.state.value} />
+          }
+    }
+    
+    export default CounterContainer;
+   ```
+   这个文件最后导出的也是CounterContainer，也就是说外界不会感受到Counter的存在。
+   
         
         
         
