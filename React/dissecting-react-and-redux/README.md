@@ -440,7 +440,7 @@
             一个纯函数，也就是说函数的返回结果必须完全由参数state和action决定，而不产生任何副作用，也不能修改state和
             action对象。
             
-   和Flux一样，Redux把action类型和action构造函数分成两个文件定义，[ActionType.js](chapter-03/redux_basic/src/ActionTypes.js)和
+   和Flux一样，Redux把action类型和action构造函数分成两个文件定义，[ActionTypes.js](chapter-03/redux_basic/src/ActionTypes.js)和
    Flux没有区别，但[Actions.js](chapter-03/redux_basic/src/Actions.js)就不大一样了
    ```
    Flux:
@@ -529,7 +529,42 @@
    ```
    这个文件最后导出的也是CounterContainer，也就是说外界不会感受到Counter的存在。
    
-        
+   
+- 组件Context
+
+    重新观察Counter和Summary组件，发现他们都直接导入了Store.js，一个应用中，最好只有
+    一个地方导入Store，并将其放在最顶层，React提供了Context，即上下文环境，让一个树状组件上所有
+    组件都能访问同一个对象。
+    
+    上级组件需要宣称自己支持context，并且提供一个函数是来返回代表Context的对象，它的子级组件只要宣称
+    自己需要这个context，就可以通过this.context来访问这个共同的环境对象。
+   
+   新建项目redux_with_context来演示该功能，创建一个特殊的React组件，它将是一个通用的context提供者，可以应用在
+   任何一个应用中，新建[Provider.js](chapter-03/redux_with_context/src/Provider.js)，它的render函数就是简单的把
+   子组件渲染出来，每个React组件的props都有一个特殊属性children，代表的是子组件。Provider中另一个重要的函数
+   getChildContext返回的就是代表context的对象。Provider还需要定义childContextTyoes，必须和getChildContext对象，只有
+   两者齐备才能访问到context。
+   
+    - React-Redux
+    
+    无论是把React组件拆分为聪明和傻瓜组件，还是利用Context来访问数据，都是一种套路，既然是
+    套路就可以把套路部分提取出来复用，利用react_redux库可以直接实现这两个功能。
+    
+    1. connect
+    
+    以Counter为例，和redux_with_context不一样，react_redux中没有定义CounterContainer这样的聪明
+    组件，而是直接导出了这样的一个语句`export default connect(mapStateToProps, mapDispatchToProps)(Counter);`
+    connect接受两个参数，返回值仍然是一个函数，所以这句话并没有语法错误，connect函数主要做了两件事，第一是
+    把Store里的数据转化成傻瓜组件的prop，第二则是把傻瓜组件的action派发给Store。
+    
+    2. Provider
+    
+    和在reux_with_context中定义的Provider几乎相同，但是react_redux提供的更加严格。 
+    
+- 小结
+
+    本章从Flux框架出发，到Redux，了解了Redux强调单一数据源、保持状态只读，只能通过纯函数
+    改变的基本原则。  
         
         
    
