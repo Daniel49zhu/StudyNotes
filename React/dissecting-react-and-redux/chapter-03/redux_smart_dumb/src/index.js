@@ -4,6 +4,6 @@ import ControlPanel from './views/ControlPanel';
 import './index.css';
 
 ReactDOM.render(
-  <ControlPanel />,
-  document.getElementById('root')
+    <ControlPanel />,
+    document.getElementById('root')
 );

@@ -1,15 +1,15 @@
-import * as ActionTypes from './ActionTypes.js';
+import * as ActionTypes from './ActionTypes';
 
-export const increment = (counterCaption) => {
+export const increment = (counterCaption)=> {
   return {
-    type: ActionTypes.INCREMENT,
-    counterCaption: counterCaption
+      type:ActionTypes.INCREMENT,
+      counterCaption:counterCaption
   };
 };
 
-export const decrement = (counterCaption) => {
-  return {
-    type: ActionTypes.DECREMENT,
-    counterCaption: counterCaption
-  };
+export const decrement = (counterCaption)=> {
+    return {
+        type:ActionTypes.DECREMENT,
+        counterCaption:counterCaption
+    };
 };
