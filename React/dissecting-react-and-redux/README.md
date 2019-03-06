@@ -649,7 +649,28 @@
         }
    ```
    当一个元素包含ref属性时，在完成装载时(mount)，会看ref属性是不是一个函数，如果是，就会调用这个函数，参数
-   就是这个组件代表的DOM元素，注意不是虚拟DOM，因此我们可以通过代码实际访问到DOM元素
+   就是这个组件代表的DOM元素，注意不是虚拟DOM，因此我们可以通过代码实际访问到DOM元素。在todoList组件上，
+   因为要根据todo数据的长度来渲染，而我们不能用for 或者while之类的循环拼接，因为这些是语句而不是表达式。
+   ```
+    const TodoList = ({todos, onToggleTodo, onRemoveTodo}) => {
+      return (
+        <ul className="todo-list">
+        {
+          todos.map((item) => (
+            <TodoItem
+              key={item.id}
+              text={item.text}
+              completed={item.completed}
+              onToggle={() => onToggleTodo(item.id)}
+              onRemove={() => onRemoveTodo(item.id)}
+            />
+            ))
+        }
+        </ul>
+      );
+    };
+   ```
+   循环出来的子组件上必须确保每一个都有key来表示这个唯一的子组件
    
   
         
