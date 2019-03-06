@@ -611,7 +611,47 @@
     filter:'all'
    }
    ```
-   每增加一个待办事项就在数据类型todos中增加一个元素
+   每增加一个待办事项就在数据类型todos中增加一个元素。在应用的入口文件[src/index.js](chapter-04/todo/src/index.js)中，和
+   ControlPanel一样，用Provider包住最顶层的TodoApp模块
+   ```
+    ReactDOM.render(
+      <Provider store={store}>
+        <TodoApp />
+      </Provider>,
+      document.getElementById('root')
+    );
+   ```
+   TodoApp组件所要做的就是把两个关键视图显示出来。在todos和filter中各有一个reducer来处理action，然后createStore
+   只能接收一个reducer，所以需要利用combineReducers来将多个reducer合成为一个。我们通过ES6的扩展操作符简化了
+   reducer的代码，扩展操作符可以用来扩展一个数据，加入state是一个数组，想要返回增加了一个对象的数据，可以这样写
+   `return [newObject,...state]`，为什么不用push或者unshift呢，因为这样会改变原来那个数组，而reducer要求
+   必须是纯函数，不能有任何副作用，包括不能修改参数对象。注意reducer中switch必须加上default并将state原样返回，
+   因为reducer会接收到任意action。
+   
+   接着就是视图部分，AddTodo组件设计处理用户输入。当用户点击“增加”按钮或者在输入栏input中
+   回车时需要读取这个DOM元素中的值，为了支持这个功能，React提供了一个叫ref的功能。
+   ```
+        render() {
+            return(
+                <div className="add-todo">
+                    <form onSubmit={this.onSubmit}>
+                        <input className="new-todo" ref={this.refInput} />
+                        <button className="add-btn" type="submit">
+                            添加
+                        </button>
+                    </form>
+                </div>
+            );
+        }
+        
+        refInput(node) {
+            this.input = node;
+        }
+   ```
+   当一个元素包含ref属性时，在完成装载时(mount)，会看ref属性是不是一个函数，如果是，就会调用这个函数，参数
+   就是这个组件代表的DOM元素，注意不是虚拟DOM，因此我们可以通过代码实际访问到DOM元素
+   
+  
         
    
          
