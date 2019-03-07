@@ -674,7 +674,7 @@
    
    在前面的例子中，通过ref来访问DOM元素，这种用法是非常脆弱的，因为React的产生就是
    为了避免直接操作DOM而降低性能，我们可以利用组件的状态来同步记录DOM元素的值，这种
-   方法可以控制组件不使用ref
+   方法可以控制组件不使用ref，我们对[addTodo](chapter-04/todo_controlled_component/src/todos/views/addTodo.js)进行了改造
    
   
         
