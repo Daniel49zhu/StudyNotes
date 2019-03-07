@@ -676,6 +676,17 @@
    为了避免直接操作DOM而降低性能，我们可以利用组件的状态来同步记录DOM元素的值，这种
    方法可以控制组件不使用ref，我们对[addTodo](chapter-04/todo_controlled_component/src/todos/views/addTodo.js)进行了改造
    
+- 第5章 React组件的性能优化
+
+    这一章主要会涉及，单个React组件的性能优化；多个React组件的性能优化；利用reselect提高数据选取的性能。
+    
+- 第6章 React高级组件
+
+    - 高阶组件
+    
+    高阶组件（Higher Order Component，HOC）并不是React提供的魔种API，而是使用React的一种模式，
+   用于增强现有组件的功能。简单来说，一个高阶组件就是一个函数，接受一个组件作为输入，然后返回一个
+   新的组件作为结果。新组件将用于之前所不具有的功能。这里的组件不是值组件的具体实例，而是组件类。
   
         
    
