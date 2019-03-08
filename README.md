@@ -17,8 +17,6 @@
     [Electron](Electron/README.md)
 
 - React
-
-  [官网教程](React/my-app/README.md)
   
   [《深入浅出React和Redux》](React/dissecting-react-and-redux/README.md)
   
