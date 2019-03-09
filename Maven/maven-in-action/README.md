@@ -139,31 +139,30 @@
        artifactId-version，可以在pom.xml中build元素下通过fileName来指定。如果希望别的项目可以使用这个jar，
        还需要执行`mvn clean install`，可以看到该jar包在被编译完成之后被添加到的本地的Maven仓库中。
        
-       到目前为止还没有运行Hello World项目，因为带有main方法的类信息不会添加到manifest中，为了生成可执行jar文件，需要在pom.xml中添加
-       `maven-shade-plugin`
-      ```
+       到目前为止还没有运行Hello World项目，因为带有main方法的类信息不会添加到manifest中，为了生成可执行jar文件，需要在pom.xml中添加maven-shade-plugin
+       ```
        <plugin>
-        	    <groupId>org.apache.maven.plugins</groupId>
-        	    <artifactId>maven-shade-plugin</artifactId>
-        	    <version>1.2.1</version>
-        	    <executions>
-        	      <execution>
-        	        <phase>package</phase>
-        	        <goals>
-        	          <goal>shade</goal>
-        	        </goals>
-        	        <configuration>
-        	          <transformers>
-        	            <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-        	              <mainClass>com.zjc.mvnbook.helloworld.HelloWorld</mainClass>
-        	            </transformer>
-        	          </transformers>
-        	        </configuration>
-        	      </execution>
-        	    </executions>
-        	  </plugin>
-      ```
-      我们指定了mainClass为HelloWorld类，项目打包时会将该信息放入MAINFEST中。现在执行`mvn clean install`，现在在target目录下
-      将会看到除了`hello-world-1.0-SANPSHOT.jar`之外，还有一个`original-hello-world-1.0-SNAPSHOT.jar`，前者是带有main方法的可运行的
-      jar，后者为原始jar,通过`java -jar hello-world-1.0-SNAPSHOT.jar`运行，可以在控制台看到输出了。
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-shade-plugin</artifactId>
+            <version>1.2.1</version>
+            <executions>
+              <execution>
+                <phase>package</phase>
+                <goals>
+                  <goal>shade</goal>
+                </goals>
+                <configuration>
+                  <transformers>
+                    <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                      <mainClass>com.zjc.mvnbook.helloworld.HelloWorld</mainClass>
+                    </transformer>
+                  </transformers>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+       ```
+          我们指定了mainClass为HelloWorld类，项目打包时会将该信息放入MAINFEST中。现在执行`mvn clean install`，现在在target目录下
+          将会看到除了`hello-world-1.0-SANPSHOT.jar`之外，还有一个`original-hello-world-1.0-SNAPSHOT.jar`，前者是带有main方法的可运行的
+          jar，后者为原始jar,通过`java -jar hello-world-1.0-SNAPSHOT.jar`运行，可以在控制台看到输出了。
       
