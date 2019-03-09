@@ -165,4 +165,28 @@
           我们指定了mainClass为HelloWorld类，项目打包时会将该信息放入MAINFEST中。现在执行`mvn clean install`，现在在target目录下
           将会看到除了`hello-world-1.0-SANPSHOT.jar`之外，还有一个`original-hello-world-1.0-SNAPSHOT.jar`，前者是带有main方法的可运行的
           jar，后者为原始jar,通过`java -jar hello-world-1.0-SNAPSHOT.jar`运行，可以在控制台看到输出了。
+          
+    5. 使用Archetype生成骨架
+    
+        通过`mvn archetype:generate`命令，我们可以让Maven为我们快速勾勒出项目骨架。
+        
+- 第4章 项目背景
+
+    - 略 
+    
+- 第5张 坐标和依赖
+
+    坐标（Coordinate），在平面几何中，（x，y）定义一个平面内的坐标，在实际生活中，省市区街道门牌号
+    顶一个地址坐标。Maven坐标的元素包括groupId、 artifactId、version、packaging、classifier。Maven内置了一个中央仓
+    库的地址（http://repo1.maven.org/maven2），Maven会根据坐标去那里下载。在我们开发自己项目的时候，也需要为其定义适当的坐标，这是Maven强制要求的。
+    ```
+    <groupId>org.sonatype.nexus</groupId>
+    <artifactId>nexus-indexer</artifactId>
+    <version>2.0.0</version>
+    <packaging>jar</packaging>
+    ```
+    这是nexus-indexer的坐标定义。groupId：定义当前Maven项目隶属的实际项目。artifactId：该元素定义实际项目中的一个Maven项目（模块）。
+    version：该元素定义Maven项目当前所处的版本。packaging：该元素定义Maven项目的打包方式。classifier：该元素用来帮助定义构建输出的一些附属构件。
+    javadoc和sources就是这两个附属构件的classifier。
       
+    上述5个元素中，groupId、artifactId、version是必须定义的，packaging是可选的（默认为jar），而classifier是不能直接定义的。
