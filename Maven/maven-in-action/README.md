@@ -178,7 +178,7 @@
 
     坐标（Coordinate），在平面几何中，（x，y）定义一个平面内的坐标，在实际生活中，省市区街道门牌号
     顶一个地址坐标。Maven坐标的元素包括groupId、 artifactId、version、packaging、classifier。Maven内置了一个中央仓
-    库的地址（http://repo1.maven.org/maven2），Maven会根据坐标去那里下载。在我们开发自己项目的时候，也需要为其定义适当的坐标，这是Maven强制要求的。
+    库的地址（http://repo.maven.org/maven2），Maven会根据坐标去那里下载。在我们开发自己项目的时候，也需要为其定义适当的坐标，这是Maven强制要求的。
     ```
     <groupId>org.sonatype.nexus</groupId>
     <artifactId>nexus-indexer</artifactId>
