@@ -337,6 +337,25 @@
     和发布项目信息，该生命周期包含 pre-site，site，post-site，site-deploy。
     
     命令行所调用的就是Maven生命周期的某个阶段，例如`mvn clean install`就是执行clean周期的到clean阶段，然后执行default到install阶段
-        
+    
+    - 插件目标（Plugin Goal）
+
+    一个插件本身为了复用能够后完成多个目标，比如maven-dependency-plugin有十多个目标，每个目标对应一个功能，上述提到
+    几个功能分别对应的插件目标为dependency:analyze、dependency:tree和dependency:list。这是一种通用写法，冒号
+    前面是插件的前缀，后面是目标，类似还有compiler:compile,surefire:test。
+    
+    - 插件绑定
+    
+    Maven的生命周期和插件相互绑定，用以完成实际的构建任务。例如项目编译任务对应了default生命周期的compile这一阶段，
+    而maven-compiler-plugin这一插件的compile目标能够完成该任务，因此将他们绑定就可以实现项目的编译。 
+    
+    - 插件解析机制
+    
+    与依赖一样，插件构件也是存储于Maven仓库中，在需要时，Maven会从本地仓库寻找插件，如果不存在，则从远程仓库查找下载
+    到本地仓库后使用。但是不同于依赖，插件的远程仓库使用pluginRepositories和pluginRepository进行配置。当该插件
+    是Maven官方提供的插件，则可以省略其groupId`org.apache.maven.plugins`。为了简化POM的配置，Maven在超级POM中为所有
+    核心插件设定了版本，因此用户不用任何配置就可以使用`maven-clean-plugin`。
+    
+- 第8章 聚合与继承
     
     
