@@ -208,3 +208,115 @@
     optional：标记依赖是否可选。exclusions：用来排除传递性依赖。
     
     - 依赖范围
+    
+        我们已经知道通过scope元素来指定依赖范围。首先要知道，Maven在编译项目主代码时需要使用一套classpath。在本例中，需要依赖spring-core，，该文件
+        以依赖的形式引入到classpath中。在编译和和执行测试代码时需要另外一套classpath，而最终在运行时又会需要一套classpath。
+        
+        依赖范围就是控制这三种classpath（编译classpath、测试classpath、运行classpath），scope元素有这几种选项：
+        - compile:编译依赖范围，默认为此，在编译、测试、运行三种classpath中都有效
+        - test：测试依赖范围，只在测试classpath中有效
+        - provided：已提供依赖范围，编译和测试时都有效，但运行时无效。典型的是servlet-api，在编译和测试时都需要，但在生产环境中tomcat会提供。
+        - runtime：运行时依赖范围，测试和运行时有效，但在编译主代码时无效，典型的是JDBC，编译时只需要JDK提供的接口即可，但在测试和运行时需要具体的JDBC驱动
+        - system：系统依赖范围，与provided运行范围一致，需要在dependency中通过systemPath制定具体路径，但是往往与本机系统绑定，不建议使用。
+        - import:导入依赖范围，第8章会具体介绍
+        
+    - 传递性依赖
+    
+        当我们的项目依赖spring-core项目，而spring-core象奴本身也会依赖一些别的项目，如commons-logging，这种就是传递性依赖。Maven会解析这些间接依赖
+        ，将其引入到项目中来。我们对spring-core的依赖范围是compile，spring-core对commons-logging的依赖范围也是compile，那么项目对commons-logging的
+        依赖范围就是compile。这种间接依赖的交叉如下,左边的列代表第一直接依赖范围，上边的行代表第二直接依赖范围。
+        !["传递性依赖"](images/dependency.jpg '传递性依赖')
+        
+    - 依赖调解
+    
+        加入项目中存在这样两条依赖关系：A->B->C->X,A->D->X，X是A的传递性依赖，但是哪个X会被Maven解析并依赖呢？都解析是不对的，那会造成依赖重复，因此必须选择一个，
+        Maven的依赖调解(Dependency Mediation)的第一原则是：路径最近优先。第二原则是路径相同则第一声明者优先，即在POM中顺序最靠前的dependency优先。
+        
+    - 可选依赖
+    
+        假设项目A->B,B又同时依赖X，Y两个项目，如果将X、Y被配置为可选依赖，则不会影响到项目A。
+        
+    - 排除依赖
+    
+        出于一些原因，我们不希望在项目中引入间接依赖，就需要在dependency中添加exclusion元素来排除这些间接依赖。
+        ```xml
+        <dependencies>
+          <dependency>
+              <groupId>com.zjc.mvnbook</groupId>
+              <groupId>account-email</groupId>
+              <version>1.0.0</version>
+              <exclusions>
+                  <exclusion>
+                      <groupId>org.springframework</groupId>
+                      <artifactId>spring-core</artifactId>
+                  </exclusion>        
+              </exclusions>
+          </dependency> 
+        </dependencies>
+        ```
+        只需指定groupId和artifactId即可。
+        
+    - 归类依赖
+    
+        对于spring-core,spring-tx，spring-context等项目，我们可以通过properties元素来统一定义版本号
+        ```
+          <properties>
+            <springframework.version>2.5.6</springframework.version>
+          </properties>
+          <dependencies>
+            <dependency>
+              <groupId>org.springframework</groupId>
+              <artifactId>spring-core</artifactId>
+              <version>${springframework.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.springframework</groupId>
+              <artifactId>spring-beans</artifactId>
+              <version>${springframework.version}</version>
+            </dependency>
+          </dependencies>  
+        ```
+        
+    - 优化依赖
+    
+       通过`mvn dependency:list`我们可以查看所有已解析依赖，`mvn dependency:tree`可以按照
+       树形结构展示已解析依赖，通过`mvn dependency:analyze`会展示出项目中声明了但未使用的依赖以及
+       使用到的但未显示声明的依赖，经过分析我们可以删除一些不需要的依赖。
+       
+   
+- 第6章 仓库
+
+    坐标和依赖都是构件的逻辑表达形式，而且对应的具体物理表达方式就是一个个的文件，仓库就是统一
+    管理所有文件。仓库分为两类，本地仓库和远程仓库。Maven会先查看本地仓库，如果不存在此构件，则会直接去
+    远程仓库下载到本地仓库再使用。如果远程仓库也不存在此构件，则会报错。
+    
+    中央仓库是Maven自带的远程仓库，包含了绝大部分开源构件。为了节约时间也可以在本地局域网搭建私有的仓库，另外包括JBoss
+    等公司也有开放的公共库可以使用。
+    
+    本地仓库默认会在c盘下的用户文件夹下，如果需要改变本地仓库地址，可以修改settings.xml文件，但并不推荐
+    直接修改全局的配置文件。
+    
+    当远程的中央仓库无法满足需求时，我们可以通过在pom.xml添加配置来指定其他公共库或是私服仓库
+    ```
+    ......
+      <repositories>
+        <repository>
+          <id>jboss</id>
+          <name>JBoss Repository</name>
+          <url>http://repository.jboss.com/maven2/</url>
+          <releases>
+              <enabled>true</enabled>
+          </releases>
+          <snapshots>
+              <enabled>true</enabled>
+          </snapshots>
+          <layout>default</layout>
+        </repository>
+      </repositories>
+    ......
+    ```        
+    
+- 第7章 生命周期和插件
+        
+    
+    
