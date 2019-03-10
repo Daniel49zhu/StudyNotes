@@ -317,6 +317,26 @@
     ```        
     
 - 第7章 生命周期和插件
+
+    除了坐标、仓库和依赖，Maven另外的两个核心概念就是生命周期和插件。生命周期和插件协同工作，密不可分。
+    
+    Maven从大量项目和构建工具中学习和反思，总结了一套高度完善、易于扩展的生命周期。包含了项目的清理、
+    初始化、编译、测试、打包、集成测试、验证、部署和站点生成等几乎所有构建步骤。生命周期抽象除了构建过程
+    的各个步骤，每个步骤都可以绑定一个或多个插件行为，Maven为这些步骤提供了默认插件，例如编译插件maven-compiler-plugin，针对
+    测试有maven-surefire-plugin。当用户存在特殊需求时则可以自定义插件。
+    
+    Maven有三套生命周期，分别是clean：负责清理项目，default：负责构建项目，site：负责建立项目站点。每个生命周期
+    又有一些具体的阶段（phase），以clean为例，包含pre-clean，clean和post-clean，当用户调用`mvn clean`时，pre-clean和clean会顺序执行。
+    
+    default生命周期定义了真正构建时所需要执行的所有步骤，它是所有生命周期中最核心的部分，包含validate、initialize、
+    generate-sources、process-sources、generate-resources、process-resources、compile、process-classes、
+    generate-test-sources、process-test-sources、test-compile、process-test-classes、test、prepare-package、package、
+    pre-integration-test、integration-test、post-integration-test、verify、install、deploy。
+    
+    site生命周期的目的是建立和发布项目站点，Maven能够基于POM所包含的信息，自动生成一个友好的站点，方便团队交流
+    和发布项目信息，该生命周期包含 pre-site，site，post-site，site-deploy。
+    
+    命令行所调用的就是Maven生命周期的某个阶段，例如`mvn clean install`就是执行clean周期的到clean阶段，然后执行default到install阶段
         
     
     
