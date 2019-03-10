@@ -168,7 +168,7 @@
           
     5. 使用Archetype生成骨架
     
-        通过`mvn archetype:generate`命令，我们可以让Maven为我们快速勾勒出项目骨架。
+        通过`mvn archetype:create -DgroupId=xxx -DartifactId=xxx -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false`命令，我们可以让Maven为我们快速勾勒出项目骨架。
         
 - 第4章 项目背景
 
@@ -190,3 +190,21 @@
     javadoc和sources就是这两个附属构件的classifier。
       
     上述5个元素中，groupId、artifactId、version是必须定义的，packaging是可选的（默认为jar），而classifier是不能直接定义的。
+    
+    新建一个account-email项目，[pom.xml](chapter-05/account-email/pom.xml)在此。
+    
+    主代码[AccountEmailException.java](chapter-05/account-email/src/main/java/com/zjc/mvnbook/account/email/AccountEmailException.java),
+    [AccountEmailService.java](chapter-05/account-email/src/main/java/com/zjc/mvnbook/account/email/AccountEmailService.java),
+    [AccountEmailServiceImpl.java](chapter-05/account-email/src/main/java/com/zjc/mvnbook/account/email/AccountEmailServiceImpl.java),
+    
+    接着是定义邮箱服务器的配置[service.properties](chapter-05/account-email/src/main/resources/service.properties)
+    
+    在完成测试之后运行`mvn clean install`我们九江account-email-1.0.SNAPSHOT安装到了本地仓库中，这时该模块就可以共其他Maven项目使用了。
+    
+    - 依赖配置
+    
+    观察dependency下的元素，除了groupId、artifactId、version这三个定义坐标的元素之外，还有一些别的元素
+    type:声明依赖的类型，对应的是packaging元素，默认为jar。scope：依赖的作用范围，默认是main和test文件夹。
+    optional：标记依赖是否可选。exclusions：用来排除传递性依赖。
+    
+    - 依赖范围
