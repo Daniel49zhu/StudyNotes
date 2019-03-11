@@ -357,5 +357,91 @@
     核心插件设定了版本，因此用户不用任何配置就可以使用`maven-clean-plugin`。
     
 - 第8章 聚合与继承
+
+    在开始之前，先为项目添加一个account-persist模块。该模块负责账户数据持久化，以XML文件报错账户数据，并支持
+    CRUD操作。具体pom文件和主代码见chapter-08下的account-persist项目。
+    - 聚合
+    
+    到目前为止，我们的用户注册模块已经有了两个模块，一个account-email，一个account-persist。自然而然我们希望把两个项目聚合在一起。
+    系那件一个account-aggregator项目，它必须有自己的pom，不过作为一个聚合项目，其POM有特殊之处。配置如下
+    ```
+    <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+        <modelVersion>4.0.0</modelVersion>
+        <groupId>com.zjc.mvnbook.account</groupId>
+        <artifactId>account-aggregator</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <packaging>pom</packaging>
+        <name>Account Aggregator</name>
+        <modules>
+            <module>./account-email</module>
+            <module>./account-persist</module>
+        </modules>
+    </project>
+    ```
+    groupId依然为通用的`com.zjc.mvnbook.account`，但是artifactId为`account-aggregator`，版本也与两个模块保持一致为`1.0.0-SNAPSHOT`。这里的第一个特殊的
+    元素是packaging，值为pom，之前项目打包的方式都是默认为了jar，对于这种聚合模式，packaging的值必须是pom。
+    
+    之后是一个新的元素modules，这是实现聚合最核心的配置，用户可以声明任意数量的module元素，每一个module的值对应的就是相对当前pom的相对目录。
+    
+    可以发现account-aggregator只是一个包含了pom.xml和子模块的目录，并没有src/main/java之类的目录。
+    
+    - 继承
+    
+    我们目前已经将多个模块聚合在一个项目下，但是目前还存在一个问题，在两个子模块中
+    pom存在很多相似的配置，类似groupId、version以及dependencies下诸多的依赖。想要消除
+    这些重复的定义，就需要继承。
+    
+    在account-aggregator项目下新建一个account-parent项目，[pom.xml](chapter-08/account-aggregator/account-parent/pom.xml)，其
+    packaging的类型也为pom，接下来就是让其他模块继承这个pom，修改account-email项目的pom如下
+    ```
+      <parent>
+        <groupId>com.zjc.mvnbook.account</groupId>
+        <artifactId>account-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../account-parent/pom.xml</relativePath>
+      </parent>
+    
+      <artifactId>account-email</artifactId>
+      <name>Account Email</name>
+    ```
+    通过parent和其中定义的groupId、artifactId、version来指定要继承的父级pom文件，而account-email将隐式的继承groupId和version，当然
+    也可以声明来覆盖父级pom中的。
+    
+    dependencies属性也是可以从父级POM中继承的，我们把org.springframework：spring-core：2.5.6、 org.springframework：spring-beans：2.5.6、
+    org.springframework：spring-context：2.5.6和junit：junit：4.7这几个两个模块共同需要的jar提取到父级模块account-parent中
+    ```
+        <dependencyManagement>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-core</artifactId>
+                    <version>${springframework.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-beans</artifactId>
+                    <version>${springframework.version}</version>
+                </dependency>
+            </dependencies>
+        </dependencyManagement>
+    ```
+    通过dependencyManagement来管理父级POM中的这些元素，子POM只需在dependency中指定groupId和artifactId就可以引用父级POM中的这些依赖，这样是为了避免
+    其余不需要springframework依赖的子模块也被迫引入了这些依赖。
+    
+    父POM中除了依赖管理之外，也有pluginManagement来管理插件
+    
+    - 聚合和继承的关系
+    
+    聚合的目的是为了快速的整合多个子项目，父模块知道自己聚合了那些模块，而被聚合的模块则不知道。继承是为了消除重复的配置，子模块知道自己从父模块继承了
+    哪些重复配置而父模块对此则不知道。
+    
+    - 反应堆
+    
+    在一个多模块的Maven项目中，反应堆（Reactor）是指所有模块组成的一个构建结构。对于单模块项目，反应堆就是该模块本身。多模块项目，反应堆就是各个模块
+    之间的继承和依赖关系的集合，从而能够计算出模块构建的顺序。最终会形成一个有向非循环图。当出现循环引用时就会报错。
+    
+    
+    
     
     
