@@ -454,4 +454,17 @@
     首先要引入一个实现账户注册服务的account-captcha模块，该模块主要负责处理账户注册时验证码key的生成、图片生成以及验证等。除了SpringFramework
     和JUnit之外，还有一个com.google.code.kaptcha：kaptcha。这是一个专门用来生成验证码（Captcha）的开源类库。
     
+    测试代码位于src/test/java目录，其包名也与主代码一致，简单看一下[RandomGeneratorTest](chapter-10/account-parent/account-captcha/src/test/java/com/zjc/mvnbook/account/captcha/RandomGeneratorTest.java)
+    和[AccountCaptchaServiceTest](chapter-10/account-parent/account-captcha/src/test/java/com/zjc/mvnbook/account/captcha/AccountCaptchaServiceTest.java)
+    
+    Maven本身并不是一个单元测试框架，Java世界中主流的单元测试框架为JUnit和TestNG。Maven所做的只是在
+    构建执行到特定生命周期阶段的时候，通过插件来执行JUnit或者TestNG的测试用例。这一插件就是maven-surefire-plugin，称之为
+    测试运行器（Test Runner），它能很好地兼容JUnit3、JUnit4以及TestNG。
+    
+    在默认情况下，maven-surefire-plugin的test目标会自动执行测试源码路径(src/test/java)下所有符合一组
+    命名模式的测试类。这组模式为`**/Test*.java`,`**/*Test.java`,`**/*TestCase.java`，只要按照上述模式命名就会自动
+    运行这些测试类。
+    
+    在插件中可以配置执行或者跳过一些测试用例
+    
    
