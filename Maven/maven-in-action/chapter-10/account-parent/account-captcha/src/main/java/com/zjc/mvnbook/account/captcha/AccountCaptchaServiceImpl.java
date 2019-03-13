@@ -16,8 +16,7 @@ import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
 
 public class AccountCaptchaServiceImpl
-    implements AccountCaptchaService, InitializingBean
-{
+        implements AccountCaptchaService, InitializingBean {
     private DefaultKaptcha producer;
 
     private Map<String, String> captchaMap = new HashMap<String, String>();
@@ -27,94 +26,76 @@ public class AccountCaptchaServiceImpl
     private int textCount = 0;
 
     public void afterPropertiesSet()
-        throws Exception
-    {
+            throws Exception {
         producer = new DefaultKaptcha();
 
-        producer.setConfig( new Config( new Properties() ) );
+        producer.setConfig(new Config(new Properties()));
     }
 
-    public String generateCaptchaKey()
-    {
+    public String generateCaptchaKey() {
         String key = RandomGenerator.getRandomString();
 
         String value = getCaptchaText();
 
-        captchaMap.put( key, value );
+        captchaMap.put(key, value);
 
         return key;
     }
 
-    public List<String> getPreDefinedTexts()
-    {
+    public List<String> getPreDefinedTexts() {
         return preDefinedTexts;
     }
 
-    public void setPreDefinedTexts( List<String> preDefinedTexts )
-    {
+    public void setPreDefinedTexts(List<String> preDefinedTexts) {
         this.preDefinedTexts = preDefinedTexts;
     }
 
-    private String getCaptchaText()
-    {
-        if ( preDefinedTexts != null && !preDefinedTexts.isEmpty() )
-        {
-            String text = preDefinedTexts.get( textCount );
+    private String getCaptchaText() {
+        if (preDefinedTexts != null && !preDefinedTexts.isEmpty()) {
+            String text = preDefinedTexts.get(textCount);
 
-            textCount = ( textCount + 1 ) % preDefinedTexts.size();
+            textCount = (textCount + 1) % preDefinedTexts.size();
 
             return text;
-        }
-        else
-        {
+        } else {
             return producer.createText();
         }
     }
 
-    public byte[] generateCaptchaImage( String captchaKey )
-        throws AccountCaptchaException
-    {
-        String text = captchaMap.get( captchaKey );
+    public byte[] generateCaptchaImage(String captchaKey)
+            throws AccountCaptchaException {
+        String text = captchaMap.get(captchaKey);
 
-        if ( text == null )
-        {
-            throw new AccountCaptchaException( "Captch key '" + captchaKey + "' not found!" );
+        if (text == null) {
+            throw new AccountCaptchaException("Captch key '" + captchaKey + "' not found!");
         }
 
-        BufferedImage image = producer.createImage( text );
+        BufferedImage image = producer.createImage(text);
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        try
-        {
-            ImageIO.write( image, "jpg", out );
-        }
-        catch ( IOException e )
-        {
-            throw new AccountCaptchaException( "Failed to write captcha stream!", e );
+        try {
+            ImageIO.write(image, "jpg", out);
+        } catch (IOException e) {
+            throw new AccountCaptchaException("Failed to write captcha stream!", e);
         }
 
         return out.toByteArray();
     }
 
-    public boolean validateCaptcha( String captchaKey, String captchaValue )
-        throws AccountCaptchaException
-    {
-        String text = captchaMap.get( captchaKey );
+    public boolean validateCaptcha(String captchaKey, String captchaValue)
+            throws AccountCaptchaException {
+        String text = captchaMap.get(captchaKey);
 
-        if ( text == null )
-        {
-            throw new AccountCaptchaException( "Captch key '" + captchaKey + "' not found!" );
+        if (text == null) {
+            throw new AccountCaptchaException("Captch key '" + captchaKey + "' not found!");
         }
 
-        if ( text.equals( captchaValue ) )
-        {
-            captchaMap.remove( captchaKey );
+        if (text.equals(captchaValue)) {
+            captchaMap.remove(captchaKey);
 
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }

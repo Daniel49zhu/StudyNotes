@@ -7,21 +7,17 @@ import java.util.Set;
 
 import org.junit.Test;
 
-public class RandomGeneratorTest
-{
+public class RandomGeneratorTest {
     @Test
-    public void testGetRandomString()
-        throws Exception
-    {
-        Set<String> randoms = new HashSet<String>( 100 );
+    public void testGetRandomString() throws Exception {
+        Set<String> randoms = new HashSet<String>(100);
 
-        for ( int i = 0; i < 100; i++ )
-        {
+        for (int i = 0; i < 100; i++) {
             String random = RandomGenerator.getRandomString();
 
-            assertFalse( randoms.contains( random ) );
+            assertFalse(randoms.contains(random));
 
-            randoms.add( random );
+            randoms.add(random);
         }
     }
 }
