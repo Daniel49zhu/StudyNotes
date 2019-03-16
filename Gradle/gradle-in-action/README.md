@@ -18,3 +18,8 @@
     测试和集成测试、执行静态代码分析和产生测试覆盖率报告、构建待发布产品、准备目标环境、部署产品、
     执行冒烟和自动化功能测试
     
+    - 第一个任务
+    
+    新建一个[build.gradle](chapter-02/hello-world/build.gradle),task的名字叫做helloWorld，其中包含
+    一个action叫做doLast，运行命令`gradle -q helloWorld`，控制台成功输出。
+    
