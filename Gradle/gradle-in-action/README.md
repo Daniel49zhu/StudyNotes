@@ -21,5 +21,22 @@
     - 第一个任务
     
     新建一个[build.gradle](chapter-02/hello-world/build.gradle),task的名字叫做helloWorld，其中包含
-    一个action叫做doLast，运行命令`gradle -q helloWorld`，控制台成功输出。
+    一个action叫做doLast，运行命令`gradle -q helloWorld`，控制台成功输出。`-q`是输出选项，quiet，代表
+    只输出task相关信息。task和action是重要的要素。` gradle tasks --all`可以列出所有当前项目的tasks
+    
+    - 命令行选项
+    
+        - -?、h、--help 打印所有可用的命令行选项
+        - -b、--build-file:可以执行特定名字的脚本（默认是build.gradle）
+        - --offline:仅在离线缓存中检查依赖是否存在
+        - -D、--system-prop:提供一个系统参数
+        - -P、--project-prop：向脚本中传入参数
+        - -i、--info：获取详细的构建输出信息
+        - -s、--stacktrace:抛出构建异常的堆栈信息
+        - -q、--quiet：减少构建出错时打印出来的错误信息
+    
+- 第3章 通过范例学习构建Gradle项目
+
+    本章我们将通过构建一个Java项目来探索Gradle标准化范例的内部工作方式，并学会将其修改成一个非约定方式的
+    用例。
     
