@@ -24,3 +24,7 @@
     
   [《Maven实战》](Maven/maven-in-action/README.md)
   
+- Linux
+
+   [Linux视频学习](Linux/VideoStudyNote/README.md)
+  
