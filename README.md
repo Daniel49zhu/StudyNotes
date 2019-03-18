@@ -27,4 +27,8 @@
 - Linux
 
    [Linux视频学习](Linux/VideoStudyNote/README.md)
+   
+- Java
+
+   [《Java编程思想》](Java/thinking-in-java/README.md)
   
