@@ -61,9 +61,35 @@
     
     ls 列出当前目录文件，ls -a，列出包含隐藏文件，ls -l，列出文件详细信息，ls -al 略
     
-   
+    - 创建目录
     
+    mkdir [dirName]：创建一个目录；
     
+    mkdir dir/dir1/dir2 -p：创建多层目录
     
+    - 删除目录
+    
+    rmdir [dirName]：删除一个空目录（不常用）
+    rm [dirName] -r：递归删除目录
+    
+    - 创建文件
+    
+    touch [fileName]:创建一个普通文件，或是修改已存在文件的时间
+    
+    - 拷贝文件
+    
+    cp [fromFile] [toFile]：将fromFile文件复制到toFile文件中
+    
+    - 查看文件内容
+    
+    cat [fileName]:查看文件内容并全部打印出来
+    
+    more [fileName]:部分查看文件内容
+    
+    less [fileName]:部分查看文件内容
+    
+    head [fileName] -10:查看正数10行
+    
+    tail [fileName] -10:查看倒数10行
    
    
