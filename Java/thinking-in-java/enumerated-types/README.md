@@ -28,3 +28,17 @@ enum类支持静态导入，但是必须要定义在不同包中（存在争议�
    
    一般来说，switch中只能使用整数值，而枚举天生就具备整数值的次序，可以通过ordinal()获得其次序，因此我们可以在switch语句中
    使用enum。[TrafficLight.java](TrafficLight.java),（在case语句中，我们不需要enum类型来修饰一个enum实例。）
+   
+- values()方法探秘
+
+    enum类都继承自java.lang.Enum类，但valueOf却并不是Enum类中的方法,通过一个反射的例子来看一下[Reflection.java](Reflection.java)，反编译Explore.class文件
+    ```
+    final class Explore extends java.lang.Enum<Explore> {
+      public static final Explore HERE;
+      public static final Explore THERE;
+      public static Explore[] values();
+      public static Explore valueOf(java.lang.String);
+      static {};
+    }
+    ```
+    ，因此，values方法是编译器添加的，在创建Explore的过程中，便以为还为其添加了valueOf方法。
