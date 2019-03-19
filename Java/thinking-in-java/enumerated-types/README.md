@@ -23,3 +23,8 @@ enum类支持静态导入，但是必须要定义在不同包中（存在争议�
 
 除了无法继承enum之外，我们基本可以把enum看作一个普通类，可以向其中添加方法甚至可以是main方法。[OzWitch.java](OzWitch.java),
 记住要先定义实例，并在实例最后加上分号,我们也可以复写toString方法,见[SpaceShip.java](SpaceShip.java);
+
+- switch中使用enum
+   
+   一般来说，switch中只能使用整数值，而枚举天生就具备整数值的次序，可以通过ordinal()获得其次序，因此我们可以在switch语句中
+   使用enum。[TrafficLight.java](TrafficLight.java),（在case语句中，我们不需要enum类型来修饰一个enum实例。）
