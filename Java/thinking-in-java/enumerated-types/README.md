@@ -73,10 +73,13 @@ enum类支持静态导入，但是必须要定义在不同包中（存在争议�
     食物，同时还希望每个enum元素仍然保持Food类型。[Food.java](menu/Food.java)。
     
     对于enum而言，实现接口是使其子类化的唯一办法，所有嵌入在Food中的每个enum
-    都实现了Food接口。然而，当需要与一大堆类型打交道时，接口就不如enum好用。
     
     另外一种更简洁的管理枚举的方法就是将一个enum嵌套在另一个enum中。像[SecurityCategory.java](SecurityCategory.java)这样。
     用Security接口将Security组织成一个公共类型是必要的。我们也对Meal进行了改写[Meal2.java](menu/Meal2.java)。
+
+- 使用EnumSet替代标志
+
+    Set是一种不能包含重复元素的集合，而enum也要求其成员唯一。
     
     
     
