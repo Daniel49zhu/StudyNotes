@@ -91,5 +91,30 @@
     head [fileName] -10:查看正数10行
     
     tail [fileName] -10:查看倒数10行
+    
+    - 修改文件名
+    
+    mv originName newName:修改文件名
+    
+    mv originName existedDirName:移动到这个目录下
+    
+    - 创建软链接
+        
+    ln -s absDirPath  newName:根据绝对路径创建一个快捷方式，注意要使用绝对路径才能在整个系统中打开
+    
+    - 创建硬链接
+    
+    ln absDirPath  newName：相当于对原文件进行了一次拷贝
+    
+   - 查看和修改文件权限
+   
+   whoami：查看当前登陆用户
+   
+   修改文件权限：（1）文字设定法 chmod [who] [+|-|=] [mode] target,who 文件所有者 u ，同组 g，其他人o，所有人a， +增加权限
+   ，-减少权限，=覆盖权限，mode x执行 r读 w写 eg.chmod a=xrw target 为所有人赋予三种权限；（2）数字设定法：r：4，
+   w：2，x：1，eg.chmod 755 target
+   
+   修改文件所属用户和组：
+   
    
    
