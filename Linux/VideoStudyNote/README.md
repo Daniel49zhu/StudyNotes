@@ -126,4 +126,14 @@
    - 软件的安装和卸载
      -  在线安装 sudo apt-get install xxx|sudo apt-get remove  xxx
      - deb包安装 sudo dpkg -i xxx.deb|sudo dpkg -r xxx.deb
+     
+- 第二天
+
+    - 压缩包管理
+    
+    https://www.cnblogs.com/newcaoguo/p/5896975.html
+    
+    
+    
+   
    
