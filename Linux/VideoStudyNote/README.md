@@ -116,5 +116,14 @@
    
    修改文件所属用户和组：
    
+   sudo chmod [who] [opt] [mode] | sudo chgrp [-cfhRv][--help][--version][所属群组][文件或目录...] 
    
+   - 文件查找和检索
+   
+     - 按文件名 find   path   -name   filename
+     - 按文件内容查找 grep 
+     
+   - 软件的安装和卸载
+     -  在线安装 sudo apt-get install xxx|sudo apt-get remove  xxx
+     - deb包安装 sudo dpkg -i xxx.deb|sudo dpkg -r xxx.deb
    
