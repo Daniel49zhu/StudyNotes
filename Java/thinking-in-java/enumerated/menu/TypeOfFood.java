@@ -1,6 +1,6 @@
-package menu;
+package enumerated.menu;
 
-import static menu.Food.*;
+import static enumerated.menu.Food.*;
 
 public class TypeOfFood {
     public static void main(String[] args) {

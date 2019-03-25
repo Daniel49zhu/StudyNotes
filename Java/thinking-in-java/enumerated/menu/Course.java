@@ -1,5 +1,4 @@
-package menu;
-
+package enumerated.menu;
 import net.mindview.util.Enums;
 
 public enum Course {

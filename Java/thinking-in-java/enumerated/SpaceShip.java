@@ -1,3 +1,4 @@
+package enumerated;
 public enum SpaceShip {
     SCOUT,CARGO,TRANSPORT,CRUISER,BATTLESHIP,MOTHERSHIP;
 

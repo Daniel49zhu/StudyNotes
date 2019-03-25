@@ -1,3 +1,4 @@
+package enumerated;
 import enumerated.Outcome;
 
 import static enumerated.Outcome.*;

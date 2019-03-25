@@ -1,4 +1,5 @@
-import enumerated.Outcome;
+
+package enumerated;
 
 import java.util.*;
 

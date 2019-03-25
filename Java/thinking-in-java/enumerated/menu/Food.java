@@ -1,4 +1,4 @@
-package menu;
+package enumerated.menu;
 
 public interface Food {
     enum Appetizer implements Food {

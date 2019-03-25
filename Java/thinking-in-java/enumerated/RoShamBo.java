@@ -1,3 +1,4 @@
+package enumerated;
 import net.mindview.util.Enums;
 
 public class RoShamBo {

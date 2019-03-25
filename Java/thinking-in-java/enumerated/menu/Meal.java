@@ -1,4 +1,4 @@
-package menu;
+package enumerated.menu;
 
 public class Meal {
   public static void main(String[] args) {

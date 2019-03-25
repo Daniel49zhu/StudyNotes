@@ -1,4 +1,4 @@
-import enumerated.AlarmPoints;
+package enumerated;
 
 import java.util.EnumSet;
 

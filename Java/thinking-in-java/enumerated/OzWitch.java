@@ -1,3 +1,4 @@
+package enumerated;
 import static net.mindview.util.Print.print;
 
 public enum OzWitch {

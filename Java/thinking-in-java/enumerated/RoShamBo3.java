@@ -1,4 +1,4 @@
-import enumerated.Outcome;
+package enumerated;
 
 import static enumerated.Outcome.*;
 

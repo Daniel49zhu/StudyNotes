@@ -1,4 +1,4 @@
-import enumerated.Outcome;
+package enumerated;
 
 public enum RoShamBo4 implements Competitor<RoShamBo4> {
     ROCK {

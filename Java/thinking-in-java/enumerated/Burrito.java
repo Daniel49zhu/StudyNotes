@@ -1,4 +1,4 @@
-import enumerated.Spiciness;
+package enumerated;
 
 import static enumerated.Spiciness.*;
 
