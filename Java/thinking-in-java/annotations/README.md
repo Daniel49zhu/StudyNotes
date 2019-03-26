@@ -33,3 +33,22 @@
        下面定义一个注解。[UseCase.java](UseCase.java),在[PasswordUtils.java](PasswordUtils.java)中有三个方法被
        添加了注解。如果没有编写注解处理器，那么注解就和注释一样无法发挥作用。下面是一个简单的处理器来处理PasswordUtils,
        [UseCaseTracker.java](UseCaseTracker.java),这个处理器中用到了getAnnotation和getDeclaredMethods方法
+       
+       注解中支持的类型包括所有基本类型、String、Class、enum、Annotation，如果在注解中使用了其他类型，那么编译器就会报错。
+       注解中的元素不能有不确定的值，也就是必须要提供值或者由注解提供默认值。其次，非基本类型的值不能用null作为其值。这个
+       约束使得处理器很难表现一个元素的存在或缺失的状态，因此我们会定义空字符串或负数来表示某个元素不存在。
+       
+       在用Hibernate关联数据库时，我们可能会需要使用XML配置很多类和数据库关系的映射，这就会造成信息的冗余，我们通过
+       实现一些新的注解，将定义的Bean关联数据库，来自动生成一些表。[DBTable/java](database/DBTable.java)，告诉处理器，你需要
+       为我生成一个数据库表。接下来是为修饰JavaBean域准备的注解。[Constraints.java](database/Constraints.java),[SQLString.java](database/SQLString.java)
+       ,[SQLInteger.java](database/SQLInteger.java)。接着利用上面的这些注解定义一个JavaBean，[Member.java](database/Member.java),@DBTable的值将来
+       会作为表的名字，@SQLString设置了字符串的长度。最后我们要实现一个处理器，它会检查类上的注解，并根据注解最后生成一个
+       创建数据库的SQL命令。[TableCreator.java](database/TableCreator.java)，最主要的方法就是利用getDeclaredAnnotations检查域上的所有注解。
+       
+       （第4版中后面提到了apt接口来实现注解处理器，该系列在jdk1.8中已经被移除了，取而代之的是Pluggable Annotation Processing API）
+       https://www.cnblogs.com/throwable/p/9139908.html
+       
+   
+       
+       
+       
