@@ -133,6 +133,10 @@
     
     https://www.cnblogs.com/newcaoguo/p/5896975.html
     
+    - ps命令 查看进程
+    
+    ps a 查看所有进程
+    
     
     
    
