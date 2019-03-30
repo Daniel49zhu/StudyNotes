@@ -1,5 +1,9 @@
 package com.zjc;
 
+/**
+ *
+ */
+
 import org.apache.commons.collections4.Predicate;
 import org.apache.commons.collections4.PredicateUtils;
 import org.apache.commons.collections4.functors.NotNullPredicate;
