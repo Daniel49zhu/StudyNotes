@@ -30,21 +30,21 @@ public class DataSourceApplication {
         SpringApplication.run(DataSourceApplication.class, args);
     }
 
-    @RequestMapping(path="/run")
+    @RequestMapping(path = "/run")
     public void run(HttpServletResponse response) throws Exception {
         PrintWriter writer = response.getWriter();
         showConnection(writer);
         showData(writer);
     }
 
-    private void showConnection(PrintWriter writer ) throws SQLException, IOException {
+    private void showConnection(PrintWriter writer) throws SQLException {
         writer.println(dataSource.toString());
         Connection conn = dataSource.getConnection();
         writer.println(conn.toString());
         conn.close();
     }
 
-    private void showData(PrintWriter writer ) throws IOException {
+    private void showData(PrintWriter writer) {
         jdbcTemplate.queryForList("SELECT * FROM FOO").forEach(row -> writer.println(row.toString()));
     }
 }
