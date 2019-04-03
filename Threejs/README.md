@@ -1,1 +1,1 @@
-演示地址：https://daniel49zhu.github.io/StudyNotes/Threejs/vrDemo/panaroma
+演示地址：https://daniel49zhu.github.io/StudyNotes/Threejs/vrDemo/panoroma
