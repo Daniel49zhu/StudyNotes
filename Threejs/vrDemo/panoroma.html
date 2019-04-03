@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>全景图</title>
+    <style>
+        html, body {
+            background-color: #000;
+            margin: 0px;
+            padding: 0px;
+            overflow: hidden;
+        }
+
+        a {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div id="container"></div>
+<script src="./libs/three.min.js"></script>
+<script src="./libs/OrbitControls.js"></script>
+<script>
+    var camera, controls;
+    var renderer;
+    var scene;
+    init();
+    animate();
+
+    function init() {
+        var container = document.getElementById('container');
+        renderer = new THREE.WebGLRenderer();
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        container.appendChild(renderer.domElement);
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.z = 0.01;
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+        // 使动画循环使用时阻尼或自转 意思是否有惯性
+        controls.enableDamping = true;
+        //是否可以缩放
+        controls.enableZoom = true;
+
+        //是否自动旋转
+        controls.autoRotate = false;
+        //设置相机距离原点的最远距离
+        controls.minDistance = 200;
+        //设置相机距离原点的最远距离
+        controls.maxDistance = 600;
+        //是否开启右键拖拽
+        controls.enablePan = false;
+
+        controls.rotateSpeed = -0.25;
+
+
+        scene.background = new THREE.CubeTextureLoader().load([
+            "./images/office_f.jpg",
+            "./images/office_b.jpg",
+            "./images/office_u.jpg",
+            "./images/office_d.jpg",
+            "./images/office_l.jpg",
+            "./images/office_r.jpg"
+        ]);
+        window.addEventListener('resize', onWindowResize, false);
+        document.getElementsByTagName('Canvas')[0].addEventListener('wheel', onDocumentMouseWheel, false);
+    }
+
+
+    function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+    }
+
+    function onDocumentMouseWheel(event) {
+
+        var fovMAX = 100;
+        var fovMIN = 20;
+
+        camera.fov -= event.wheelDeltaY * 0.05;
+        camera.fov = Math.max(Math.min(camera.fov, fovMAX), fovMIN);
+        camera.updateProjectionMatrix();
+
+    }
+</script>
+</body>
+</html>
