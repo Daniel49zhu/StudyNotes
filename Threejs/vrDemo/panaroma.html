@@ -37,10 +37,25 @@
         camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 100);
         camera.position.z = 0.01;
         controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableZoom = false;
-        controls.enablePan = false;
+
+        // 使动画循环使用时阻尼或自转 意思是否有惯性
         controls.enableDamping = true;
+        //是否可以缩放
+        controls.enableZoom = true;
+
+        controls.zoomSpeed = 1.0;
+        //是否自动旋转
+        controls.autoRotate = false;
+        //设置相机距离原点的最远距离
+        controls.minDistance = 200;
+        //设置相机距离原点的最远距离
+        controls.maxDistance = 600;
+        //是否开启右键拖拽
+        controls.enablePan = false;
+
         controls.rotateSpeed = -0.25;
+
+
         scene.background = new THREE.CubeTextureLoader().load([
             "./images/office_f.jpg",
             "./images/office_b.jpg",
@@ -61,9 +76,11 @@
 
     function animate() {
         requestAnimationFrame(animate);
-        controls.update(); // required when damping is enabled
+        controls.update();
         renderer.render(scene, camera);
     }
+
+
 </script>
 </body>
 </html>
