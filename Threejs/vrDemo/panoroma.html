@@ -43,7 +43,6 @@
         //是否可以缩放
         controls.enableZoom = true;
 
-        controls.zoomSpeed = 1.0;
         //是否自动旋转
         controls.autoRotate = false;
         //设置相机距离原点的最远距离
@@ -65,6 +64,7 @@
             "./images/office_r.jpg"
         ]);
         window.addEventListener('resize', onWindowResize, false);
+        document.getElementsByTagName('Canvas')[0].addEventListener('wheel', onDocumentMouseWheel, false);
     }
 
 
@@ -80,6 +80,16 @@
         renderer.render(scene, camera);
     }
 
+    function onDocumentMouseWheel(event) {
+
+        var fovMAX = 100;
+        var fovMIN = 20;
+
+        camera.fov -= event.wheelDeltaY * 0.05;
+        camera.fov = Math.max(Math.min(camera.fov, fovMAX), fovMIN);
+        camera.updateProjectionMatrix();
+
+    }
 </script>
 </body>
 </html>
