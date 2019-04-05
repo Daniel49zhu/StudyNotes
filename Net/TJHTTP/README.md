@@ -259,8 +259,56 @@
         通信流量和通信时间。缓存服务器是代理服务器的一种，并归类在缓存代理类型中。
         
         缓存在浏览器客户端称之为临时网络文件（Temporary Internet File）
+        
+- 第6章 HTTP首部
+
+    HTTP协议的请求和响应报文中必定包含HTTP首部，只是我们在使用Web的过程中感受不到它。
     
+    - HTTP报文首部
+        
+        HTTP协议的请求和响应报文中必须包含HTTP首部。首部内容为客户端和服务器分别处理请求和响应所需要的重要
+    信息。对于客户端用户来说。这些信息大部分无需亲自查看。报文首部由几个字段构成。
     
+        - HTTP请求报文首部
+        
+        包含方法、URI、HTTP版本 HTTP首部字段等部分
+        ```
+        GET / HTTP/1.1
+        Host: hackr.jp
+        User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:13.0) Gecko/
+        20100101 Firefox/13.0
+        Accept: text/html,application/xhtml+xml,application/xml;q=0.9,
+        */*; q=0.8
+        Accept-Language: ja,en-us;q=0.7,en;q=0.3
+        Accept-Encoding: gzip, deflate
+        DNT: 1
+        Connection: keep-alive
+        If-Modified-Since: Fri, 31 Aug 2007 02:02:20 GMT
+        If-None-Match: "45bae1-16a-46d776ac"
+        Cache-Control: max-age=0
+        ```
+        
+        - HTTP响应报文
+        
+        包含HTTP版本、状态码、HTTP首部字段3部分组成
+        ```
+        HTTP/1.1 304 Not Modified
+        Date: Thu, 07 Jun 2012 07:21:36 GMT
+        Server: Apache
+        Connection: close
+        Etag: "45bae1-16a-46d776ac"
+        ```
+        
+    - HTTP首部字段
+    
+        HTTP首部字段是构成HTTP报文的要素之一，无论是请求还是响应，都会使用首部字段，他能起到传递额外信息
+        的重要作用。使用首部字段是为了给浏览器和服务器提供报文主体大小、所使用的语言、认证信息等。
+        
+        - 首部字段一览
+        
+        ![首部字段一览](images/head.jpg "首部字段一览")
+        
+- 第7章 确保Web安全的HTTPS
         
             
     
