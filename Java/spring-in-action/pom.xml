@@ -22,6 +22,7 @@
         <module>example01</module>
         <module>example02</module>
         <module>example03</module>
+        <module>example04</module>
     </modules>
     <dependencies>
         <dependency>
