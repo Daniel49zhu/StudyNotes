@@ -14,7 +14,6 @@ import java.io.PrintWriter;
 
 @SpringBootApplication
 @RestController
-@Slf4j
 public class DruidDemoApplication {
     @Autowired
     private DataSource dataSource;
@@ -28,10 +27,8 @@ public class DruidDemoApplication {
     @RequestMapping(path = "/run")
     public void run(HttpServletResponse response) throws Exception {
         PrintWriter writer = response.getWriter();
-
         writer.println(dataSource.toString());
         jdbcTemplate.queryForList("SELECT * FROM FOO").forEach(list -> writer.println(list));
-
         writer.close();
     }
 }

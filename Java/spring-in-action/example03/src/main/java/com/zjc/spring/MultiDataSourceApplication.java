@@ -1,6 +1,5 @@
 package com.zjc.spring;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -9,7 +8,6 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerA
 import org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,11 +19,10 @@ import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.sql.Connection;
 
+@RestController
 @SpringBootApplication(exclude = { DataSourceAutoConfiguration.class,
         DataSourceTransactionManagerAutoConfiguration.class,
         JdbcTemplateAutoConfiguration.class})
-@RestController
-@Slf4j
 public class MultiDataSourceApplication {
     public static void main(String[] args) {
         SpringApplication.run(MultiDataSourceApplication.class,args);
@@ -81,3 +78,4 @@ public class MultiDataSourceApplication {
     }
 
 }
+
