@@ -79,5 +79,33 @@
     SELECT prod_name,prod_price FROM products WHERE prod_name REGEXP '1000|2000';
     SELECT prod_name,prod_price FROM products WHERE prod_name REGEXP '[123] ton';
     ```
+    
+- 第10章 创建计算字段
+    
+    数据库表中的数据一般不是应用程序所需要的格式，因此需要对字段进行处理
+    - 拼接字段
+    
+        多数数据库使用`||`来实现拼接，但在MySQL中使用Concat()函数来实现，这一点要铭记于心。
+        ```
+        SELECT CONCAT(vend_name,'(',vend_country,')') FROM vendors ORDER BY vend_name;
+        SELECT CONCAT(RTRIM(vend_name),'(',RTRIM(vend_country),')') FROM vendors ORDER BY vend_name;
+        SELECT CONCAT(RTRIM(vend_name),'(',RTRIM(vend_country),')') AS vend_title FROM vendors ORDER BY vend_name;
+        ```
+    - 执行算数计算： MySQL执行对数字类型字段进行算数计算
+    
+- 第11章 使用数据处理函数
+    
+    DBMS支持通过函数处理数据，但是这样移植性会较差。
+    
+    - 文本处理函数： 
+    ![文本处理函数](images/strfunc.jpg "文本处理函数")
+    
+    其中SOUNDEX是按照发音进行模糊匹配的函数
+    
+    - 日期处理函数
+    ![日期处理函数](images/datefunc.jpg "日期处理函数")
+    
+    - 数值处理函数
+    ![数值处理函数](images/numfunc.jpg "数值处理函数")
 
     
