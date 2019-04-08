@@ -107,5 +107,24 @@
     
     - 数值处理函数
     ![数值处理函数](images/numfunc.jpg "数值处理函数")
+    
+- 第12章 汇总数据
+
+    - 聚集函数
+    ![聚集函数](images/gathfunc.jpg "聚集函数")
+    
+- 第13章 分组数据
+
+    `select vend_id ,count(*) as num_prods from products group by vend_id;`
+    
+    GROUP子句可以包含任意数目的列。这使得可以对分组进行嵌套，提供更细致的控制。如果分组进行了嵌套，数据
+    会在最后规定的分组上进行汇总。GROUP BY子句列出的所有列必须是索引列或是有效的表达式（不能是聚集函数）。如果
+    在子句中使用的是表达式，则在select中也要用相同的表达式，而不能是别名。
+    
+    GROUP BY必须出现在WHERE 之后，ORDER BY之前。
+    
+    如果需要过滤某个分组，则需要使用HAVING关键字。WHERE过滤行，HAVING过滤分组。WHERE会在分组钱进行过滤，HAVING
+    则是在数据分组之后过滤。
+    `select cust_id,count(*) as orders from orders group by cust_id having orders>=2;`
 
     
