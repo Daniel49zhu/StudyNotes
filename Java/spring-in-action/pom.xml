@@ -25,6 +25,7 @@
         <module>example04</module>
         <module>example05</module>
         <module>example06</module>
+        <module>example07</module>
     </modules>
     <dependencies>
         <dependency>
