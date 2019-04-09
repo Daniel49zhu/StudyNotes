@@ -4,8 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,19 +27,18 @@ public class TransactionApplication {
     public void run(HttpServletResponse response) throws Exception {
         PrintWriter writer = response.getWriter();
         writer.println("COUNT BEFORE TRANSACTION: {}" + getCount());
-        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-            @Override
-            protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-                jdbcTemplate.execute("INSERT INTO FOO (ID, BAR) VALUES (1, 'aaa')");
-                writer.println("COUNT IN TRANSACTION: {}" + getCount());
-                transactionStatus.setRollbackOnly();
-            }
+        transactionTemplate.execute(transactionStatus -> {
+            jdbcTemplate.execute("INSERT INTO FOO (ID, BAR) VALUES (1, 'aaa')");
+            writer.println("COUNT IN TRANSACTION: {}" + getCount());
+            transactionStatus.setRollbackOnly();
+            return null;
         });
         writer.println("COUNT AFTER TRANSACTION: {}" + getCount());
     }
 
     private long getCount() {
-        return (long) jdbcTemplate.queryForList("SELECT COUNT(*) AS CNT FROM FOO")
-                .get(0).get("CNT");
+        return (long) jdbcTemplate.queryForList("SELECT COUNT(*) AS CNT FROM FOO").get(0).get("CNT");
     }
+
 }
+

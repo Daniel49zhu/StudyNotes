@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 @Service
 public class FooServiceImpl implements IFooService {
@@ -25,6 +26,13 @@ public class FooServiceImpl implements IFooService {
 
     @Override
     public void invokeInsertThenRollback() throws Exception {
-        insertThenRollback();
+        try {
+            TransactionAspectSupport.currentTransactionStatus()
+            insertThenRollback();
+        } catch (Exception e) {
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        }
+        throw new Exception();
     }
 }
