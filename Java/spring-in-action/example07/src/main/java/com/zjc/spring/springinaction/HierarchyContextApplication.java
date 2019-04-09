@@ -32,7 +32,7 @@ public class HierarchyContextApplication {
         bean = barContext.getBean("testBeanY", TestBean.class);
         writer.println(bean.hello());
 
-        bean = barContext.getBean("testBeanX", TestBean.class);
+        bean = barContext.getBean("testBeanZ", TestBean.class);
         writer.println(bean.hello());
     }
 }

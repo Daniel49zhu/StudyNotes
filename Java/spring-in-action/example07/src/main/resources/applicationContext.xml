@@ -8,7 +8,7 @@
 
     <aop:aspectj-autoproxy/>
 
-    <bean id="testBeanX" class="com.zjc.spring.springinaction.TestBean">
+    <bean id="testBeanZ" class="com.zjc.spring.springinaction.TestBean">
         <constructor-arg name="context" value="Bar" />
     </bean>
 
