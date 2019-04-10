@@ -216,6 +216,28 @@
         `select note_text from productnotes where match(note_text) against('heavy -rope*' in boolean mode )`
         ![布尔操作符](images/boolean.jpg "布尔操作符")
         
-- 第19章 插入数据  
+- 第19章 插入数据
+
+    - 插入一条数据 略
+    - 插入检索出的数据
+    
+        INSERT 一般用来给表插入一个指定列值的行。但是INSET还存在另一种形式，可以利用它将
+        一条SELECT语句的结果插入表中。这就是INSERT SELECT。
+        ```
+        INSERT INTO customers (
+            cust_id,
+            cust_email,
+            cust_name
+        ) 
+        SELECT cust_id,
+        cust_contact,
+        cust_name 
+        FROM custnew;
+        ```
+        这种插入不在乎列名是否对应，只许类型对应即可。
+        
+
+        
+      
 
     
