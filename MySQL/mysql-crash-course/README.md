@@ -183,5 +183,39 @@
     注意UNION默认会去除重复的行，如果需要保留则要使用UNION ALL。
     
     如果要对UNION 的结果进行排序，注意ORDER BY必须只能出现在最后一个SELECT语句之后。
+    
+- 第18章 全文本搜索
+
+    并非所有引擎都支持全文本搜索，两个最常使用的引擎为MyISAM和InnoDB，前者支持全文本搜索而后者不支持。为了使用
+    全文本搜索，必须索引被搜索的列，而且随着数据的改变不断地重新索引。
+    
+    - 启用全文本搜索支持
+    
+        一般在创建表时启用全文本搜索。CREATE TABLE语句接受FULLTEXT子句，它给出被索引列的一个逗号分隔的列表。
+        ```
+        CREATE TABLE productnotes
+        (
+            note        int         NOT NULL AUTO_INCREMENT,
+            prod_id     char(10)    NOT NULL,
+            note_date   datetime    NOT NULL,
+            note_text   text        NULL,
+            PRIMARY KEY(note_id),
+            FULLTEXT(note_text)
+        )   ENGINE=MyISAM;
+        ```
+        在定义之后，MySQL会自动维护该索引。在增加、更新或删除行时，索引随之自动更新。在索引之后，使用两个函数
+        Match()和Against()执行全文本搜索。其中Match()指定被搜索的列，Against()指定要使用的搜索表达式。
+        `SELECT note_text FROM productnotes WHERE Match(note_text) Against('rabbit');`
+        这条SELECT语句检索单个列note_text。由于WHERE子句，一个全文本搜索被执行。Match(note_text)指示MySQL针对
+        指定的列进行索引，Against('rabbit')指定词rabbit作为搜索文本。相较于LIKE关键词，全文本搜索能进行排序，搜索
+        效率也会更高。
+        
+    - 布尔文本搜索
+    
+        MySQL支持全文本搜索的另一种形式，称为布尔方式。
+        `select note_text from productnotes where match(note_text) against('heavy -rope*' in boolean mode )`
+        ![布尔操作符](images/boolean.jpg "布尔操作符")
+        
+- 第19章 插入数据  
 
     
