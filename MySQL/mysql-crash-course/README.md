@@ -236,7 +236,119 @@
         ```
         这种插入不在乎列名是否对应，只许类型对应即可。
         
+- 第20章 更新和删除数据
 
+    - 更新数据
+    
+        UPDATE
+        
+    - 删除数据
+     
+        DELETE
+        
+    - 切记要带上WHERE否则会更新或删除每一行
+    
+- 第21章 创建和操纵表
+
+    - 创建表
+    
+        一般创建表的方法，使用具有交互式创建和管理表的工具，表也可以直接用MySQL语句操纵。
+        ```
+        CREATE TABLE customers
+        (
+          cust_id      int       NOT NULL AUTO_INCREMENT,
+          cust_name    char(50)  NOT NULL ,
+          cust_address char(50)  NULL ,
+          cust_city    char(50)  NULL ,
+          cust_state   char(5)   NULL ,
+          cust_zip     char(10)  NULL ,
+          cust_country char(50)  NULL ,
+          cust_contact char(50)  NULL ,
+          cust_email   char(255) NULL ,
+          PRIMARY KEY (cust_id)
+        ) ENGINE=InnoDB;
+        ```
+        最后一句是指定创建表使用的引擎。MySQL与其他DBMS不一样，它具有多种引擎，全都能
+        执行CREATE TABLE和SELECT等命令。它们各自有不用的功能和特性，为不同的任务选择正确
+        的引擎能获得良好的功能和灵活性。如果省略则使用默认引擎（很可能是MyISAM），多数SQL
+        语句会默认使用它。
+        - InnoDB是一个可靠的事务处理引擎，它不支持全文本搜索
+        - MEMORY在功能等同于MyISAM，但由于数据存储在内存中，速度很快。
+        - MyISAM是一个性能极高的引擎，它支持全文本搜索，但不支持事务处理。
+        
+        混用引擎有一个大缺陷，外键不能跨引擎，即使用一个引擎的表不能引用具有使用不用引擎的表的外键。
+    - 更新表
+        为了更新表定义，可以使用ALTER TABLE语句。
+    - 删除表
+        DROP TABLE customer;
+    - 重命名表
+        RENAME TABLE customer;
+- 第22章 使用视图
+
+    MySQL5添加了对视图的支持，视图是虚拟的表。与包含数据的表不同，视图只包含使用时动态检索数据的查询。    
+    
+    - 视图的规则和限制
+        - 与表一样，视图必须唯一命名
+        - 对于可以创建的视图数目没有限制
+        - 为了创建视图，必须有足够的访问权限。
+        - 视图可以嵌套，即可以利用从其他视图中检索数据的查询来构造一个视图。
+        - ORDER BY可以用在视图
+        - 视图不能索引，也不能添加触发器或默认值
+        - 视图可以和表一起使用
+    - 使用视图
+    
+        CREATE VIEW创建视图，SHOW CREATE VIEW viewname来查看视图的语句
+        DROP VIEW viewname删除视图，CREATE OR REPLACE VIEW更新视图。
+        
+        视图最常见的应用之一就是隐藏复杂的SQK，这通常会涉及联结。
+        ```
+        CREATE OR REPLACE VIEW productcustomers AS
+        SELECT cust_name, cust_contact, prod_id
+        FROM customers,
+             orders,
+             orderitems
+        WHERE customers.cust_id = orders.cust_id
+          AND orderitems.order_num = orders.order_num;
+          
+      SELECT *
+      FROM productcustomers
+      WHERE prod_id = 'TNT2'
+      ```    
+      可以看出，视图极大简化了复杂SQL的使用，利用视图可以一次性编写基础的SQL，然后根据需要多次使用。
+      
+- 第23章 使用存储过程
+
+    MySQL5添加了对存储过程的支持，迄今为止，使用的大多数SQL都是针对一个或多个表的单条语句。并非所有操作
+    都这么简单，经常会有一个完整的操作需要多条语句才能完成。
+    
+    - 为什么使用存储过程
+        - 通过把处理封装在容易使用的单元中，简化复杂的操作
+        - 由于不要求反复建立一系列处理步骤，这保证了数据的完整性。
+        - 简化对变动的管理。如果表名、列名或业务逻辑有变化，只需要更改存储过程的代码
+        - 提高性能。因为使用存储过程比单独的SQL语句要快。
+        
+        简单来说，就是简单、安全、高性能。但是存储过程比基本SQL复杂，编写存储过程需要更高的技能。
+        
+    - 执行存储过程
+        MySQL称存储过程的执行为调用，因此MySQL执行存储过程的语句为CALL。CALL接收存储过程的名字
+        以及需要传递给它的任意参数。
+        ```
+        CALL productprincing(@pricelow,
+                             @pricehigh,
+                             @priceaverage);
+        ```
+    - 创建存储过程
+    
+        先看一个例子，一个返回产品平均价格的存储过程。
+        ```
+        CREATE PROCEDURE productpricing()
+        BEGIN
+            SELECT Avg(prod_price) AS priceaverage
+            FROM products;
+        END;
+        ```
+        
+         
         
       
 
