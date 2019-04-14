@@ -347,7 +347,34 @@
             FROM products;
         END;
         ```
+        执行CALL productpricing();并显示返回的结果。
+    - 删除存储过程
+    
+        DROP PROCEDURE productpricing;
         
+    上面的例子只是一个简单的存储过程，它简单的显示SELECT语句的结果。一般，存储过程并不显示结果，
+    而是把结果返回给你指定的变量。
+    ```
+    CREATE PROCEDURE productpricing(
+        OUT pl decimal(8, 2),
+        OUT ph decimal(8, 2),
+        OUT pa decimal(8, 2))
+    BEGIN
+      SELECT Min(prod_price) INTO pl FROM products;
+      SELECT Max(prod_price) INTO ph FROM products;
+      SELECT Avg(prod_price) INTO pa FROM products;
+    END;
+    
+    CALL productpricing(@pricelow,@pricehigh,@priceaverage);
+    
+    SELECT @pricelow;
+    ```   
+    在新的存储过程定义中，我们定义了OUT参数（从存储过程中传出），另外还有IN（传递给存储过程）和
+    INOUT（对存储过程传入和传出）类型的参数。所有MySQL变量都必须以@开始。调用之后，并不显示任何数据，它返回以后
+    可以显示（或在其他处理中使用）变量。
+     
+      
+              
          
         
       
