@@ -372,6 +372,37 @@
     在新的存储过程定义中，我们定义了OUT参数（从存储过程中传出），另外还有IN（传递给存储过程）和
     INOUT（对存储过程传入和传出）类型的参数。所有MySQL变量都必须以@开始。调用之后，并不显示任何数据，它返回以后
     可以显示（或在其他处理中使用）变量。
+    ```
+    CREATE PROCEDURE ordertotal(IN onumber INT,
+                                IN taxable BOOLEAN,
+                                OUT ototal DECIMAL(8, 2))
+        COMMENT 'Obtain order total.optionally adding tax'
+    BEGIN
+        -- Declare variable for total
+        DECLARE total DECIMAL(8, 2);
+        -- Declare tax percentage
+        DECLARE taxrate INT DEFAULT 6;
+        -- Get order total
+        SELECT Sum(item_price * quantity)
+        FROM orderitems
+        WHERE order_num = onumber INTO total;
+        -- Is this taxable
+        IF taxable THEN
+            SELECT total + (total / 100 * taxrate) INTO total;
+        end if;
+    
+        SELECT total into ototal;
+    END;
+    -------------------------------------
+    CALL ordertotal(20005,0,@total);
+    select @total;
+    ```
+    这个存储过程变化很大，首先，增加了注释。用DECLARE定义了两个局部变量，DECLARE要求指定变量名
+    和数据类型，他也可以支持默认值。
+    
+    - 检查存储过程
+    
+    `SHOW CREATE PROCEDURE ordertotal`;
      
       
               
