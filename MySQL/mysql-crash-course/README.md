@@ -477,8 +477,8 @@
      中的合适位置放置占位符。这样如果需要回退可以回退到某个占位符，这些占位符被称为保留点，为了创建占位符
      可以使用保留点。
      ```
-    SAVEPOINT delete1;
-    ROLLBACK TO delete1;
+     SAVEPOINT delete1;
+     ROLLBACK TO delete1;
      ```
         
     
