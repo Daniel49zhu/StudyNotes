@@ -480,6 +480,47 @@
      SAVEPOINT delete1;
      ROLLBACK TO delete1;
      ```
+     
+- 第27章 全球化 略
+
+- 第28章 安全管理
+
+    - 访问控制
+    
+        MySQL创建一个名为root的用户账号，它对整个MySQL服务器具有完全的控制。但在现实世界的日常工作中，绝不能使用oot。应该创建
+        一系列账号，有的用于管理，有的供用户使用，有的供开发人员使用等等。
+        
+        访问控制不仅仅是防止用户的恶意企图，更为常见的是无意识错误的结果。
+    - 管理用户
+    
+        查询所有用户名
+        ```
+        use mysql;
+        select user from user;
+        ```
+        账号操作
+        ```
+        CREATE USER ben IDENTIFIED BY 'p@$$w)rd';
+        RENAME USER ben TO bforta;
+        DROP USER bforta;
+        ```
+        设置访问权限
+        ```
+        SHOW GRANTS FOR bforta;
+        GRANT SELECT ON mysql_crash.* TO bforta;
+        REVOKE SELECT ON mysql_crash.* FROM bforta;
+        ```
+        新创建的用户没有任何权限，需要手动添加和撤销权限。
+        
+- 第29章 数据库维护
+
+    ```
+    ANALYZE TABLE orders,orderitems; --用来检查表键是都正确
+    CHECK TABLE orders,orderitems;     --针对许多问题对表进行检查
+    ```
+    
+- 第30章 改善性能 略
+    
         
     
         
