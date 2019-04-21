@@ -31,7 +31,8 @@
 - Java
 
    [《Java编程思想》](Java/thinking-in-java/README.md)
-   
+   [《Effective Java》](Java/effective-java/README.md)
+
 - Docker
 
     [《Docker从入门到实践》](Docker/docker-in-practice/README.md)
