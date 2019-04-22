@@ -22,7 +22,7 @@ function mapStateToProps(state) {
     return {value: sum};
 }
 
-
 export default connect(mapStateToProps)(Summary);
+
 
 
