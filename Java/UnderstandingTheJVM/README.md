@@ -104,4 +104,11 @@
     泄露还是内存溢出，如果是泄露对象是如何导致垃圾收集器无法自动回收它们。如果是内存溢出，则要检查
     虚拟机堆参数（-Xmx与-Xms）。
     
+    [JavaVMStackSOF.java](demo/src/JavaVMStackSOF.java)，使用-Xss参数减少栈内存容量，最终会抛出StackOverflowError异常
+    
+    [RuntimeConstantPoolOOM.java](demo/src/RuntimeConstantPoolOOM.java),这段代码在JDK1.6及之前的版本中，由于
+    常量池分配在永久代内，因此会抛出OutOfMomoryError:PermGen space。而在JDK1.7运行上就会一直进行下去。
+    
+    `-XX:MaxDirectMemorySize`直接内存默认与Java堆的最大值一样
+    
        
