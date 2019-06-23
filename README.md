@@ -33,6 +33,7 @@
    [《Java编程思想》](Java/thinking-in-java/README.md)
    [《Effective Java》](Java/effective-java/README.md)
    [《深入理解JVM》](Java/UnderstandingTheJVM/README.md)
+   [《Spring揭秘》](Java/SpringJieMi/README.md)
 
 - Docker
 
