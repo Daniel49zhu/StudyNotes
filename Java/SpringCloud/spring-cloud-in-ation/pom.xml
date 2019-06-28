@@ -10,6 +10,8 @@
     <modules>
         <module>hello-service</module>
         <module>eureka-server</module>
+        <module>eureka-server-ha</module>
+        <module>ribbon-consumer</module>
     </modules>
 
 </project>
