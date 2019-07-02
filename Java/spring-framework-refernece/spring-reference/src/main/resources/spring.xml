@@ -4,6 +4,9 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
             https://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="helloService" class="com.zjc.services.HelloService" />
+    <bean id="helloService" class="com.zjc.services.HelloService" >
+    </bean>
+    <alias name="helloService" alias="firstService"/>
+    <alias name="helloService" alias="demoService"/>
 
 </beans>

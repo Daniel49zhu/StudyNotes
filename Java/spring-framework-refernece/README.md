@@ -59,3 +59,53 @@
         </property>
     </bean>
     ```
+    Spring支持别名
+    ```
+        <bean id="helloService" class="com.zjc.services.HelloService" >
+        </bean>
+        <alias name="helloService" alias="firstService"/>
+        <alias name="helloService" alias="demoService"/>
+    ```
+    
+    Bean的实例化默认是通过构造器，你也可通过静态的工厂方法
+    ```
+    <bean id="clientService"  class="examples.ClientService" factory-method="createInstance"/>
+    
+    public class ClientService {
+        private static ClientService clientService = new ClientService();
+        private ClientService() {}
+        public static ClientService createInstance() {
+            return clientService;
+        }
+    }
+    ```
+   你也可以通过静态工厂方法来实现
+   ```
+    <!-- the factory bean, which contains a method called createInstance() -->
+    <bean id="serviceLocator" class="examples.DefaultServiceLocator">
+        <!-- inject any dependencies required by this locator bean -->
+    </bean>
+    
+    <!-- the bean to be created via the factory bean -->
+    <bean id="clientService"
+        factory-bean="serviceLocator"
+        factory-method="createClientServiceInstance"/>
+        
+    <bean id="accountService"
+        factory-bean="serviceLocator"
+        factory-method="createAccountServiceInstance"/>
+        
+    public class DefaultServiceLocator {
+        private static ClientService clientService = new ClientServiceImpl();
+        
+        public ClientService createClientServiceInstance() {
+            return clientService;
+        }
+        public AccountService createAccountServiceInstance() {
+            return accountService;
+        }
+    }
+   ``` 
+    
+    
+    

@@ -23,9 +23,18 @@ public class TestApplication {
     @Test
     public void test2() {
         ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
-        beanFactory.registerSingleton("helloService2",new HelloService());
+        beanFactory.registerSingleton("helloService2", new HelloService());
 
         HelloService helloService2 = (HelloService) beanFactory.getBean("helloService2");
         helloService2.sayHello();
+    }
+
+    @Test
+    public void test3() {
+        HelloService firstService = (HelloService) context.getBean("firstService");
+        HelloService demoService = (HelloService) context.getBean("demoService");
+        firstService.sayHello();
+        demoService.sayHello();
+        System.out.println(firstService.equals(demoService));
     }
 }
