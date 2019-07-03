@@ -1,5 +1,6 @@
 package com.zjc.test;
 
+import com.zjc.services.CoolService;
 import com.zjc.services.HelloService;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,5 +37,18 @@ public class TestApplication {
         firstService.sayHello();
         demoService.sayHello();
         System.out.println(firstService.equals(demoService));
+    }
+
+    @Test
+    public void test4() {
+        HelloService helloService = (HelloService) context.getBean("helloService");
+        System.out.println("Hello I'm " + helloService.getBeanOne().getName());
+        System.out.println("Hello I'm " + helloService.getBeanTwo().getName());
+    }
+
+    @Test
+    public void test5() {
+        CoolService coolService = (CoolService) context.getBean("coolService");
+        System.out.println(coolService);
     }
 }

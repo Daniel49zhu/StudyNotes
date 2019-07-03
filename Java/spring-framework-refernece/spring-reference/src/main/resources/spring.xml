@@ -5,8 +5,17 @@
             https://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="helloService" class="com.zjc.services.HelloService" >
+        <constructor-arg ref="beanTwo" />
+        <property name="beanOne" ref="beanOne"/>
     </bean>
+    <bean id="beanOne" class="com.zjc.beans.BeanOne"></bean>
+    <bean id="beanTwo" class="com.zjc.beans.BeanTwo"></bean>
     <alias name="helloService" alias="firstService"/>
     <alias name="helloService" alias="demoService"/>
 
+    <bean id="coolService" class="com.zjc.services.CoolService" >
+        <constructor-arg name="a" value="1"/>
+        <constructor-arg name="b" value="2"/>
+        <constructor-arg name="v" value="3"/>
+    </bean>
 </beans>
