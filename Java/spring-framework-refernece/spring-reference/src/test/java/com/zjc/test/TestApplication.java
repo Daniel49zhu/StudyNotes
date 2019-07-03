@@ -1,5 +1,6 @@
 package com.zjc.test;
 
+import com.zjc.services.AutowiredService;
 import com.zjc.services.CoolService;
 import com.zjc.services.HelloService;
 import org.junit.Before;
@@ -50,5 +51,12 @@ public class TestApplication {
     public void test5() {
         CoolService coolService = (CoolService) context.getBean("coolService");
         System.out.println(coolService);
+    }
+
+    @Test
+    public void test6() {
+        AutowiredService autowiredService = (AutowiredService) context.getBean("autowiredService");
+        System.out.println("Hello I'm " + autowiredService.getBeanOne().getName());
+        System.out.println("Hello I'm " + autowiredService.getBeanTwo().getName());
     }
 }

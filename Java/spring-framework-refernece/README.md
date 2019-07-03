@@ -108,6 +108,17 @@
    ``` 
    依赖注入有两种形式，通过构造器或是setter方法，Spring团队推荐构造器注入。
    
+   默认的容器会在启动时初始化所有单例的bean，当你手动指定lazy-init属性为true时，则这个初始化
+  过程会被延迟到这个bean第一次被需要时。但是当你的懒加载bean被别的单例bean所依赖时，他就回立即初始化。
+  你可以从容器层面来实现懒加载
+  ```
+   <beans default-lazy-init="true">
+       <!-- no beans will be pre-instantiated... -->
+   </beans>
+  ```
+  
+  --1.4.6-
+   
    
 
     
