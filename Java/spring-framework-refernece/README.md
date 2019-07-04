@@ -196,6 +196,11 @@
    ```
    手动指定parent。
    
+   Spring也提供了基于注解的配置，需要在xml中添加`<context:annotaion-config />`，注意它
+   只会查找当前当前容器内bean上的注解，诸如`@Autowired`，JSR-330的`@Inject`有相同功能，
+   该xml元素实际作用就是显式的向容器中注册AutowiredAnnotationBeanPostProcessor，CommonAnnotationBeanPostProcessor
+    ，PersistenceAnnotationBeanPostProcessor，RequiredAnnotationBeanPostProcessor这四个Processor来处理注解
+   
 
     
     

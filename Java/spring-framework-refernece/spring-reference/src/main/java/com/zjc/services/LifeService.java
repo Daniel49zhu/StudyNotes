@@ -19,4 +19,8 @@ public class LifeService implements SmartLifecycle {
     public void sayHello() {
         System.out.println("I'm ListService");
     }
+
+    public int getPhase() {
+        return 0;
+    }
 }

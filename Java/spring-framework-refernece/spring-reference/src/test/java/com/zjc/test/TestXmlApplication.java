@@ -3,12 +3,13 @@ package com.zjc.test;
 import com.zjc.services.AutowiredService;
 import com.zjc.services.CoolService;
 import com.zjc.services.HelloService;
+import com.zjc.services.LifeService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class TestApplication {
+public class TestXmlApplication {
     private ClassPathXmlApplicationContext context;
 
     @Before
@@ -64,6 +65,12 @@ public class TestApplication {
     public void testInit() {
         CoolService coolService = (CoolService) context.getBean("coolService");
         System.out.println(coolService);
+    }
+
+    @Test
+    public void test7() {
+        LifeService lifeService = (LifeService) context.getBean("lifeService");
+        lifeService.sayHello();
     }
 
 }
