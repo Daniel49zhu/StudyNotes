@@ -177,7 +177,24 @@
     Spring提供了若干接口来帮助你定制Bean的生命周期事件，可以通过`org.springframework.beans.factory.InitializingBean`
     或是`@PostConstruct`（JSR-250）注解来，推荐使用注解方式。
  
-   
+   Bean Definitoin中记录了Bean很多的相关配置信息，包括构造器参数、属性、初始化方法、静态工厂方法等，
+   如果我们让一个子Bean类继承父Bean，就可以节省不少配置，子类配置由ChildBeanDefinition类代表，当时用
+   XML配置时可以这样实现
+   ```
+    <bean id="inheritedTestBean" abstract="true"
+            class="org.springframework.beans.TestBean">
+        <property name="name" value="parent"/>
+        <property name="age" value="1"/>
+    </bean>
+    
+    <bean id="inheritsWithDifferentClass"
+            class="org.springframework.beans.DerivedTestBean"
+            parent="inheritedTestBean" init-method="initialize">  
+        <property name="name" value="override"/>
+        <!-- the age property value of 1 will be inherited from parent -->
+    </bean>
+   ```
+   手动指定parent。
    
 
     
