@@ -116,8 +116,67 @@
        <!-- no beans will be pre-instantiated... -->
    </beans>
   ```
+  在Spring的诸多应用场景中bean都是单例形式，当一个单例bean需要和一个非单例bean组合使用或者
+  一个非单例bean和另一个非单例bean组合使用时，我们通常都是将依赖以属性的方式放到bean中来引用，
+  然后以@Autowired来标记需要注入的属性。但是这种方式在bean的生命周期不同时将会出现很明显的问题，
+  假设单例bean A需要一个非单例bean B（原型），我们在A中注入bean B，每次调用bean A中的方法时都会
+  用到bean B，我们知道Spring Ioc容器只在容器初始化时执行一次，也就是bean A中的依赖bean B只有一次
+  注入的机会，但是实际上bean B我们需要的是每次调用方法时都获取一个新的对象（原型）所以问题明显就是：
+  我们需要bean B是一个原型bean，而事实上bean B的依赖只注入了一次变成了事实上的单例bean。
   
-  --1.4.6-
+  解决方法有两种，Bean A继承`ApplicationContextAware`,来获得ApplicationContext，依赖Bean b的时候通过
+  getBean的方法手动获取，二是通过@Lookup注解
+  ```
+  <bean id="myCommand" class="fiona.apple.AsyncCommand" scope="prototype">
+      <!-- inject dependencies here as required -->
+  </bean>
+  
+  <!-- commandProcessor uses statefulCommandHelper -->
+  <bean id="commandManager" class="fiona.apple.CommandManager">
+      <lookup-method name="createCommand" bean="myCommand"/>
+  </bean>
+
+    public abstract class CommandManager {
+        public Object process(Object commandState) {
+            Command command = createCommand();
+            command.setState(commandState);
+            return command.execute();
+        }
+
+        @Lookup("myCommand")
+        protected abstract Command createCommand();
+    }
+  ```
+  
+  Spring框架提供了六种Bean的Scope类型
+  ![Bean Scope](images/beanScope.jpg "Bean Scope")
+  
+  - Singleton Scope
+    一个容器中只有一个bean的实例
+  - Prototype Scope
+  
+    当通过getBean方法或是被别的bean依赖时，都会实例化一个新的bean
+    
+  - Request、Session、Application和WebSocket Scopes
+  
+    只在web-aware的ApplicationContext才能生效，在普通的容器中会引发IllegalStateException。
+    
+    当你在一个长生命周期的Bean中依赖了一个短生命周期的Bean，
+    ```
+    <bean id="userPreferences" class="com.something.UserPreferences" scope="session">
+        <aop:scoped-proxy/>
+    </bean>
+    
+    <bean id="userManager" class="com.something.UserManager">
+        <property name="userPreferences" ref="userPreferences"/>
+    </bean>
+    ```
+    通过 `<aop:scoped-proxy/>`元素，userManager操作代理对象，代理对象去session域中获取真正的对象方法调用。
+    当你需要实现自己的Scope类型是你可以重写`org.springframework.beans.factory.config.Scope`来实现。
+    
+    Spring提供了若干接口来帮助你定制Bean的生命周期事件，可以通过`org.springframework.beans.factory.InitializingBean`
+    或是`@PostConstruct`（JSR-250）注解来，推荐使用注解方式。
+ 
    
    
 

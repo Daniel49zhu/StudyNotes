@@ -1,5 +1,7 @@
 package com.zjc.services;
 
+import javax.annotation.PostConstruct;
+
 public class CoolService {
     private int a;
     private int b;
@@ -18,5 +20,10 @@ public class CoolService {
                 ", b=" + b +
                 ", v=" + v +
                 '}';
+    }
+
+    @PostConstruct
+    public void intiMd() {
+        System.out.println("Bean has been initialized!!!");
     }
 }

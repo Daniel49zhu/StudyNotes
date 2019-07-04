@@ -59,4 +59,11 @@ public class TestApplication {
         System.out.println("Hello I'm " + autowiredService.getBeanOne().getName());
         System.out.println("Hello I'm " + autowiredService.getBeanTwo().getName());
     }
+
+    @Test
+    public void testInit() {
+        CoolService coolService = (CoolService) context.getBean("coolService");
+        System.out.println(coolService);
+    }
+
 }

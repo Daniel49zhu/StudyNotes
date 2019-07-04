@@ -3,7 +3,8 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
             https://www.springframework.org/schema/beans/spring-beans.xsd">
-
+<!--  用来处理@PostConstruct和@PreDestroy注解  -->
+    <bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor" />
     <bean id="helloService" class="com.zjc.services.HelloService" >
         <constructor-arg ref="beanTwo" />
         <property name="beanOne" ref="beanOne"/>
@@ -20,4 +21,6 @@
     </bean>
 
     <bean id="autowiredService" class="com.zjc.services.AutowiredService" autowire="byName"/>
+
+    <bean id="lifeService" class="com.zjc.services.LifeService" />
 </beans>
