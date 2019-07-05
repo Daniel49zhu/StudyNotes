@@ -1,6 +1,7 @@
 package com.zjc.test;
 
 import com.zjc.services.AutowiredAnnoService;
+import com.zjc.services.NotRequiredService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -17,5 +18,11 @@ public class TestAnnoApplication {
     public void test1() {
         AutowiredAnnoService autowiredAnnoService = (AutowiredAnnoService) context.getBean("autowiredAnnoService");
         autowiredAnnoService.sayHello();
+    }
+
+    @Test
+    public void test2() {
+        NotRequiredService notRequiredService = (NotRequiredService) context.getBean("notRequiredService");
+        notRequiredService.sayHello();
     }
 }

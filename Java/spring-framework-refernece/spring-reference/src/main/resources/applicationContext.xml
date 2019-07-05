@@ -13,4 +13,5 @@
     <bean id="beanTwo" class="com.zjc.beans.BeanTwo"></bean>
 
     <bean id="autowiredAnnoService" class="com.zjc.services.AutowiredAnnoService" />
+    <bean id="notRequiredService" class="com.zjc.services.NotRequiredService" />
 </beans>
