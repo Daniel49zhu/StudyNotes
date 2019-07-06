@@ -2,8 +2,10 @@ package com.zjc.test;
 
 import com.zjc.services.AutowiredAnnoService;
 import com.zjc.services.NotRequiredService;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class TestAnnoApplication {
@@ -24,5 +26,12 @@ public class TestAnnoApplication {
     public void test2() {
         NotRequiredService notRequiredService = (NotRequiredService) context.getBean("notRequiredService");
         notRequiredService.sayHello();
+    }
+
+    @Test
+    public void test3() {
+        AutowiredAnnoService autowiredAnnoService = (AutowiredAnnoService) context.getBean("autowiredAnnoService");
+        ApplicationContext applicationContext = autowiredAnnoService.getContext();
+        Assert.assertNotNull(applicationContext);
     }
 }

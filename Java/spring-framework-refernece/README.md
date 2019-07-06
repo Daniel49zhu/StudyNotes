@@ -200,6 +200,9 @@
    只会查找当前当前容器内bean上的注解，诸如`@Autowired`，JSR-330的`@Inject`有相同功能，
    该xml元素实际作用就是显式的向容器中注册AutowiredAnnotationBeanPostProcessor，CommonAnnotationBeanPostProcessor
     ，PersistenceAnnotationBeanPostProcessor，RequiredAnnotationBeanPostProcessor这四个Processor来处理注解
+    
+  你可以使用`@Autowired`来注入那些著名的接口诸如 BeanFactory, ApplicationContext, Environment, ResourceLoader,
+   ApplicationEventPublisher和MessageSource。 
    
 
     
