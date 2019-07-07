@@ -1,8 +1,9 @@
 package com.zjc;
 
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
-@org.springframework.context.annotation.Configuration
+@Configuration
 @ComponentScan(basePackages = "com.zjc")
-public class Configuration {
+public class AppConfiguration {
 }

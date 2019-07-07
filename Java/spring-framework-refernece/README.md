@@ -229,7 +229,13 @@
    如果需要指定Bean的scope类型可以添加`@Scope`注解，Spring3.0开始支持JSR-330的注解。
    @Autowired和@Inject，@Component和@Name，@Scope和@Singleton等。
    
-   基于Java代码的配置，其核心使@Bean和@Configuration注解。
+   基于Java代码的配置，其核心使@Bean和@Configuration注解。当需要Java Config混合XML配置时可以
+   ```
+    @Configuration
+    @ImportResource("classpath:/com/acme/properties-config.xml")
+    public class AppConfig {
+    }
+   ```
    
    
 
