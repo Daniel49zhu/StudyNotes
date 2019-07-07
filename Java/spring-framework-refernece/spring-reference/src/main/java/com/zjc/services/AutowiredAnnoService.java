@@ -4,9 +4,13 @@ import com.zjc.beans.BeanOne;
 import com.zjc.beans.BeanTwo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
+@Component
 public class AutowiredAnnoService {
-    @Autowired
+    @Resource
     private BeanOne beanOne;
     @Autowired
     private BeanTwo beanTwo;

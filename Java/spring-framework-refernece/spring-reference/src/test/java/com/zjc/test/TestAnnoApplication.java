@@ -13,7 +13,7 @@ public class TestAnnoApplication {
 
     @Before
     public void init() {
-        context = new ClassPathXmlApplicationContext("classpath:/applicationContext.xml");
+        context = new ClassPathXmlApplicationContext("classpath:/spring2.xml");
     }
 
     @Test

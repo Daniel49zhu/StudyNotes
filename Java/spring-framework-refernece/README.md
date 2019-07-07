@@ -202,7 +202,35 @@
     ，PersistenceAnnotationBeanPostProcessor，RequiredAnnotationBeanPostProcessor这四个Processor来处理注解
     
   你可以使用`@Autowired`来注入那些著名的接口诸如 BeanFactory, ApplicationContext, Environment, ResourceLoader,
-   ApplicationEventPublisher和MessageSource。 
+   ApplicationEventPublisher和MessageSource。 因为该接口是基于Type类型来导入，因此一个接口可能存在多个可能的实现，
+   这时就需要通过`@Primary`或`@Qualifier`注解来指定具体的实现。 Spring也支持JSR-250的注解`@Resource`来注入。
+   
+   之前的例子还是需要在XML中手动定义bean，而是把注入的工作交给了注解，接下来我们也将无需再XML中定义
+   bean，而是也交给注解来完成，如`@Component`,`@Repository`, `@Service`,和`@Controller`。
+   
+   在XML中需要添加元素`<context:component-scan base-package="com.zjc"/>`，该注解会隐式的启用
+   `<context:annotation-config>`。该元素内可以配置include-filter 和 exclude-filter，支持包括
+   注解、切面、正则等多种规则来过滤。实现自己的BeanNameGenerator接口可以定义自己的默认命名bean
+   的方式。
+   ```
+    <beans>
+        <context:component-scan base-package="org.example">
+            <context:include-filter type="regex" expression=".*Stub.*Repository"/>
+            <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+        </context:component-scan>
+    </beans>
+    
+    ----------------------------
+    <beans>
+        <context:component-scan base-package="org.example"
+            name-generator="org.example.MyNameGenerator" />
+    </beans>
+   ```
+   如果需要指定Bean的scope类型可以添加`@Scope`注解，Spring3.0开始支持JSR-330的注解。
+   @Autowired和@Inject，@Component和@Name，@Scope和@Singleton等。
+   
+   基于Java代码的配置，其核心使@Bean和@Configuration注解。
+   
    
 
     
