@@ -237,6 +237,30 @@
     }
    ```
    
+   `Enviroment`是一个容器类整合了profiles和properties的重要接口。
+   ```
+    @Configuration
+    @PropertySource("classpath:/com/myco/app.properties")
+    public class AppConfig {
+    
+        @Autowired
+        Environment env;
+    
+        @Bean
+        public TestBean testBean() {
+            TestBean testBean = new TestBean();
+            testBean.setName(env.getProperty("testbean.name"));
+            return testBean;
+        }
+    }
+   ```
+   
+   Java有标准的URL类来访问资源但却不够通用，Spring中的Resource接口是对底层的resource的一层封装，
+   Spring包含了以下几种实现:UrlResource，ClassPathResource，FileSystemResource，ServletContextResource，
+   InputStreamResource，ByteArrayResource。你也可以通过ResourceLoader接口来获得Resource。
+   
+   Spring提供了`Validator`接口，来提供在各层中对于验证的基础需求。而对于数据绑定提供了`DataBinder`接口，
+   两种接口组成了validation包。Spring4.0开始支持JSR-303/JSR-349d的Bean验证。
    
 
     
