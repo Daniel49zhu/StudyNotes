@@ -261,8 +261,18 @@
    
    Spring提供了`Validator`接口，来提供在各层中对于验证的基础需求。而对于数据绑定提供了`DataBinder`接口，
    两种接口组成了validation包。Spring4.0开始支持JSR-303/JSR-349d的Bean验证。
+   ```
+    public class PersonForm {
+    
+        @NotNull
+        @Size(max=64)
+        private String name;
+    
+        @Min(0)
+        private int age;
+    }
+   ```
    
-
     
     
     
