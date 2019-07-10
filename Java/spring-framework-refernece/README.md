@@ -278,6 +278,12 @@
    其中，Around Advice是最常用的。但我们仍建议根据功能去是用更合适的advice而不是统统用Around advice，
    以便面一些潜在的风险。
    
+   Spring AOP默认是使用Java的动态代理，他能代理任意接口。AOP也可以使用CGLIB代理，他能代理类而不仅仅是
+   接口，当一个类没有继承接口时就会使用CGLIB。可以使用`@EnableAspectJAutoProxy`或是`<aop:aspectj-autoproxy/>`来开启
+   AspectJ。之后所有在容器内添加了@AspectJ注解的类都会被探测到。[TestAspectApplication](spring-reference/src/test/java/com/zjc/test/TestAspectApplication.java)
+   
+  
+   
    
     
     

@@ -2,6 +2,7 @@ package com.zjc.services;
 
 import com.zjc.beans.BeanOne;
 import com.zjc.beans.BeanTwo;
+import org.aspectj.lang.annotation.Pointcut;
 
 public class HelloService {
 
