@@ -273,6 +273,12 @@
     }
    ```
    
+   Spring 的AOP提供了一下几种Advice,Before advice,After returning advice,After throwing advice,
+   After (finally) advice,Around advice。
+   其中，Around Advice是最常用的。但我们仍建议根据功能去是用更合适的advice而不是统统用Around advice，
+   以便面一些潜在的风险。
+   
+   
     
     
     
