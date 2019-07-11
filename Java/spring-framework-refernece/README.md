@@ -435,8 +435,59 @@
     
     org.springframework.web.servlet.FlashMapManager=org.springframework.web.servlet.support.SessionFlashMapManager
     ```
+  DispatcherServlet按照如下步骤来处理请求
   
-   
+  - WebApplicationContext 会搜索和绑定请求，使其能被进程中其他元素和控制器使用，默认绑定在键
+    `DispatcherServlet.WEB_APPLICATION_CONTEXT_ATTRIBUTE `
+  - locale resolver会绑定到请求，使处理器能对请求进行本地会解析
+  - theme resolver会被绑定到请求来让视图决定使用什么主题
+  - 当指定了multipart file resolver，如果请求复合要求则会被包装成一个`MultipartHttpServletRequest`
+  - 寻找一个合适的处理器，相关的执行链会处理模型数据
+  - 如果模型被返回，视图会被渲染
+  
+  HandlerExceptionResolver在WebApplicationContext中来解决请求处理过程中的异常。
+  
+  你可以使用@Controller注解来定义一个控制器，为了能自动探测，需要在XML文件中进行配置，
+  ```
+  <?xml version="1.0" encoding="UTF-8"?>
+  <beans xmlns="http://www.springframework.org/schema/beans"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:p="http://www.springframework.org/schema/p"
+      xmlns:context="http://www.springframework.org/schema/context"
+      xsi:schemaLocation="
+          http://www.springframework.org/schema/beans
+          https://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/context
+          https://www.springframework.org/schema/context/spring-context.xsd">
+    <context:component-scan base-package="org.example.web"/>
+    </beans>
+  ```
+  @RestController注解是一个复合注解，组合了@Controller和@ResponseBody。
+  @RequestMapping用来将请求映射到控制器，它有多个变种来对应不同URL，@GetMapping，@PostMapping，@PutMapping
+  @DeleteMapping，@PatchMapping
+  ```
+    @GetMapping("/owners/{ownerId}/pets/{petId}")
+    public Pet findPet(@PathVariable Long ownerId, @PathVariable Long petId) {
+        // ...
+    }
+    ---------------------------------------------------------------------------------
+    @Controller
+    @RequestMapping("/owners/{ownerId}")
+    public class OwnerController {
+    
+        @GetMapping("/pets/{petId}")
+        public Pet findPet(@PathVariable Long ownerId, @PathVariable Long petId) {
+            // ...
+        }
+    }
+    --------------------------------------------------------------------------------
+    //假设请求时"/spring-web-3.0.5 .jar"
+    @GetMapping("/{name:[a-z-]+}-{version:\\d\\.\\d\\.\\d}{ext:\\.[a-z]+}")
+    public void handle(@PathVariable String version, @PathVariable String ext) {
+        // ...
+    }
+  ```
+   //1.3.2
    
     
     
