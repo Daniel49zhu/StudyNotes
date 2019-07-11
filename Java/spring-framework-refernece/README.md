@@ -282,6 +282,159 @@
    接口，当一个类没有继承接口时就会使用CGLIB。可以使用`@EnableAspectJAutoProxy`或是`<aop:aspectj-autoproxy/>`来开启
    AspectJ。之后所有在容器内添加了@AspectJ注解的类都会被探测到。[TestAspectApplication](spring-reference/src/test/java/com/zjc/test/TestAspectApplication.java)
    
+- Web on Servlet Stack
+
+    Spring Web MVC是一个基于Servlet API的原生的web框架，它有一个更被广泛认知的名字，Spring MVC。与SpringMVC并行，在
+    Spring5.0一入了Spring WebFlux。
+    
+    和其他web框架一样，都需要一个前置的控制器来处理所有请求，`DispatcherServlet`和任意的其他Servlet一样，
+    都需要在`web.xml`中声明和映射
+   
+   注册和初始化DispatherServlet可以通过java配置
+   ```
+    public class MyWebApplicationInitializer implements WebApplicationInitializer {
+    
+        @Override
+        public void onStartup(ServletContext servletCxt) {
+    
+            // Load Spring web application configuration
+            AnnotationConfigWebApplicationContext ac = new AnnotationConfigWebApplicationContext();
+            ac.register(AppConfig.class);
+            ac.refresh();
+    
+            // Create and register the DispatcherServlet
+            DispatcherServlet servlet = new DispatcherServlet(ac);
+            ServletRegistration.Dynamic registration = servletCxt.addServlet("app", servlet);
+            registration.setLoadOnStartup(1);
+            registration.addMapping("/app/*");
+        }
+    }
+    ```
+    或是XML
+    ```
+    <web-app>
+    
+        <listener>
+            <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+        </listener>
+    
+        <context-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>/WEB-INF/app-context.xml</param-value>
+        </context-param>
+    
+        <servlet>
+            <servlet-name>app</servlet-name>
+            <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+            <init-param>
+                <param-name>contextConfigLocation</param-name>
+                <param-value></param-value>
+            </init-param>
+            <load-on-startup>1</load-on-startup>
+        </servlet>
+    
+        <servlet-mapping>
+            <servlet-name>app</servlet-name>
+            <url-pattern>/app/*</url-pattern>
+        </servlet-mapping>
+    
+    </web-app>
+    ```
+    DispatcherServlet启动需要配置一个WebApplicationContext，而WebApplicationContext则关联了ServletContext和Servlet。对
+    一些应用来说一个单独的WebApplicationContext就足够了。但也可以有一个context的层次体系，一个root context被
+    为多个DispathcerServlet提供基础bean。
+    ```
+    public class MyWebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+    
+        @Override
+        protected Class<?>[] getRootConfigClasses() {
+            return new Class<?>[] { RootConfig.class };
+        }
+    
+        @Override
+        protected Class<?>[] getServletConfigClasses() {
+            return new Class<?>[] { App1Config.class };
+        }
+    
+        @Override
+        protected String[] getServletMappings() {
+            return new String[] { "/app1/*" };
+        }
+    }
+    ```
+    
+    ```
+    <web-app>
+    
+        <listener>
+            <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+        </listener>
+    
+        <context-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>/WEB-INF/root-context.xml</param-value>
+        </context-param>
+    
+        <servlet>
+            <servlet-name>app1</servlet-name>
+            <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+            <init-param>
+                <param-name>contextConfigLocation</param-name>
+                <param-value>/WEB-INF/app1-context.xml</param-value>
+            </init-param>
+            <load-on-startup>1</load-on-startup>
+        </servlet>
+    
+        <servlet-mapping>
+            <servlet-name>app1</servlet-name>
+            <url-pattern>/app1/*</url-pattern>
+        </servlet-mapping>
+    
+    </web-app>
+    ```
+    
+    DispatcherServlet内部代理了一些功能性的bean来处理请求和渲染结果，包括：
+    
+    - HandlerMapping： 映射请求，其有两个实现类RequestMappingHandlerMapping （@RequestMapping）和
+                        SimpleUrlHandlerMapping 
+    - HandlerAdapter： 帮助DispatcherServlet调用请求映射到的处理器
+    - HandlerExceptionResolver： 处理异常，将他们映射到处理器或视图或是其他目标
+    - ViewResolver： 将String型的视图名解析成真实的视图并渲染到response中
+    - LocalResolver，LocaleContextResolver：解析客户端的时区、区域并尝试提供国际化的视图
+    - ThemeResolver： 解析你的web应用能使用的主题，来提供个性化的布局
+    - MultipartResolver： 解析multi-part类型的请求，例如从浏览器上上传多个文件
+    - FlashMapManager： ----
+    
+    Dispatcher会在WebApplicationContext检索这些bean，如果没有配置则会使用默认的bean
+    ```
+    # Default implementation classes for DispatcherServlet's strategy interfaces.
+    # Used as fallback when no matching beans are found in the DispatcherServlet context.
+    # Not meant to be customized by application developers.
+    
+    org.springframework.web.servlet.LocaleResolver=org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver
+    
+    org.springframework.web.servlet.ThemeResolver=org.springframework.web.servlet.theme.FixedThemeResolver
+    
+    org.springframework.web.servlet.HandlerMapping=org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping,\
+    	org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping,\
+    	org.springframework.web.servlet.function.support.RouterFunctionMapping
+    
+    org.springframework.web.servlet.HandlerAdapter=org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter,\
+    	org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter,\
+    	org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter,\
+    	org.springframework.web.servlet.function.support.HandlerFunctionAdapter
+    
+    
+    org.springframework.web.servlet.HandlerExceptionResolver=org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver,\
+    	org.springframework.web.servlet.mvc.annotation.ResponseStatusExceptionResolver,\
+    	org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver
+    
+    org.springframework.web.servlet.RequestToViewNameTranslator=org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator
+    
+    org.springframework.web.servlet.ViewResolver=org.springframework.web.servlet.view.InternalResourceViewResolver
+    
+    org.springframework.web.servlet.FlashMapManager=org.springframework.web.servlet.support.SessionFlashMapManager
+    ```
   
    
    

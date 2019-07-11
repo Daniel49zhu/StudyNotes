@@ -30,11 +30,13 @@ public class NotVeryUsefulAspect {
     @Around("execution(* com.zjc.services.HelloService.sayHello(..))")
     public void AroundMethod(ProceedingJoinPoint pjp) throws Throwable {
         String methodName = pjp.getSignature().getName();
-        System.out.println("method " + methodName + " start time:" + System.currentTimeMillis());
+        Long startTime = System.currentTimeMillis();
+        System.out.println("method " + methodName + " start time:" + startTime);
 
-        Object re = pjp.proceed();
+        pjp.proceed();
 
-        System.out.println("method " + methodName + " end time:" + System.currentTimeMillis());
-
+        Long endTime = System.currentTimeMillis();
+        System.out.println("method " + methodName + " end time:" + endTime);
+        System.out.println("method " + methodName + " cost " + (endTime-startTime)/1000.0F +" seconds");
     }
 }
