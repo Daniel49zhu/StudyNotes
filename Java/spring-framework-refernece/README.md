@@ -517,7 +517,63 @@
   
   方法允许的返回参数类型有
   ![返回类型](images/returnType.jpg "返回类型")
-   
+  
+  ```
+  Host                    localhost:8080
+  Accept                  text/html,application/xhtml+xml,application/xml;q=0.9
+  Accept-Language         fr,en-gb;q=0.7,en;q=0.3
+  Accept-Encoding         gzip,deflate
+  Accept-Charset          ISO-8859-1,utf-8;q=0.7,*;q=0.7
+  Keep-Alive              300
+  
+  @GetMapping("/demo")
+  public void handle(
+          @RequestHeader("Accept-Encoding") String encoding, 
+          @RequestHeader("Keep-Alive") long keepAlive) { 
+      //...
+  }
+  ```
+  你可以使用@CookieValue来绑定HTTP的cookie信息，下面的这个例子展示了用法
+  ```
+    
+    JSESSIONID=415A4AC178C59DACE0B2C9CA727CDD84
+  
+  
+    @GetMapping("/demo")
+    public void handle(@CookieValue("JSESSIONID") String cookie) { 
+        //...
+    }
+  ```
+  
+  @ModelAttribute可以绑定在方法参数上，模型的参数会从HTTP的请求参数中进行匹配和转型。
+  ```
+    @PostMapping("/owners/{ownerId}/pets/{petId}/edit")
+    public String processSubmit(@ModelAttribute Pet pet) { }
+  ```
+  
+  ```
+    @PostMapping("/files/{path}")
+    public String upload(...) {
+        // ...
+        return "redirect:files/{path}";
+    }
+  ```
+  
+  @ResponseBody注解可以把返回值写入到响应体中，通过HttpMessageConverter，通过ResponseEntity可以实现
+  相同功能。
+  ```
+    @GetMapping("/accounts/{id}")
+    @ResponseBody
+    public Account handle() {
+        // ...
+    }
+    
+     @RequestMapping("/pet/{name}/{id}")
+        public ResponseEntity<Pet> pet(@ModelAttribute Pet pet) {
+            return ResponseEntity.ok(pet);
+        }
+  ```
+   1.3.5
     
     
     
