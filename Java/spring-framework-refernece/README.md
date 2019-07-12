@@ -486,8 +486,37 @@
     public void handle(@PathVariable String version, @PathVariable String ext) {
         // ...
     }
+    ----------------------------------------------------------------------------------
+    @PostMapping(path = "/pets", consumes = "application/json") 
+    public void addPet(@RequestBody Pet pet) {
+        // ...
+    }
+    ----------------------------------------------------------------------------------
+    @GetMapping(path = "/pets/{petId}", produces = "application/json;charset=UTF-8") 
+    @ResponseBody
+    public Pet getPet(@PathVariable String petId) {
+        // ...
+    }
   ```
-   //1.3.2
+  consumes 属性用来限定请求的`Content-Type`，produces 用来限定请求的`Accpet`属性。
+  ```
+    @GetMapping(path = "/pets/{petId}", params = "myParam=myValue") 
+    public void findPet(@PathVariable String petId) {
+        // ...
+    }
+    ------------------------------------------------------------------------------------
+    @GetMapping(path = "/pets", headers = "myHeader=myValue") 
+    public void findPet(@PathVariable String petId) {
+        // ...
+    }
+  ```  
+  params属性用来限定请求的参数，headers属性用来限定头部参数
+  
+  Controller方法中可以注入的参数类型有
+  ![方法参数](images/methodArguments.jpg "方法参数")
+  
+  方法允许的返回参数类型有
+  ![返回类型](images/returnType.jpg "返回类型")
    
     
     
