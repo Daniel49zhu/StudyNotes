@@ -573,7 +573,5 @@
             return ResponseEntity.ok(pet);
         }
   ```
-   1.3.5
-    
     
     
