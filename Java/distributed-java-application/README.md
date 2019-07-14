@@ -31,3 +31,6 @@
     Apache CXF是Apache的一个顶级项目，也是目前Java社区中用来实现WebService流行的一个开源框架。类似这样的开源框架还有不少例如Axis。
     
 - 第2章 大型分布式Java应用与SOA
+
+    当对系统进行拆分时，很可能出现不同系统之间的交互方式不同：Http、TCP+NIO、Hessian、RMI、WebService等；同步、异步交杂。
+    解决方式就是统一交互方式，SOA无疑时实现这种方式的首选。SOA全称是面向服务架构。
