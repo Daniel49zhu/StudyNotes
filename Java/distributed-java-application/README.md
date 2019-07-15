@@ -34,3 +34,11 @@
 
     当对系统进行拆分时，很可能出现不同系统之间的交互方式不同：Http、TCP+NIO、Hessian、RMI、WebService等；同步、异步交杂。
     解决方式就是统一交互方式，SOA无疑时实现这种方式的首选。SOA全称是面向服务架构。
+    
+- 第3章 深入理解JVM
+    
+    Java程序运行在JVM上，JVM的运行状况对于Java程序而言会产生很大影响。因此掌握JVM中的关键机制对于编写稳定、高性能的Java
+    程序至关重要。
+    
+    Java源码编译机制：1.分析和输入到符号表（Parse and Enter），2.注解处理（Annotation Processing），
+    3.语义分析和生成class文件（Analyse and Generate）
