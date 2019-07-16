@@ -42,3 +42,9 @@
     
     Java源码编译机制：1.分析和输入到符号表（Parse and Enter），2.注解处理（Annotation Processing），
     3.语义分析和生成class文件（Analyse and Generate）
+    
+    类加载机制：是指class文件加载到JVM，并形成Class对象的机制，之后应用就可对Class对象进行实例化并调用。JVM将装载
+    分为三个步骤：1.装载，2.链接，3.初始化。
+    
+    类执行机制：加载完成后，就可以执行Class对象的静态方法或实例化对象来调用了。JVM通过invokestatic、invokespecial、
+    invokevirtual及invokeinterface 4种指令调用对应类型的方法。
