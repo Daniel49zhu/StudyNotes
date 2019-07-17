@@ -48,3 +48,7 @@
     
     类执行机制：加载完成后，就可以执行Class对象的静态方法或实例化对象来调用了。JVM通过invokestatic、invokespecial、
     invokevirtual及invokeinterface 4种指令调用对应类型的方法。
+    
+- 第4章 分布式Java应用与JDK类库
+
+    集合：ArrayList、LinkedList、Vector、Stack、HashSet、TreeSet、TreeMap
