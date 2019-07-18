@@ -54,5 +54,18 @@
     集合：ArrayList、LinkedList、Vector、Stack、HashSet、TreeSet、TreeMap
     
     并发包：ConcurrentHashMap、CopyOnWriteArrayList、CopyOnWriteArraySet、ArrayBlockingQueue、
-        AtomicInteger、ThreadPoolExecutor
+            AtomicInteger、ThreadPoolExecutor
+
+- 第5章 性能调优
+
+    - CPU消耗分析
+
+        上下文切换：Linux切换线程，需要保存当前线程状态，并恢复待执行线程状态，这个过程称为上下文切换。
+            频繁的IO操作，锁等待，线程Sleep时会触发上下文切换。
+
+        运行队列：每个CPU都维护了一个可运行的线程队列，运行队列值越大，这就意味着线程会要消耗越长时间
+        才能执行完。
+
+        利用率：CPU利用率是指CPU在用户进程、内核、中断处理、IO及空闲5各部分使用百分比。这五个值是用来分析CPU消耗
+        情况的关键指标。
     
