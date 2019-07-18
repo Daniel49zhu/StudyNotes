@@ -52,3 +52,7 @@
 - 第4章 分布式Java应用与JDK类库
 
     集合：ArrayList、LinkedList、Vector、Stack、HashSet、TreeSet、TreeMap
+    
+    并发包：ConcurrentHashMap、CopyOnWriteArrayList、CopyOnWriteArraySet、ArrayBlockingQueue、
+        AtomicInteger、ThreadPoolExecutor
+    
