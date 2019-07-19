@@ -35,6 +35,7 @@
    [《深入理解JVM》](Java/UnderstandingTheJVM/README.md)
    [《Spring Cloud微服务实战》](Java/SpringCloud/README.md)
    [《分布式Java应用基础与实践》](Java/SpringCloud/README.md)
+   [《Java并发编程实战》](Java/java-concurrency-in-practice/README.md)
 
 - Docker
 
