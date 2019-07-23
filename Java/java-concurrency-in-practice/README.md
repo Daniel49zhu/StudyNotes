@@ -86,3 +86,33 @@
     一些原子变量类，用于实现在数值和对象因用上的原子状态转换。用AtomicLong来代替long，以确保对count的
     所有操作都是原子的。
     
+    当只有一个状态变量时，我们可以通过线程安全的对象来代替，以维护Servlet的线程安全性。但如果想在Servlet中
+    添加更多的状态，则不仅仅是使用多个原子类来代替。java提供了一种内置的锁机制来支持原子性：同步代码块
+    （Synchronized Block）。
+    
+    同步代码块包含两个部分：一个作为锁的对象引用，一个作为由这个锁保护的代码块。以关键词synchronized来修饰的
+    方法就是一种横跨整个方法体的同步代码块。静态的synchronized以整个Class对象作为锁。
+    ```
+    @ThreadSafe
+    public class SyncronizedFactorizer implements Servlet {
+        private BigInteger lastNumber;
+        private BigInteger[] lastFactors;
+        
+        public synchronized void service(ServletRequest req,ServletResponse resp) {
+            BigInteger i = extractFromRequest(req);
+            if(i.equals(lastNumber)) {
+                encodeIntoResponse(resp,lastFactors);
+            } else {
+                BigInteger[] factors = factor(i);
+                lastNumber = i;
+                lastFactos = factoes;
+                encodeIntoRersponse(resp,factors);
+            }
+        }
+    }
+    ```
+    现在这个类是安全的了，但方法却过于极端，因为多个客户端无法同时使用该Servlet，服务响应性非常低。
+    
+    当一个线程请求由别的线程持有的锁时，发出请求的线程会被阻塞。但内置锁时可重入的，因此当线程试图获得
+    一个已经由它持有的锁时，请求就会成功。重入意味着锁的操作粒度是针对“线程”而不是“方法调用”。
+    
