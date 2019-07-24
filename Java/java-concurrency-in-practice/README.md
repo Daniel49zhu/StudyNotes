@@ -116,3 +116,25 @@
     当一个线程请求由别的线程持有的锁时，发出请求的线程会被阻塞。但内置锁时可重入的，因此当线程试图获得
     一个已经由它持有的锁时，请求就会成功。重入意味着锁的操作粒度是针对“线程”而不是“方法调用”。
     
+    上面的SyncronizedFactorizer类，通过同步整个service方法来确保安全性，但代码的执行性能将会非常糟糕。当需要因数分解
+    一个大数值则需要执行很长时间，其他的客户端就会一直等待。我们将这种Web应用程序称为不良并发（Poor Concurrency）应用。
+    
+- 第3章 对象的共享
+
+    第2章主要是讲述如何通过同步避免多个线程在同一时刻访问先攻的数据。本章将介绍如何通过共享和发布对象，使它们能够安全地由多个
+    线程同时访问。
+    [NoVisibility](concurrency-demo/src/main/java/com/zjc/concurrencydemo/cp3/NoVisibility.java)
+    NotVisibility可能会持续循环下去，因为读循环一直看不到ready的值，也可能输出0，因为看到了ready却没看到number的值。
+    这种现象被称为重排序，当主线程首先写入number，然后在没有同步的情况下写入ready，那么读线程看到的顺序可能完全相反。
+    这被称为重排序（Reordering）。NotVisibility是一个简单的并发程序，只包含两个共享变量和两个线程，只要有数据在多个
+    线程间共享，就能使用正确的同步。
+    ```
+    @NotThreadSafe
+    public class MutableInteger {
+        private int value;
+        public int get() {return value;}
+        public void set(int value) {this.value=value;}
+    }
+    ```
+    上例不是一个线程安全的类，因为get和set方法都是在没有同步的情况下访问value的，当一个线程使用set，另一个正在调用get的
+    线程可能会看到更新了的value也可能看不到。通过对get、set方法进行同步，可以有效解决这个问题。
