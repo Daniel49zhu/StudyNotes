@@ -151,3 +151,20 @@
     - 当变量的写入操作不依赖变量的当前值，或者你能确保只有单个线程更新变量的值
     - 该变量不会与其他状态变量一起纳入不变性条件中
     - 在访问变量时不需要加锁
+    
+    如果仅在单线程内部访问数据，就不需要使用同步，这种技术被称为线程封闭（Thread Confinement）。一种常见的
+    应用就是JDBC的Connection对象。线程封闭的一种规范用法是使用ThreadLocal，这个类能使线程中的某个值与保存
+    值的对象联系起来。ThreadLocal提供了get与set等访问接口或方法。
+    
+    ThreadLocal对象通常用于防止对可变的单实例变量或全局变量进行共享。通过将JDBC的连接保存到ThreadLocal中，每个
+    线程都会拥有书自己的连接对象。
+    ```
+    private static ThreadLocal<Connection> connectionHolder = new ThreadLocal<> {
+        public Connection initalValue() {
+            return DriverManaget.getConnection(DB_URL);
+        }
+    };
+    public static Connection getConnection() {
+        return connectionHolder.get();
+    }
+    ```
