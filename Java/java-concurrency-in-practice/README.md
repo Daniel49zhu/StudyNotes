@@ -168,3 +168,27 @@
         return connectionHolder.get();
     }
     ```
+    
+- 第4章 对象的组合
+
+    通过组合模式可以将一些现有的线程安全组件组合为更大规模的应用，而不用对每一次内存访问都进行安全性分析。
+    在设计线程安全类的过程中，需要包含以下三个基本要素：
+    - 找出构成对象状态的所有变量
+    - 找出约束状态变量的不变性条件
+    - 建立对象状态的并发访问管理策略
+    ```
+    @ThreadSafe
+    public class PersonSet {
+        private final Set<Person> mySet = new HashSet<Person>();
+        
+        public synchronized void addPerson(Person p) {
+            mySet.add(p);
+        }
+        
+        public synchronized boolean containsPerson(Person p) {
+            return mySet.contains(p);
+        }
+    }
+    ```
+
+    
