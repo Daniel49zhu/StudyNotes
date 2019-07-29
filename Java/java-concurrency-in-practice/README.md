@@ -191,4 +191,68 @@
     }
     ```
 
+    在某些情况下，通过多个线程安全的类组合而成的类可能是线程安全的，也可能不是。
+    ```
+    @ThreadSafe
+    public class DelegatingVehicleTracker {
+        private final CouncurrentMap<String,Point> locations;
+        private final Map<String,Point> unmodifiableMap;
+        
+        public DelefatingVehicleTracker(Map<String,Point> poinits) {
+            locations = new ConcurrentHashMap<String,Point>(points);
+            unmodifiableMap = Collections.unmodifiableMap(locations);
+        }
+        
+        public Map<String,Point> getLocation() {
+            return unmodifiableMap;
+        }
+        
+        public Point getLocation(String id) {
+            return location.get(id);
+        }
+        
+        public void setLocation(String id,int x,int y) {
+            if(location.reaplce(id,new Point(x,y)==null)) 
+                throw new IllegalArgumentException("invalid vehicle name:"+id);
+        }
+    }
     
+    @Immutable
+    public class Point {
+        public final int x,y;
+        public Point(x,y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+    ```
+    
+    ```
+    @NotThreadSafe
+    public class ListHelper<E> {
+        public List<E> list = Collections.synchronizedList(new ArrayList<E>());
+        
+        public synchronized boolean putIfAbsent(E x) {
+            boolean absent = !list.contains(x);
+            if (absebt) list.add(x);
+            return absent;
+        }
+    }
+    ```
+    这个方法虽然呗声明为synchronized，但其使用的锁并不是ListHelper上的锁，只是带来了同步的假象，
+    为了使方法能够正确执行，必须在实现客户端加锁或外部加锁时使用同一个锁。
+    ```
+        @ThreadSafe
+        public class ListHelper<E> {
+            public List<E> list = Collections.synchronizedList(new ArrayList<E>());
+            
+            public  boolean putIfAbsent(E x) {
+                synchronized(list) {
+                    boolean absent = !list.contains(x);
+                    if (absebt) 
+                        list.add(x);
+                    return absent;
+                }
+            }
+        }
+    ```
