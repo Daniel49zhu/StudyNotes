@@ -256,3 +256,22 @@
             }
         }
     ```
+    当要为现有的类添加一个原子操作时，更好的一种做法是组合。
+    ```
+    @ThreadSafe
+    public class ImprovedList<T> implements List<T> {
+        private final List<T> list;
+        
+        public ImprovedList(List<T> list) {
+            this.list = list;
+        }
+        
+        public synchronized boolean putIfAbsent(T x) {
+            boolean contains = list.contains(x);
+            if(!contains) list.add(x);
+            return !contains;     
+        }
+    }
+    ```
+    ImprovedList并不关心底层List是否是线程安全的，而是通过提供一致的加锁机制来实现其安全性。
+                
