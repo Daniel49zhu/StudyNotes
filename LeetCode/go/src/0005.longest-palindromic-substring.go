@@ -15,37 +15,25 @@ func longestPalindrome(s string) string {
 	if len(s) < 2 {
 		return s
 	}
-	originMap := make(map[int][]int, len(s))
-	for i := range s {
-		originMap[int(s[i])] = append(originMap[int(s[i])], i)
+	sLen := len(s)
+	locations := make([][]bool, sLen)
+	for i := 0; i < sLen; i++ {
+		locations[i] = make([]bool, sLen)
 	}
-	maxLen := 0
-	left, right := 0, 0
-	for k := range originMap {
-		if len(originMap[k]) > 1 {
-			for m := 0; m < len(originMap[k]); m++ {
-				for n := m + 1; n < len(originMap[k]); n++ {
-					tempM := originMap[k][m]
-					tempN := originMap[k][n]
-					if isPalindrome(&s, tempM, tempN) && maxLen < (tempN-tempM+1) {
-						maxLen = tempN - tempM + 1
-						left = tempM
-						right = tempN
-					}
+
+	maxLen, start := 0, 0
+	for i := 0; i < sLen; i++ {
+		j := i
+		for j >= 0 {
+			if s[j] == s[i] && (i-j < 2 || locations[i-1][j+1]) {
+				locations[i][j] = true
+				if maxLen < i-j+1 {
+					maxLen = i - j + 1
+					start = j
 				}
 			}
+			j--
 		}
 	}
-	return s[left : right+1]
-}
-
-func isPalindrome(s *string, i, j int) bool {
-	for i < j {
-		if (*s)[i] != (*s)[j] {
-			return false
-		}
-		i++
-		j--
-	}
-	return true
+	return s[start : start+maxLen]
 }
