@@ -280,6 +280,42 @@
     阻塞队列适用于生产者-消费者模式，双端队列（Deque和BlockingDeque），适用于另一种相关模式，工作密取（Work Stealing），
     当一个消费者处理完自己的双端队列中的任务，就可以秘密的从其他消费者的队列末尾获取工作。相较于
     传统的生产消费者模型拥有更高的可伸缩性。
+    
+    ```
+    public class TestHarness {
+        public long timeTasks(int nThreads,final Runnable task) throws InterruptException{
+            final CountDownLatch startGate = new CountDownLatch(1);
+            final CountDownLatch endGate = new CountDownLatch(nThreads);
+            
+            for(int i=0;i<nThreads;i++) {
+                Thread t = new Thread() {
+                    public void run() {
+                    try {
+                            startGate.await();
+                            try {
+                                task.run();
+                            } finally {
+                                endGate.countDown();
+                            }
+                        } catch (InterruptedException ignored{})
+                    }
+                };
+                t.start();
+            }
+            long start = System.nanoTime();
+            startGate.countDown();
+            endGate.await();
+            long end = System.nanoTime();
+            return end-start;
+        }
+    }
+    ```
+    
+    ```
+    public class Preloader {
+        
+    }
+    ```
 
     
                 
