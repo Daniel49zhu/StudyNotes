@@ -312,10 +312,58 @@
     ```
     
     ```
-    public class Preloader {
+    public interface Computeble<A,V> {
+        V compute(A arg) throws InterruptException;
+    }
+    
+    public class ExpensiveFunction implements Computable<String,BigInteger> {
+        public BigInteger compute(String arg) {
+            //......
+            return new BigInteger(arg);
+        }
+    }
+    
+    public class Memoizer1<A,V> implements Computable<A,V> {
+        private final Map<A,V> cache = new HashMap<A,V>();
+        private final Computable<A,V> c;
         
+        public Memoizer1(Computable<A,V> c) {
+            this.c = c;
+        }
+        
+        public synchronized V compute(A arg) throws InterruptException {
+            V result = cache.get(arg);
+            if (result == null) {
+                result = c.compute(arg);
+                cache.put(arg,result);
+            }
+            return result
+        }
     }
     ```
+    我们通过HashMap实现了一个带缓存功能的class，为了确保线程安全，对整个compute进行了同步，这就会带来
+    一个明显的伸缩性问题，每次只有一个线程能够执行compute。在下面的程序中我们通过线程安全的类ConcurrentHashMap
+    来避免这种对compute方法进行串行.
+    ``` 
+     public class Memoizer2<A,V> implements Computable<A,V> {
+            private final Map<A,V> cache = new ConcurrentHashMap<A,V>();
+            private final Computable<A,V> c;
+            
+            public Memoizer2(Computable<A,V> c) {
+                this.c = c;
+            }
+            
+            public V compute(A arg) throws InterruptException {
+                V result = cache.get(arg);
+                if (result == null) {
+                    result = c.compute(arg);
+                    cache.put(arg,result);
+                }
+                return result
+            }
+    ```
+    但是这个类也存在问题，如果compute进行的计算需要很大的开销。而其他线程并不知道这个计算正在进行，就会
+    出现重复计算。理想的结果就是等待线程X计算结果，而FutureTask能完成这个功能。
 
     
                 
