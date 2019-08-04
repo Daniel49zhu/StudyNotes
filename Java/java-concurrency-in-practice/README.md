@@ -361,9 +361,75 @@
                 }
                 return result
             }
+    }
     ```
     但是这个类也存在问题，如果compute进行的计算需要很大的开销。而其他线程并不知道这个计算正在进行，就会
     出现重复计算。理想的结果就是等待线程X计算结果，而FutureTask能完成这个功能。
-
+    ```
+      public class Memoizer3<A,V> implements Computable<A,V> {
+                private final Map<A,V> cache = new ConcurrentHashMap<A,Future<V>>();
+                private final Computable<A,V> c;
+                
+                public Memoizer3(Computable<A,V> c) {
+                    this.c = c;
+                }
+                
+                public V compute(final A arg) throws InterruptException {
+                    Future<V> f= cache.get(arg);
+                    if(f==null) {
+                        Callable<V> eval = new Callable<V>() {
+                            public V call() throws InterruptException {
+                                return c.compute(arg);
+                            }
+                        };
+                        FutureTask<V> ft = new FutureTask<V>(eval);
+                        try {
+                            return f.get();
+                        } catch (ExecutionException e) {
+                            throws launderThrowable(e.getCause());
+                        }
+                    }
+                }
+        }
+    ```
+    Memoizer3几乎是完美的，有非常好的并发性，但仍然存在零个线程进行相同计算的漏洞，这个漏洞的发生概率要远小于Memoizer2。
+    ```
+        ```
+          public class Memoizer<A,V> implements Computable<A,V> {
+            public V compute(final A arg) throws InterruptException {
+                while(true) {
+                    Future<V> f = cache.get(arg);
+                    if(f==null) {
+                        Callable<V> eval = new Callable<V>() {
+                            public V call() throws InterruptException {
+                                return c.compute(arg);
+                            }
+                        };
+                        FutureTask<V> ft = new FutureTask<V>(eval);
+                        f = cache.putIfAbsent(arg,ft);
+                        if(f==null) {f= ft;ft.run();}
+                    }
+                    try {
+                        return f.get();
+                    } catch (ExecutionException e) {
+                        throws launderThrowable(e.getCause());
+                    }
+                }
+            }
+        } 
+    ```
     
+    第一部分小结：
+    - 可变状态是至关重要的（It's the mutable state，stupid）：所有的
+        并发问题都可以归结为如何协调对并发状态的访问，可变状态越少，越容易确保线程安全性。
+    - 尽量将域声明为final，除非需要它们是可变的。
+    - 不可变对象一定是线程安全的
+    - 封装有助于管理复杂性：将数据封装在对象中，更易于维持不变性条件
+    - 用锁来保护每个可变变量
+    - 当保护同一个不变性条件中所有的变量时，需要使用用一个锁
+    - 在执行复合操作期间，要持有锁
+    - 如果从多个线程中访问同一个可变变量没有同步机制，程序就可能出问题
+    - 在设计过程中考虑线程安全，或者在文档中明确指出它不是线程安全的
+    - 将同步策略文档化
+        
                 
