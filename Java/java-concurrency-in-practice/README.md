@@ -484,23 +484,67 @@
     ```
     class TaskExecutionWenServer {
         private static final int NTHREADS = 100;
-        private static final Executor exec 
-            = Executors.newFixedThreadPool(NTHREADS); 
+        private static final Executor exec
+                = Executors.newFixedThreadPool(NTHREADS);
     
-        public staic void main(String[] args) throw IOException {
+        public static void main(String[] args) throws IOException {
             ServerSocket socket = new ServerSocket(80);
-            while(true) {
+            while (true) {
                 final Socket connection = socket.accept();
                 Runnable task = new Runnable() {
                     public void run() {
                         handleRequest(connection);
                     }
-                }  
-            };
-            exec.execute(task);
+                };
+                exec.execute(task);
+            }
         }
     }
     ```
     在TaskExecutionWebServer中，通过使用Executor，将请求处理任务的提交与任务的执行解耦开来。
+    Executors中的静态工厂方法可以创建的有：
+    - newFixedThreadPool，定容线程池
+    - newCachedThreadPool，线程池规模无上限
+    - newSingleThreadExecutor，单线程的Executor
+    - newScheduledThreadPool，定容线程池，而且通过延迟或定时的方式来执行任务
     
-                
+    Executor框架使用Runnable作为基本的任务表达形式，Runnable有一种很大的局限，因为任务
+    实际上都存在延迟的计算，执行数据库查询，从网络上获取资源，或者计算某个复杂的功能。对于
+    这些任务，Callable是一种更好的抽象：它认为主入口点（call方法）将返回一个值，并可能
+    抛出异常。
+    
+    示例：使用Future来实现页面渲染器，为了使页面渲染实现更高的并发性，将渲染过程分解为
+    两个任务，一个负责渲染所有文本，另一个下载图片。（因为其中一个是CPU密集，一个是IO密集）
+    ``` 
+    public class FutureRenderer {
+        private final ExecutorService executor = Executors.newCachedThreadPool();
+    
+        void renderPage(CharSequence source) {
+            final List<ImageInfo> imageInfos = scanForImageInfo(source);
+            Callable<List<ImageData>> task =
+                    new Callable<List<ImageData>>() {
+                        public List<ImageData> call() {
+                            List<ImageData> result = new ArrayList<>();
+                            for (ImageInfo imageInfo : imageInfos) {
+                                result.add(imageInfo.downloadImage());
+                            }
+                            return result;
+                        }
+                    };
+            Future<List<ImageData>> future = executor.submit(task);
+            renderText(source);
+            
+            try {
+                List<ImageData> imageData = future.get();
+                for(ImageDatt data : imageData) {
+                    renderImage(data);
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                future.cancel(true);
+            } catch (ExecutionException e) {
+                throw launderThrowable(e.getCause());
+            }
+        }
+    }
+    ```
