@@ -548,3 +548,36 @@
         }
     }
     ```
+    
+- 第7章 取消与关闭
+
+    任务和线程的启动很容易，大多数情况下哦我们会让其运行到结束。然后有时我们希望提前结束任务或线程，或是因为
+    用户取消了操作，或是应用程序需要快速关闭。
+    
+    如果外部代码能在某个操作正常完成之前将其置入“完成”状态，那么这个操作就可以称为可取消的（Cancellable）。
+    ```
+    @ThreadSafe
+    public class PrimeGenerator implemens Runnable {
+        @GuardBy("this") private final List<BiInteger> primes 
+                                    = new ArrayList<BigInteger>();
+        private volatile boolean cancelled = false;
+        
+        public void run() {
+            BigInteger p = BigInteger.ONE;
+            while(!cancelled) {
+                p = p.nextProbablePrime();
+                synchronized(this) {
+                    primes.add(p);
+                }
+            }
+        }
+        
+        public void cancel() {cancelled=true;}
+        
+        public synchronized List<BigInteger> get() {
+            return new ArrayList<BigInteger>(primes); 
+        }
+    }
+    ```
+    PrimeGenerator使用了一种简单的取消策略：客户通过调用cancel来取消请求。ExecutorService也提供共
+    两种关闭方法：shutdown正常关闭和shutdownNow强行关闭
