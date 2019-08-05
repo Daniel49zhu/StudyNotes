@@ -432,4 +432,75 @@
     - 在设计过程中考虑线程安全，或者在文档中明确指出它不是线程安全的
     - 将同步策略文档化
         
+- 第6章 任务执行
+
+    大多数并发应用都是围绕“任务执行（Task Execution）”来构造的：任务通常是一些抽象的
+    且离散的工作单元。通过把应用程序的工作分解到多个任务中，可以简化程序的组织结构。
+    ```
+    class SingleThreadWebServer {
+        public static void main(String[] args) throws IOException {
+            ServerSocket socket = new ServerSocket(80);
+            while(true) {
+                Socket connection = socket.accept();
+                handleRequest(connection);
+            }
+        }
+    }
+    ```
+    这个程序理论上时正确的，但是在实际生产环境执行性能会很糟糕，因为一次只能处理一个请求，当
+    服务器正在处理请求时，新来的连接必须等待请求处理完成。
+    
+    通过为每一个新来的请求建立一个新的线程来提供服务，可以实现更高的响应性。
+    ```
+    class ThreadPerTaskWebServer {
+        public static void main(String[] args) throws IOException {
+            ServerSocket socket = new ServerSocket(80);
+            while(true) {
+                final Socket connection = soclet.accept();
+              Runnable task = new Runnable() {
+                public void run() {
+                    handleRequest(connection);
+                }
+              };
+                new Thread(task).start();
+            }
+        }
+    }
+    ```
+    为每一个任务分配一个线程存在一些缺陷，尤其是当需要创建大量的线程时，
+    - 线程生命周期的开销非常高
+    - 活跃的线程会消耗系统资源，尤其是内存
+    - 可创建的线程数随着平台的限制而各不相同，也受JVM启动参数等限制
+    
+    线程池在简化了线程的管理工作，并且java.util.concurrent提供了一种灵活的
+    线程池实现作为Executor框架的一部分，任务执行的主要抽象不是Thread，而是Executor
+    ```
+    public interface Executor {
+        void execute(Runnable command);
+    }
+    ```
+    虽然Executor是个简单的接口，但缺位灵活且强大的异步任务执行框架提供了基础，Executor基于
+    生产者-消费者模式，提交任务的操作相当于生产者，执行任务的线程则相当于消费者。
+    ```
+    class TaskExecutionWenServer {
+        private static final int NTHREADS = 100;
+        private static final Executor exec 
+            = Executors.newFixedThreadPool(NTHREADS); 
+    
+        public staic void main(String[] args) throw IOException {
+            ServerSocket socket = new ServerSocket(80);
+            while(true) {
+                final Socket connection = socket.accept();
+                Runnable task = new Runnable() {
+                    public void run() {
+                        handleRequest(connection);
+                    }
+                }  
+            };
+            exec.execute(task);
+        }
+    }
+    ```
+    在TaskExecutionWebServer中，通过使用Executor，将请求处理任务的提交与任务的执行解耦开来。
+    
                 
