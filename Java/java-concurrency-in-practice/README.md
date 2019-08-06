@@ -581,3 +581,24 @@
     ```
     PrimeGenerator使用了一种简单的取消策略：客户通过调用cancel来取消请求。ExecutorService也提供共
     两种关闭方法：shutdown正常关闭和shutdownNow强行关闭
+
+- 第8章 线程池的使用
+
+    在线程池中，如果任务依赖于其他任务，那么可能产生死锁。
+    ```
+    public class ThreadDeadClock {
+        ExecutorService exec
+            = Execytirs.newSingleThreadExecutor();
+        public class RenderPageTask implements Callable<String> {
+            public String call() throws Exception {
+                Future<String> header,footer;
+                header = exec.submin(new LoadFileTask("header.html"));
+                footer = exec.submit(new LoadFIleTask("footer.html"));
+                String page = renderBodt();
+                // 将发生死锁 ---- 由于任务在等待子任务的结果
+                return header.get() + page + footer.get();
+            }
+        }
+    }
+    ```
+
