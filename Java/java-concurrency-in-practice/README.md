@@ -614,6 +614,9 @@
     }
   
     public void submitTask(final Runnable command) throws InterruptedExeception{
+        /**
+         * 在 semaphore.acquire() 和 semaphore.release()之间的代码，同一时刻只允许制定个数的线程进入，
+         * */
         semaphore.acquire();
         try {
             exec.execute(new Runnable() {
@@ -631,4 +634,43 @@
     }
   } 
   ```
+  
+- 第9章 图形用户界面应用程序
+
+    略
+    
+- 第10章 避免活跃性危险
+
+    我们使用加锁来保证线程安全，但如果过度加锁可能会死锁。因此在安全性和活跃性之间存在
+    着某种制衡。
+    ```
+    public class LeftRightDeadlock {
+        private final Object left = new Object();
+        private final Object right = new Object();
+    
+        public void leftRight() {
+            synchronized (left) {
+                synchronized (right) {
+                    System.out.println("left right");
+                }
+            }
+        }
+    
+        public void rightLeft() {
+            synchronized (right) {
+                synchronized (left) {
+                    System.out.println("right left");
+                }
+            }
+        }
+    }
+    ```
+    尽管死锁是最常见的活跃性危险，但并发程序还包括一些其他的活跃性危险，包括：饥饿、丢失信号、活锁等。
+    - 饥饿：线程无法访问它所需要的资源而不能继续执行，就发生了“饥饿（Starvation）”。引发饥饿最常见
+    资源就是CPU时钟周期。如果持有锁时执行一些无法结束的结构或者无线等待某个资源也会导致饥饿。
+    
+    - 活锁：当多个相互协作的线程都对彼此进行响应从而修改各自的状态，并使得任何一个线程都无法继续执行，就发生
+    了活锁。
+    
+
 
