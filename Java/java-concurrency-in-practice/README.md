@@ -677,5 +677,71 @@
     性能意味着用更少的资源做更多的事情，当操作性能由于某种中特定的资源而受到限制时，我们就称为资源密集型
     操作，如CPU密集型、数据库密集型等
     
+    Amdahl定律告诉我们，程序的可伸缩性取决于代码中必须被串行执行的代码比例。可以通过以下
+    方式来提升可伸缩性：减少锁持有的时间、降低锁的粒度以及采用非独占的锁或非阻塞的锁来代替。
+    
+- 第12章 并发程序的测试
 
+    并发程序存在一定的不确定性，这将增加不同交互模式以及故障模式的数量。并发测试大致分为两类，即
+    安全性测试与活跃性测试。
+    
+- 第13章 显式锁
+
+    在Java5.0之前，协调对共享对象的访问可以使用的机制只有synchronized和volatile。Java5.0
+    提供了一种新的机制：ReentrantLock。
+    ```
+    Lock lock = new ReentrantLock();
+    ...
+    lock.lock();
+    try {
+        // 对共享对象状态的更新
+    } finall {
+        lock.unlock();
+    }
+    ```
+  
+  ReentrantLock实现了一种标准的互斥锁，对于维护数据的完整性来说，是一种过于强硬的
+  加锁规则，因此也就不必要地限制了并发性。如果使用读写锁，一个资源可以被多个读操作访问，
+  或者被一个写操作访问，但两者不能同时进行。
+  ```
+    public interface ReadWriteLock {
+        Lock readLock();
+        Lock writeLock();
+    }
+  
+    public class ReadWriteMap<K, V> {
+        private final Map<K, V> map;
+        private final ReadWriteLock lock = new ReentrantReadWriteLock();
+        private final Lock r = lock.readLock();
+        private final Lock w = lock.writeLock();
+    
+        public ReadWriteMap(Map<K, V> map) {
+            this.map = map;
+        }
+    
+        public V put(K key, V value) {
+            w.lock();
+            try {
+                return map.put(key, value);
+            } finally {
+                w.unlock();
+            }
+        }
+    
+        public V get(Object key) {
+            r.lock();
+            try {
+                return map.get(key);
+            } finally {
+                r.unlock();
+            }
+        }
+    }
+  ```
+  
+- 第14章 构建自定义同步工具
+
+    AbstractQueuedSynchronizer，大部分开发者不会直接使用AQS，但如果了解了标准同步器类的实现
+    方式，对于理解他们的工作原理非常有帮助。在基于AQS构建的同步器类种，最基本的操作包括各种形式的
+    获取和释放操作。
 
