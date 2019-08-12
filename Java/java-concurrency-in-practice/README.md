@@ -769,5 +769,57 @@
     }
 
     ```
-  ReentrantLock、Semaphore、ReentrantReadWiteLock、CouontDownLatch、SynchronousQueue和FutureTask等
+  ReentrantLock、Semaphore、ReentrantReadWriteLock、CountDownLatch、SynchronousQueue和FutureTask等
+  
+- 第15章 原子变量与非阻塞同步机制
+
+    Semaphore和ConcurrentLinkedQueue都提供了比synchronized机制更高的性能和可伸缩性，本章将介绍这种提升的
+    主要来源：原子变量和非阻塞的同步机制。
+    
+    通过锁协议来协调对共享状态的访问，可以确保无论哪个线程持有守护变量的锁，都能采用独占方式来访问这些变量，并且
+    对变量的任何修改对随后获得这个锁的其他线程都是可见的。但对于细粒度的操作，锁任然是一种高开销的机制。在管理
+    线程之间的竞争时还应该有一种粒度更细的技术，类似volatile机制，同时还要支持原子的更新操作。
+    
+    独占锁是一种悲观技术，它假设最坏的情况，并在只有在确保其他线程不会造成干扰的情况下才能执行下去。还有另外一种
+    更高效的方法，也是一宗乐观的方法。在大多处理器架构中采用的方法是实现一个比较并交换指令（CAS）。CAS包含了
+    三个操作数，需要读写的内存位置V、进行比较的值A和拟写入的新值B。当且仅当V的值等于A时，CAS才会用过原子方法用新值B
+    来更新V的值，否则不执行任何操作。CAS的含义是“我认为V的值应该为A，如果是那将V的值更新为B，否则不修改并告诉V的值
+    实际是多少”。CAS是一项乐观的技术，它希望能成功地执行更新操作，并且如果有另一个线程在最近检查后更新了该变量，
+    那么CAS能检测到这个错误。
+    ```
+    @ThreadSafe
+    public class SimulatedCAS {
+        @GuardedBy("this") private int value;
+        public synchronized int get() {return value;}
+        public synchronized int compareAnsSwap(int expectedValue,int newValue) {
+            int oldValue = value;
+            if(oldValue==exceptedValue) {
+                value = newValue;
+            }
+            return oldValue;
+        }
+  
+        public synchronized boolean compareAndSet(int expectedValue,int newValue) {
+            return (exceptedValue==compareAndSwap(expectedValue,newValue));
+        }
+    }
+    ```
+  
+    ``` 
+    @ThreadSafe
+    public class CasCounter {
+        private SimulatedCAS value;
+        public int getValue() {
+            return value.get();
+        }
+  
+          public int increment() {
+            int v;
+            do {
+                v = value.get();
+            } while (v!=value.compareAndSwap(v,v+1));
+            return v + 1;
+          }
+    }
+    ```
 
