@@ -744,4 +744,30 @@
     AbstractQueuedSynchronizer，大部分开发者不会直接使用AQS，但如果了解了标准同步器类的实现
     方式，对于理解他们的工作原理非常有帮助。在基于AQS构建的同步器类种，最基本的操作包括各种形式的
     获取和释放操作。
+    下例是一个使用AQS实现的二元闭锁。包含两个共有方法：await和signal，分别对应获取操作和释放操作。
+    ```
+    @ThreadSafe
+    public class OneShotLatch {
+        private final Sync sync = new Sync();
+        public void signal() {sync.releaseShared(0);}
+        public void await() throws InterruptedException {
+            sync.acquireSharedInterruptibly(0);
+        }
+        private class Sync extends AbstractQueuedSynchronizer {
+            @Override
+            protected int tryAcquireShared(int arg) {
+    //            如果闭锁是开的（state==1），那么这个操作将成功，否则将失败
+                return (getState()==1)?1:-1;
+            }
+    
+            @Override
+            protected boolean tryReleaseShared(int arg) {
+                setState(1);//现在打开闭锁
+                return true;//现在其他的线程可以获取该闭锁
+            }
+        }
+    }
+
+    ```
+  ReentrantLock、Semaphore、ReentrantReadWiteLock、CouontDownLatch、SynchronousQueue和FutureTask等
 
