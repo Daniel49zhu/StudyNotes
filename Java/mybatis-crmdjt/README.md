@@ -6,3 +6,7 @@
 3. 通过SqlSessionFactory获取SqlSession，通过其selectList方法罩到映射文件中id=“selectAll”的方法，
 执行SQL查询。
 4. MyBatis底层使用JDBC执行SQL，获取ResultSet之后，根据resultType的配置将结果映射为Country对象
+
+- 第2章 MyBatis XML方式的基本用法
+
+    
