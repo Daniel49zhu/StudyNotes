@@ -36,6 +36,7 @@
    [《Spring Cloud微服务实战》](Java/SpringCloud/README.md)
    [《分布式Java应用基础与实践》](Java/SpringCloud/README.md)
    [《Java并发编程实战》](Java/java-concurrency-in-practice/README.md)
+   [《MyBatis从入门到精通》](Java/mybatis-crmdjt/README.md)
 
 - Docker
 
