@@ -4,10 +4,9 @@ import "./ButtonPanel.css"
 
 export default class ButtonPanel extends React.Component {
 
-    handleClick = buttonName =>{
-        console.log(buttonName+" ButtonPanel")
-        this.props.clickHandler(buttonName);
-    }
+  handleClick = (buttonName)=> {
+    this.props.clickHandler(buttonName);
+  }
 
     render() {
         return (

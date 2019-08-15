@@ -3,11 +3,15 @@ import './Button.css'
 import PropTypes from "prop-types";
 
 export default class Button  extends React.Component {
+    static propTypes = {
+        name: PropTypes.string,
+        orange: PropTypes.bool,
+        wide: PropTypes.bool,
+        clickHandler: PropTypes.func,
+    };
 
-    handleClick = () =>{
-        debugger
-        console.log(this.props.name+" Button")
-        this.props.clickHandler(this.props.name);
+    handleClick = () => {
+        this.props.clickHandler(this.props.name)
     }
 
     render() {
@@ -15,7 +19,7 @@ export default class Button  extends React.Component {
             "component-button",
             this.props.orange ? "orange" : "",
             this.props.wide ? "wide" : "",
-          ];
+        ];
 
         return (<div className={className.join(" ").trim()}>
             <button  onClick={this.handleClick}>{this.props.name}</button>
