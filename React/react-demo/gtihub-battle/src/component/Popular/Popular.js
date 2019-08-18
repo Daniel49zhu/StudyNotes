@@ -1,6 +1,8 @@
 import React from 'react'
 import SelectLanguage from './SelectLanguage';
 import Loading from '../Reusable/Loading';
+import { fetchPopularRepos } from '../../utils/api';
+import RepoGrid from './RepoGrid'
 
 export default class Popular extends React.Component {
 
@@ -14,6 +16,13 @@ export default class Popular extends React.Component {
           selectedLanguage: lang,
           repos: null
         });
+
+    fetchPopularRepos(lang).then(
+        function(repos) {
+        this.setState(function() {
+            return { repos: repos };
+        });
+        }.bind(this));
     }
 
     render = ()=> {
@@ -24,7 +33,11 @@ export default class Popular extends React.Component {
                     onSelect={this.updateLanguage}
                 />
 
-                {!this.state.repos? (<Loading speed="250"/>):(<Loading speed="250"/>)}
+                {!this.state.repos? (
+                    <Loading/>
+                    )   :   (
+                    <RepoGrid repos={this.state.repos} />
+                ) }
             </div>
         )
     }
