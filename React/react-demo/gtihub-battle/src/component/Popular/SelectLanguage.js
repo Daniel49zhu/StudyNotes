@@ -1,18 +1,19 @@
 import React from 'react'
+import {jsonLanguages} from './language.json'
 
 export default class SelectLanguage extends React.Component {
     languages = [
         'All',
         'Javascript',
-        'Ruby',
         'Java',
         'CSS',
         'Python',
-        'PHP',
-        'Shell'
+        'Shell',
+        'Go'
     ];
 
     render = () => {
+      debugger
         return (
             <ul className="languages">
             {this.languages.map(lang => (
