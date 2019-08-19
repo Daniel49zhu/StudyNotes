@@ -1,22 +1,10 @@
-[{
-        "name": "All"
-    },
-    {
-        "name": "Javascript"
-    },
-    {
-        "name": "Java"
-    },
-    {
-        "name": "CSS"
-    },
-    {
-        "name": "Python"
-    },
-    {
-        "name": "Shell"
-    },
-    {
-        "name": "Go"
-    }
+[
+    {"name":"All"},
+    {"name":"Javascript"},
+    {"name":"Java"},
+    {"name":"CSS"},
+    {"name":"Python"},
+    {"name":"Shell"},
+    {"name":"Go"},
+    {"name":"C++"}
 ]
