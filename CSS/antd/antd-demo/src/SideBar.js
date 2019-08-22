@@ -17,39 +17,47 @@ class SideBar extends React.Component {
     render() {
         return (
             <Router>
-            <Menu
-                onClick={this.handleClick}
-                style={{ width: 256 }}
-                defaultSelectedKeys={['1']}
-                defaultOpenKeys={['sub1']}
-                mode="inline"
-            >
-                <SubMenu
-                    key="sub1"
-                    title={
-                        <span>
-                            <Icon type="setting" />
-                            <span>Component</span>
-                        </span>
-                    }
-                >
-                    <Menu.ItemGroup key="g1" title="Common">
-                        <Menu.Item key="1">
-                            <Link to="/button">Button</Link>
-                        </Menu.Item>
-                        <Menu.Item key="2">
-                            <Link to="/icon" >Icon</Link>
-                        </Menu.Item>
-                    </Menu.ItemGroup>
-                    <Menu.ItemGroup key="g2" title="Layout">
-                        <Menu.Item key="3">Grid</Menu.Item>
-                        <Menu.Item key="4">Layout</Menu.Item>
-                    </Menu.ItemGroup>
-                </SubMenu>
-            </Menu>
-
-            <Route path="/button"><ButtonDemo /></Route>
-            <Route path="/icon"><IconDemo /></Route>
+                <div style={{ display: "flex" }}>
+                    <div style={{
+                        padding: "0 10px 0 0",
+                        background: "#f0f0f0"
+                    }}>
+                        <Menu
+                            onClick={this.handleClick}
+                            style={{ width: 256 }}
+                            defaultSelectedKeys={['1']}
+                            defaultOpenKeys={['sub1']}
+                            mode="inline"
+                        >
+                            <SubMenu
+                                key="sub1"
+                                title={
+                                    <span>
+                                        <Icon type="setting" />
+                                        <span>Component</span>
+                                    </span>
+                                }
+                            >
+                                <Menu.ItemGroup key="g1" title="Common">
+                                    <Menu.Item key="1">
+                                        <Link to="/button">Button</Link>
+                                    </Menu.Item>
+                                    <Menu.Item key="2">
+                                        <Link to="/icon" >Icon</Link>
+                                    </Menu.Item>
+                                </Menu.ItemGroup>
+                                <Menu.ItemGroup key="g2" title="Layout">
+                                    <Menu.Item key="3">Grid</Menu.Item>
+                                    <Menu.Item key="4">Layout</Menu.Item>
+                                </Menu.ItemGroup>
+                            </SubMenu>
+                        </Menu>
+                    </div>
+                    <div style={{ flex: 1, padding: "10px" }}>
+                        <Route path="/button" component={ButtonDemo}></Route>
+                        <Route path="/icon" component={IconDemo}></Route>
+                    </div>
+                </div>
             </Router>
         );
     }
