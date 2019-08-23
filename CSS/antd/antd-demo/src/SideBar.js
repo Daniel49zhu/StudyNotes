@@ -4,8 +4,9 @@ import 'antd/dist/antd.css';
 import './index.css';
 import { Menu, Icon } from 'antd';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import ButtonDemo from './ButtonDemo';
-import IconDemo from './IconDemo';
+import ButtonDemo from './component/ButtonDemo';
+import IconDemo from './component/IconDemo';
+import GridDemo from './component/GridDemo';
 
 const { SubMenu } = Menu;
 
@@ -19,8 +20,7 @@ class SideBar extends React.Component {
             <Router>
                 <div style={{ display: "flex" }}>
                     <div style={{
-                        padding: "0 10px 0 0",
-                        background: "#f0f0f0"
+                        padding: "0 10px 0 0"
                     }}>
                         <Menu
                             onClick={this.handleClick}
@@ -47,7 +47,9 @@ class SideBar extends React.Component {
                                     </Menu.Item>
                                 </Menu.ItemGroup>
                                 <Menu.ItemGroup key="g2" title="Layout">
-                                    <Menu.Item key="3">Grid</Menu.Item>
+                                    <Menu.Item key="3">
+                                        <Link to="/grid">Grid</Link>
+                                    </Menu.Item>
                                     <Menu.Item key="4">Layout</Menu.Item>
                                 </Menu.ItemGroup>
                             </SubMenu>
@@ -56,6 +58,7 @@ class SideBar extends React.Component {
                     <div style={{ flex: 1, padding: "10px" }}>
                         <Route path="/button" component={ButtonDemo}></Route>
                         <Route path="/icon" component={IconDemo}></Route>
+                        <Route path="/grid" component={GridDemo}></Route>
                     </div>
                 </div>
             </Router>

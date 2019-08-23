@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Radio, Icon } from 'antd';
-import './App.css';
+import './../App.css';
 const ButtonGroup = Button.Group;
 
 class ButtonDemo extends React.Component {
@@ -123,7 +123,7 @@ class ButtonDemo extends React.Component {
         </Button>
                 </div>
 
-                <div className="contaniner">
+                <div className="container">
                     <h4>Basic</h4>
                     <ButtonGroup>
                         <Button>Cancel</Button>
@@ -145,10 +145,10 @@ class ButtonDemo extends React.Component {
                         <Button type="primary">
                             <Icon type="left" />
                             Go back
-          </Button>
+                        </Button>
                         <Button type="primary">
                             Go forward
-            <Icon type="right" />
+                        <Icon type="right" />
                         </Button>
                     </ButtonGroup>
                     <ButtonGroup>
