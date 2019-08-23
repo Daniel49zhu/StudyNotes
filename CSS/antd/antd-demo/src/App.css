@@ -31,7 +31,15 @@
   padding: 10px;
   margin: 10px;
   border:1px solid #ebedf0;
-  min-width: 30rem;
+}
+
+.gutter-example .ant-row > div {
+  background: transparent;
+  border: 0;
+}
+.gutter-box {
+  background: #00a0e9;
+  padding: 5px 0;
 }
 
 @keyframes App-logo-spin {
