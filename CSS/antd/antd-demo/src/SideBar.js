@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+
 import 'antd/dist/antd.css';
 import './index.css';
 import { Menu, Icon } from 'antd';
@@ -7,6 +7,9 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import ButtonDemo from './component/ButtonDemo';
 import IconDemo from './component/IconDemo';
 import GridDemo from './component/GridDemo';
+import LayoutDemo from './component/LayoutDemo';
+import BreadcrumbDemo from './component/BreadcrumbDemo';
+import DropdownDemo from './component/DropdownDemo';
 
 const { SubMenu } = Menu;
 
@@ -50,7 +53,17 @@ class SideBar extends React.Component {
                                     <Menu.Item key="3">
                                         <Link to="/grid">Grid</Link>
                                     </Menu.Item>
-                                    <Menu.Item key="4">Layout</Menu.Item>
+                                    <Menu.Item key="4">
+                                        <Link to="/layout">Layout</Link>
+                                    </Menu.Item>
+                                </Menu.ItemGroup>
+                                <Menu.ItemGroup key="g" title="Navigation">
+                                    <Menu.Item key="5">
+                                        <Link to="/breadcrumb">Breadcrumb</Link>
+                                    </Menu.Item>
+                                    <Menu.Item key="6">
+                                        <Link to="/dropdown">Dropdown</Link>
+                                    </Menu.Item>
                                 </Menu.ItemGroup>
                             </SubMenu>
                         </Menu>
@@ -59,6 +72,9 @@ class SideBar extends React.Component {
                         <Route path="/button" component={ButtonDemo}></Route>
                         <Route path="/icon" component={IconDemo}></Route>
                         <Route path="/grid" component={GridDemo}></Route>
+                        <Route path="/layout" component={LayoutDemo}></Route>
+                        <Route path="/breadcrumb" component={BreadcrumbDemo}></Route>
+                        <Route path="/dropdown" component={DropdownDemo}></Route>
                     </div>
                 </div>
             </Router>
