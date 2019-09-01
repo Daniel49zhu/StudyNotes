@@ -1,7 +1,7 @@
-package com.zjc.demo1;
+package com.zjc.strategy.demo1;
 
-import com.zjc.demo1.behavior.impl.FlyWithWings;
-import com.zjc.demo1.behavior.impl.MuteQuack;
+import com.zjc.strategy.demo1.behavior.impl.FlyWithWings;
+import com.zjc.strategy.demo1.behavior.impl.MuteQuack;
 
 public class StrategyPatternTest {
 

@@ -1,7 +1,7 @@
-package com.zjc.demo1;
+package com.zjc.strategy.demo1;
 
-import com.zjc.demo1.behavior.FlyBehavior;
-import com.zjc.demo1.behavior.QuackBehavior;
+import com.zjc.strategy.demo1.behavior.FlyBehavior;
+import com.zjc.strategy.demo1.behavior.QuackBehavior;
 
 public abstract class Duck {
 

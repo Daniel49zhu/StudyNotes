@@ -1,4 +1,4 @@
-package com.zjc.demo2;
+package com.zjc.strategy.demo2;
 
 public class SpellStrategy implements DragonSlayingStrategy {
     @Override

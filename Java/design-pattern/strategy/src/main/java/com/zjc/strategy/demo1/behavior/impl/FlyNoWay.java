@@ -1,6 +1,6 @@
-package com.zjc.demo1.behavior.impl;
+package com.zjc.strategy.demo1.behavior.impl;
 
-import com.zjc.demo1.behavior.FlyBehavior;
+import com.zjc.strategy.demo1.behavior.FlyBehavior;
 
 public class FlyNoWay implements FlyBehavior {
     public void fly() {

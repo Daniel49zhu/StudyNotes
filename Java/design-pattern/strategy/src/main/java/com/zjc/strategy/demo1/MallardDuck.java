@@ -1,7 +1,7 @@
-package com.zjc.demo1;
+package com.zjc.strategy.demo1;
 
-import com.zjc.demo1.behavior.impl.FlyNoWay;
-import com.zjc.demo1.behavior.impl.Quack;
+import com.zjc.strategy.demo1.behavior.impl.FlyNoWay;
+import com.zjc.strategy.demo1.behavior.impl.Quack;
 
 public class MallardDuck extends Duck {
 

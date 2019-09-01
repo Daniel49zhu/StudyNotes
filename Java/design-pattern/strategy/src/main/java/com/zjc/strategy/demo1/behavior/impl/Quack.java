@@ -1,6 +1,6 @@
-package com.zjc.demo1.behavior.impl;
+package com.zjc.strategy.demo1.behavior.impl;
 
-import com.zjc.demo1.behavior.QuackBehavior;
+import com.zjc.strategy.demo1.behavior.QuackBehavior;
 
 public class Quack implements QuackBehavior {
     public void quack() {
