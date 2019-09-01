@@ -4,7 +4,7 @@ import "fmt"
 
 func main() {
 	//a := []int{2,3,4,5}
-	fmt.Println(twoSum(nil, 9))
+	fmt.Println(twoSum([]int{2, 3, 4, 5}, 9))
 }
 
 func twoSum(nums []int, target int) []int {
