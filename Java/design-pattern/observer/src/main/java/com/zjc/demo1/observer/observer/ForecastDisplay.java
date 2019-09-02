@@ -1,6 +1,6 @@
-package com.zjc.observer.observer;
+package com.zjc.demo1.observer.observer;
 
-import com.zjc.observer.subject.WeatherData;
+import com.zjc.demo1.observer.subject.WeatherData;
 
 import java.util.List;
 

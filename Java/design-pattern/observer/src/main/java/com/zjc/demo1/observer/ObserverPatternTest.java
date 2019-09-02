@@ -1,8 +1,8 @@
-package com.zjc.observer;
+package com.zjc.demo1.observer;
 
-import com.zjc.observer.observer.CurrentConditionsDisplay;
-import com.zjc.observer.observer.ForecastDisplay;
-import com.zjc.observer.subject.WeatherData;
+import com.zjc.demo1.observer.observer.CurrentConditionsDisplay;
+import com.zjc.demo1.observer.observer.ForecastDisplay;
+import com.zjc.demo1.observer.subject.WeatherData;
 
 import java.util.ArrayList;
 import java.util.List;

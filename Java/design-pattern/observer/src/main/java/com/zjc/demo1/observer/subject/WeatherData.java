@@ -1,6 +1,6 @@
-package com.zjc.observer.subject;
+package com.zjc.demo1.observer.subject;
 
-import com.zjc.observer.observer.Observer;
+import com.zjc.demo1.observer.observer.Observer;
 
 import java.util.ArrayList;
 import java.util.List;
