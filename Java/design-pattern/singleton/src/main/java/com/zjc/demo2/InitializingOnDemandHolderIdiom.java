@@ -22,36 +22,38 @@
  */
 package com.zjc.demo2;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-
 /**
- * Functional interface, an example of the factory-kit design pattern.
- * <br>Instance created locally gives an opportunity to strictly define
- * which objects types the instance of a factory will be able to create.
- * <br>Factory is a placeholder for {@link Builder}s
- * with {@link WeaponFactory#create(WeaponType)} method to initialize new objects.
+ * The Initialize-on-demand-holder idiom is a secure way of creating a lazy initialized singleton
+ * object in Java.
+ * <p>
+ * The technique is as lazy as possible and works in all known versions of Java. It takes advantage
+ * of language guarantees about class initialization, and will therefore work correctly in all
+ * Java-compliant compilers and virtual machines.
+ * <p>
+ * The inner class is referenced no earlier (and therefore loaded no earlier by the class loader) than
+ * the moment that getInstance() is called. Thus, this solution is thread-safe without requiring special
+ * language constructs (i.e. volatile or synchronized).
+ *
  */
-@FunctionalInterface
-public interface WeaponFactory {
+public final class InitializingOnDemandHolderIdiom {
 
   /**
-   * Creates an instance of the given type.
-   * @param name representing enum of an object type to be created.
-   * @return new instance of a requested class implementing {@link Weapon} interface.
+   * Private constructor.
    */
-  Weapon create(WeaponType name);
+  private InitializingOnDemandHolderIdiom() {}
 
   /**
-   * Creates factory - placeholder for specified {@link Builder}s.
-   * @param consumer for the new builder to the factory.
-   * @return factory with specified {@link Builder}s
+   * @return Singleton instance
    */
-  static WeaponFactory factory(Consumer<Builder> consumer) {
-    Map<WeaponType, Supplier<Weapon>> map = new HashMap<>();
-    consumer.accept(map::put);
-    return name -> map.get(name).get();
+  public static InitializingOnDemandHolderIdiom getInstance() {
+    return HelperHolder.INSTANCE;
+  }
+
+  /**
+   * Provides the lazy-loaded Singleton instance.
+   */
+  private static class HelperHolder {
+    private static final InitializingOnDemandHolderIdiom INSTANCE =
+        new InitializingOnDemandHolderIdiom();
   }
 }
