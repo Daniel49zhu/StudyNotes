@@ -2,11 +2,6 @@ package main
 
 import "fmt"
 
-type ListNode struct {
-	Val  int
-	Next *ListNode
-}
-
 func main() {
 	l1 := makeListNode([]int{2, 4, 3})
 	l2 := makeListNode([]int{5, 6, 8, 1})
@@ -31,10 +26,10 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 		}
 		carry = sum / 10
 
-		cur.Next = &ListNode{Val:sum%10}
+		cur.Next = &ListNode{Val: sum % 10}
 		cur = cur.Next
 	}
-	return originList.Next;
+	return originList.Next
 }
 
 func makeListNode(is []int) *ListNode {
