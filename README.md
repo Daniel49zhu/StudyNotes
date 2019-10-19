@@ -14,15 +14,11 @@
   
 - Electron
 
-    [Electron](Electron/README.md)
+  [Electron](Electron/README.md)
 
 - React
   
   [《深入浅出React和Redux》](React/dissecting-react-and-redux/README.md)
-  
-- Maven
-    
-  [《Maven实战》](Maven/maven-in-action/README.md)
   
 - Linux
 
@@ -38,7 +34,8 @@
    [《Java并发编程实战》](Java/java-concurrency-in-practice/README.md)
    [《MyBatis从入门到精通》](Java/mybatis-crmdjt/README.md)
    [Dubbo视频](Java/dubbo-study/README.md)
-
+   [《Maven实战》](Maven/maven-in-action/README.md)
+   [《ElasticSearch权威指南》](Java/elasticsearch-definitive/README.md)
 - Docker
 
     [《Docker从入门到实践》](Docker/docker-in-practice/README.md)
