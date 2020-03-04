@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .container {
+            width: 768px;
+            margin: 0 auto;
+            height: 100%;
+            background-color: pink;
+        }
+
+        /* 屏幕尺寸介于768~992px间展示以下css样式 */
+        @media screen and (max-width: 992px) and (min-width: 768px) {
+            .container {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container"></div>
+</body>
+
+</html>
