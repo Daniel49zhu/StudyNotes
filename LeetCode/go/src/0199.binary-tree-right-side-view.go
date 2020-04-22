@@ -2,12 +2,6 @@ package main
 
 import "fmt"
 
-type TreeNode struct {
-	Val   int
-	Left  *TreeNode
-	Right *TreeNode
-}
-
 func main() {
 	var arr1 = []int{1, 2, 3}
 	var arr2 = []int{4, 5, 6}
