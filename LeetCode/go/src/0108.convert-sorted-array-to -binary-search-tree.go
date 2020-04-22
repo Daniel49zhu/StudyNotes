@@ -1,11 +1,5 @@
 package main
 
-import (
-	"kit"
-)
-
-type TreeNode = kit.TreeNode
-
 func main() {
 	sortedArrayToBST([]int{-10, -3, 0, 5, 9})
 }
@@ -15,10 +9,10 @@ func sortedArrayToBST(nums []int) *TreeNode {
 		return nil
 	}
 
-	mid  := len(nums) / 2
+	mid := len(nums) / 2
 	return &TreeNode{
-		Val:nums[mid],
-		Left:sortedArrayToBST(nums[:mid]),
+		Val:   nums[mid],
+		Left:  sortedArrayToBST(nums[:mid]),
 		Right: sortedArrayToBST(nums[mid+1:]),
 	}
 }
