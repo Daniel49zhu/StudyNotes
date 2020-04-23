@@ -17,6 +17,11 @@ for是Go唯一的循环结构 [for.go](05For.go)
 
 go支持针对struct定义方法[methof.go](19Methods.go)，go会隐式的转换
 指针和值
+
+channel是连接goroutine的管道，可以将值从一个goroutine发送到
+channel。通过make(chan val-type)声明一个管道，通过`<-channel`接受消息。
+默认管道双方都是阻塞的.
+select使您可以等待多个通道操作
            
 
               
