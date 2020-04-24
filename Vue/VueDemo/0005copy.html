@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TodoMVC</title>
+    <script src="https://unpkg.com/vue"></script>
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/todomvc-app-css@2.2.0/index.css"/>
+</head>
+<body>
+<section class="todoapp">
+    <header class="header">
+        <h1>todos</h1>
+        <input class="new-todo"
+               autofocus autocomplete="off"
+               placeholder="What needs to be done?"
+               v-model="newTodo"
+               @keyup.enter="addTodo"/>
+    </header>
+    <section class="main" v-show="todos.length">
+        <input id="toggle-all" class="toggle-all" type="checkbox"/>
+        <label for="toggle-all"></label>
+        <ul class="todo-list">
+            <li class="todo" v-for="todo in filteredTodos" v-bind:key="todo.id"
+                v-bind:class="{ completed: todo.completed}">
+                <div class="view">
+                    <input class="toggle" type="checkbox"/>
+                    <label>{{todo.title}}</label>
+                    <button class="destroy" v-on:click="removeTodo(todo)"/>
+                </div>
+                <input class="edit"/>
+            </li>
+        </ul>
+    </section>
+    <footer class="footer" v-show="todos.length">
+        <span class="todo-count">
+            <strong>{{remaining}}</strong> {{ remaining | pluralize }} left
+        </span>
+        <ul class="filters">
+            <li>
+                <a href="#/all">All</a>
+            </li>
+            <li>
+                <a href="#/active">Active</a>
+            </li>
+            <li>
+                <a href="#/completed">Completed</a>
+            </li>
+
+        </ul>
+    </footer>
+</section>
+<footer class="info">
+    <p>Double-click to edit a todo</p>
+    <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
+</footer>
+
+
+<script>
+    var STORAGE_KEY = "zjctodolist";
+    var todoStorage = {
+        fetch: function () {
+            var todos = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+            todos.forEach(function (todo, index) {
+                todo.id = index;
+            });
+            todoStorage.uid = todos.length;
+            return todos;
+        },
+        save: function () {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+        }
+    }
+
+    // visibility filters
+    var filters = {
+        all: function (todos) {
+            return todos;
+        },
+        active: function (todos) {
+            return todos.filter(function (todo) {
+                return !todo.completed;
+            });
+        },
+        completed: function (todos) {
+            return todos.filter(function (todo) {
+                return todo.completed;
+            });
+        }
+    };
+
+    var vm = new Vue({
+        el: '.todoapp',
+        data: {
+            newTodo: '',
+            todos: todoStorage.fetch(),
+            visibility: "all"
+        },
+        watch: {
+            todos: {
+                handler: function (todos) {
+                    todos.save(todos)
+                }
+            }
+        },
+        computed: {
+            filteredTodos: function () {
+                return filters[this.visibility](this.todos)
+            },
+            remaining: function () {
+                return filters.active(this.todos).length
+            }
+        },
+        filters: {
+            pluralize: function (n) {
+                return n === 1 ? "item" : "items";
+            }
+        },
+        methods: {
+            addTodo: function () {
+                var value = this.newTodo && this.newTodo.trim()
+                if (!value) {
+                    return
+                }
+                this.todos.push({
+                    id: todoStorage.uid++,
+                    title: value,
+                    completed: false
+                });
+                this.newTodo = ''
+            },
+            removeTodo: function (todo) {
+                this.todos.splice(this.todos.indexOf(todo), 1);
+            }
+        }
+    })
+</script>
+</body>
+</html>
