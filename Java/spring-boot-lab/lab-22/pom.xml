@@ -2,21 +2,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>spring-boot-lab</artifactId>
+        <groupId>org.example</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
-    <artifactId>spring-boot-lab</artifactId>
+    <artifactId>lab-22</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>lab-01</module>
-        <module>lab-02</module>
-        <module>lab-33</module>
-        <module>lab-47</module>
-        <module>lab-55</module>
-        <module>lab-23</module>
-        <module>lab-26</module>
-        <module>lab-22</module>
+        <module>validation-demo</module>
     </modules>
 
 
