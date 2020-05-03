@@ -1,0 +1,12 @@
+dubbo:
+  application:
+    name: user-service-provider # 应用名
+  registry:
+    address: zookeeper://192.168.146.128:2181 # 注册中心地址
+  protocol:
+    port: -1 # 协议端口。使用 -1 表示随机端口。
+    name: dubbo
+  provider:
+    timeout: 1000 # 【重要】远程服务调用超时时间，单位：毫秒。默认为 1000 毫秒，胖友可以根据自己业务修改
+    UserRpcService:
+      version: 1.0.0
