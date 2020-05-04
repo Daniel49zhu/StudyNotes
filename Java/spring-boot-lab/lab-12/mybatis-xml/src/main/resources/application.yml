@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:mysql://192.168.146.128:3306/testdb?useSSL=false&useUnicode=true&characterEncoding=UTF-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+mybatis:
+  config-location: classpath:mybatis-config.xml
+  mapper-locations: classpath:mapper/*.xml # 配置 Mapper XML 地址
+  type-aliases-package: mybatislab.dataobject
