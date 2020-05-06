@@ -1,0 +1,9 @@
+spring:
+  task:
+    scheduling:
+      pool:
+        size: 10
+      thread-name-prefix: pikachu-demo-
+      shutdown:
+        await-termination: true
+        await-termination-period: 60
