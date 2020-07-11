@@ -18,6 +18,21 @@ public class DecoratorPatternTest {
         beverage2 = new Mocha(beverage2);//顾客想要摩卡，用摩卡装饰
         beverage2 = new Whip(beverage2);//顾客想要奶泡，用奶泡装饰
         System.out.println(beverage2.getDescription() + " 共花费$" + beverage2.cost());
+
+        @SpringBootApplication
+        @RestController
+        public class Application {
+
+            @RequestMapping("/")
+            public String home() {
+                return "Hello world";
+            }
+
+            public static void main(String[] args) {
+                new SpringApplicationBuilder(Application.class).web(true).run(args);
+            }
+
+
     }
 }
 

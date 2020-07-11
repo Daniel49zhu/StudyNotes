@@ -11,4 +11,7 @@
     <dubbo:service ref="userRpcServiceImpl" interface="lab30.api.UserRpcService"
         version="${dubbo.provider.UserRpcService.version}" validation="true" />
 
+    <!-- 服务提供者暴露服务配置 -->
+    <dubbo:service ref="demoRpcServiceImpl" interface="lab30.api.DemoRpcService" />
+
 </beans>

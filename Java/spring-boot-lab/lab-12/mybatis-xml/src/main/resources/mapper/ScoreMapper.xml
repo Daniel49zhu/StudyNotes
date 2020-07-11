@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatislab.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatislab.mapper.ScoreMapper">
+    <sql id="SELECT_FIELDS">
+        id,userid,subject,score,deleted
+    </sql>
+
+    <select id="selectById" parameterType="Integer" resultType="ScoreDO">
+        SELECT
+        <include refid="SELECT_FIELDS"/>
+        FROM tb_score
+        WHERE id = #{id}
+    </select>
+</mapper>
