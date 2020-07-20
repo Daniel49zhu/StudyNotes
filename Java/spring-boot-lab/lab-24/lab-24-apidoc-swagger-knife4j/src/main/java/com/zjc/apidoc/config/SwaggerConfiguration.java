@@ -22,7 +22,7 @@ public class SwaggerConfiguration {
                 .apiInfo(this.apiInfo()) // 设置 API 信息
                 // 扫描 Controller 包路径，获得 API 接口
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.zjc.com.com.zjc.apidoc.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.zjc.apidoc.controller"))
                 .paths(PathSelectors.any())
                 // 构建出 Docket 对象
                 .build();

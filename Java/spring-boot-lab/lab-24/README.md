@@ -1,3 +1,5 @@
+默认路径 http://127.0.0.1:8080/swagger-ui.html
+
 @Api 注解，添加在 Controller 类上，标记它作为 Swagger 文档资源。
 
 @ApiOperation 注解，添加在 Controller 方法上，标记它是一个 API 操作

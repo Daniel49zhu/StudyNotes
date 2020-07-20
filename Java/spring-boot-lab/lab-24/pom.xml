@@ -12,7 +12,8 @@
     <artifactId>lab-24</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>lab-24-apidoc-swagger</module>
+        <module>lab-24-com.com.zjc.apidoc-swagger</module>
+        <module>lab-24-com.com.zjc.apidoc-swagger-knife4j</module>
     </modules>
 
 
