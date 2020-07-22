@@ -1,0 +1,18 @@
+spring:
+  data:
+    # MongoDB 配置项，对应 MongoProperties 类
+    mongodb:
+      host: 192.168.146.128
+      port: 27017
+      database: admin
+      username: myadmin
+      password: secret
+      # 上述属性，也可以只配置 uri
+
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          mongodb:
+            core: DEBUG # 打印 mongodb 操作的具体语句。生产环境下，不建议开启。

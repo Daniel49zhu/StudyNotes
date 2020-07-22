@@ -25,6 +25,8 @@
         <module>lab-31</module>
         <module>lab-24</module>
         <module>lab-48</module>
+        <module>lab-16</module>
+        <module>lab-16-springdata-mongodb</module>
 
     </modules>
 
