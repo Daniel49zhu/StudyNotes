@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://39.106.190.72:3306/ibatisdb?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
+    username: root
+    password: 123456
