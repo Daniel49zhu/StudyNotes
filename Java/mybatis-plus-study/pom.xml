@@ -29,6 +29,7 @@
     <modules>
         <module>quick-start</module>
         <module>sample-crud</module>
+        <module>sample-wrapper</module>
     </modules>
 
     <dependencyManagement>

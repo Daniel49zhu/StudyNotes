@@ -7,7 +7,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -44,7 +43,7 @@ public class CrudTest {
     public void bDelete() {
         assertThat(mapper.deleteById(3L)).isGreaterThan(0);
         assertThat(mapper.delete(new QueryWrapper<User>()
-                .lambda().eq(User::getName, "Sandy"))).isGreaterThan(0);
+                .lambda().eq(User::getName, "makoto"))).isGreaterThan(0);
     }
 
 
