@@ -1,3 +1,4 @@
+
 spring:
   # 对应 RedisProperties 类
   redis:
