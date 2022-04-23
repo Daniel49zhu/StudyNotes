@@ -9,7 +9,7 @@
 
 
   <properties>
-    <springframework.version>5.2.7.RELEASE</springframework.version>
+    <springframework.version>5.3.19</springframework.version>
   </properties>
   <dependencies>
     <dependency>
